@@ -1,0 +1,370 @@
+---
+import DashboardLayout from "@notionglaze/ui/DashboardLayout.astro";
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+    } catch (e) {
+        console.error("SEO Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="SEO" tenant={tenant}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8">
+        <header class="mb-12">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                SEO & Metadata
+            </h1>
+            <p class="text-muted-foreground">
+                Optimize your blog for search engines and social media.
+            </p>
+        </header>
+
+        <div class="space-y-8">
+            <!-- Meta Tags -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">
+                            Default Meta Tags
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                            Set default SEO metadata for your blog
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Site Title</label
+                            >
+                            <input
+                                type="text"
+                                id="site-name"
+                                value={config.site_name || ""}
+                                placeholder="My Awesome Blog"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Appears in browser tabs and search results
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Site Description</label
+                            >
+                            <textarea
+                                id="site-description"
+                                rows="3"
+                                placeholder="A brief description of your blog..."
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                                >{config.site_description || ""}</textarea
+                            >
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Shown in search engine results (150-160
+                                characters recommended)
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Keywords</label
+                            >
+                            <input
+                                type="text"
+                                id="site-keywords"
+                                value={config.site_keywords || ""}
+                                placeholder="blog, tech, programming"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Comma-separated keywords (less important for
+                                modern SEO)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Open Graph -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">
+                            Open Graph (Social Media)
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                            Control how your blog appears when shared on social
+                            media
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Default OG Image</label
+                            >
+                            <input
+                                type="url"
+                                id="og-image"
+                                value={config.og_image || ""}
+                                placeholder="https://example.com/og-image.jpg"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Recommended: 1200x630px. Used when posts don't
+                                have a cover image.
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Twitter Card Type</label
+                            >
+                            <select
+                                id="twitter-card-type"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            >
+                                <option
+                                    value="summary"
+                                    selected={config.twitter_card_type ===
+                                        "summary" || !config.twitter_card_type}
+                                    >Summary</option
+                                >
+                                <option
+                                    value="summary_large_image"
+                                    selected={config.twitter_card_type ===
+                                        "summary_large_image"}
+                                    >Summary Large Image</option
+                                >
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Twitter Handle</label
+                            >
+                            <input
+                                type="text"
+                                id="twitter-handle"
+                                value={config.twitter_handle || ""}
+                                placeholder="@yourhandle"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Your Twitter/X username (with @)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Sitemap & Robots -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">
+                            Sitemap & Robots.txt
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                            Configure search engine crawling
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="enable-sitemap"
+                                checked={config.enable_sitemap !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Enable XML sitemap generation</span
+                            >
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="allow-indexing"
+                                checked={config.allow_indexing !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Allow search engine indexing</span
+                            >
+                        </label>
+                        <div class="ml-7 text-xs text-muted-foreground">
+                            Disable to prevent search engines from indexing your
+                            blog
+                        </div>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Analytics -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">
+                            Analytics Integration
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                            Connect third-party analytics services
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Google Analytics ID</label
+                            >
+                            <input
+                                type="text"
+                                id="google-analytics-id"
+                                value={config.google_analytics_id || ""}
+                                placeholder="G-XXXXXXXXXX or UA-XXXXXXXXX-X"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background font-mono"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Your Google Analytics measurement ID
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Google Search Console Verification</label
+                            >
+                            <input
+                                type="text"
+                                id="google-site-verification"
+                                value={config.google_site_verification || ""}
+                                placeholder="verification-code-here"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background font-mono"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Meta tag content for Google Search Console
+                                verification
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Structured Data -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">Structured Data</h3>
+                        <p class="text-sm text-muted-foreground">
+                            Schema.org markup for rich search results
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="enable-schema-blog"
+                                checked={config.enable_schema_blog !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Enable Blog schema markup</span
+                            >
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="enable-schema-article"
+                                checked={config.enable_schema_article !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Enable Article schema for posts</span
+                            >
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="enable-schema-breadcrumb"
+                                checked={config.enable_schema_breadcrumb !==
+                                    false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Enable Breadcrumb schema</span
+                            >
+                        </label>
+                    </div>
+                </div>
+            </DashboardCard>
+        </div>
+
+        <StickyFooter id="seo-footer" saveId="save-seo-btn" />
+    </div>
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Save settings
+            const saveBtn = document.getElementById("save-seo-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    site_name: document.getElementById("site-name")?.value,
+                    site_description:
+                        document.getElementById("site-description")?.value,
+                    site_keywords:
+                        document.getElementById("site-keywords")?.value,
+                    og_image: document.getElementById("og-image")?.value,
+                    twitter_card_type:
+                        document.getElementById("twitter-card-type")?.value,
+                    twitter_handle:
+                        document.getElementById("twitter-handle")?.value,
+                    enable_sitemap:
+                        document.getElementById("enable-sitemap")?.checked,
+                    allow_indexing:
+                        document.getElementById("allow-indexing")?.checked,
+                    google_analytics_id: document.getElementById(
+                        "google-analytics-id",
+                    )?.value,
+                    google_site_verification: document.getElementById(
+                        "google-site-verification",
+                    )?.value,
+                    enable_schema_blog:
+                        document.getElementById("enable-schema-blog")?.checked,
+                    enable_schema_article: document.getElementById(
+                        "enable-schema-article",
+                    )?.checked,
+                    enable_schema_breadcrumb: document.getElementById(
+                        "enable-schema-breadcrumb",
+                    )?.checked,
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast("SEO settings updated!", "success");
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</DashboardLayout>

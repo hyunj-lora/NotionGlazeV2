@@ -1,0 +1,133 @@
+---
+import DashboardCard from "./DashboardCard.astro";
+
+interface Props {
+    steps: Array<{
+        id: string;
+        label: string;
+        done: boolean;
+        link?: string;
+        action?: string;
+    }>;
+}
+
+const { steps } = Astro.props;
+const allDone = steps.every((s) => s.done);
+---
+
+{
+    !allDone ? (
+        <DashboardCard class="onboarding-card mb-8">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="text-xl">🚀</span>
+                <h2 class="text-lg font-black">
+                    Bootstrapper's Launch Checklist
+                </h2>
+            </div>
+            <div class="space-y-3">
+                {steps.map((step) => (
+                    <div class={`step-item ${step.done ? "done" : ""}`}>
+                        <div class="step-check">
+                            {step.done ? (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                            ) : null}
+                        </div>
+                        <span class="step-label">{step.label}</span>
+                        {!step.done &&
+                            (step.link ? (
+                                <a href={step.link} class="step-link">
+                                    Go →
+                                </a>
+                            ) : (
+                                <button
+                                    id="onboarding-sync-trigger"
+                                    class="step-link"
+                                >
+                                    Run →
+                                </button>
+                            ))}
+                    </div>
+                ))}
+            </div>
+        </DashboardCard>
+    ) : null
+}
+
+<style>
+    .onboarding-card {
+        background: linear-gradient(
+            135deg,
+            hsl(var(--primary) / 0.1) 0%,
+            transparent 100%
+        );
+        border: 1px solid hsl(var(--primary) / 0.2);
+    }
+
+    .step-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 1rem;
+        background: hsl(var(--background) / 0.5);
+        border: 1px solid hsl(var(--border));
+        transition: all 0.2s;
+    }
+
+    .step-item.done {
+        opacity: 0.6;
+        background: transparent;
+        border-style: dashed;
+    }
+
+    .step-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid hsl(var(--border));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .step-item.done .step-check {
+        background: hsl(var(--primary));
+        border-color: hsl(var(--primary));
+        color: white;
+    }
+
+    .step-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        flex: 1;
+    }
+
+    .step-link {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: hsl(var(--primary));
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .step-link:hover {
+        background: hsl(var(--primary) / 0.1);
+    }
+</style>

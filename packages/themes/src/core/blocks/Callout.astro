@@ -1,0 +1,45 @@
+---
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    children?: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<div class={`notion-callout ${className || ""}`}>
+    <div class="notion-callout-icon">
+        {content.icon?.emoji ? content.icon.emoji : "💡"}
+    </div>
+    <div class="notion-callout-content">
+        <RichText content={content.rich_text} />
+        <slot />
+    </div>
+</div>
+
+<style>
+    .notion-callout {
+        display: flex;
+        gap: 1.25rem;
+        padding: 1.25rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+        align-items: flex-start;
+    }
+
+    .notion-callout-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        line-height: 1;
+    }
+
+    .notion-callout-content {
+        flex: 1;
+        min-width: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+</style>

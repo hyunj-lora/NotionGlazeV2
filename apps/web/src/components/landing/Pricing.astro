@@ -1,0 +1,328 @@
+---
+
+---
+
+<section id="pricing" class="pricing">
+    <div class="container">
+        <div class="header text-center">
+            <h2 class="title">Simple, Professional Pricing.</h2>
+            <p class="subtitle">Start for free. Upgrade for power.</p>
+        </div>
+
+        <div class="pricing-toggle-wrap">
+            <div class="pricing-toggle">
+                <span class="period-label active" data-period="monthly"
+                    >Monthly</span
+                >
+                <button class="toggle-switch" id="ui-price-toggle">
+                    <span class="knob"></span>
+                </button>
+                <span class="period-label" data-period="annually"
+                    >Yearly <em>Save 45%</em></span
+                >
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="price-card">
+                <div class="plan-name">Free Plan</div>
+                <div class="amount">
+                    <span class="currency">$</span>0<span class="period"
+                        >/forever</span
+                    >
+                </div>
+                <p class="desc">For hobbyists & journals.</p>
+                <ul class="features">
+                    <li>yourname.notionglaze.cc</li>
+                    <li>Standard Sync (12h)</li>
+                    <li>Global Asset Shield (Included)</li>
+                    <li>Standard Themes</li>
+                </ul>
+                <a href="/login" class="btn btn-secondary">Start Free</a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="price-card featured">
+                <div class="badge">Recommended</div>
+                <div class="plan-name">Professional Plan</div>
+                <div class="amount">
+                    <span class="currency">$</span><span id="ui-price-val"
+                        >9</span
+                    ><span class="period" id="ui-price-period">/mo</span>
+                </div>
+                <p class="desc">For creators who mean business.</p>
+                <ul class="features">
+                    <li><strong>Custom Domain (.com)</strong></li>
+                    <li><strong>Priority 5m Sync</strong></li>
+                    <li><strong>AI Sidekick Pro</strong></li>
+                    <li><strong>White-Label (No Branding)</strong></li>
+                    <li>Unlimited Typography</li>
+                </ul>
+                <a href="/login" class="btn btn-primary"
+                    >Start 14-Day Free Trial</a
+                >
+                <p class="trial-text">No credit card required.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .pricing {
+        padding: 8rem 0;
+        background: var(--surface-1);
+    }
+
+    .header {
+        margin-bottom: 4rem;
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .pricing-toggle-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 4rem;
+    }
+
+    .pricing-toggle {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 0.5rem 1.5rem;
+        background: hsl(var(--background));
+        border-radius: 100px;
+        border: 1px solid hsl(var(--border));
+    }
+
+    .period-label {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: hsl(var(--muted-foreground));
+        transition: color 0.3s;
+    }
+
+    .period-label.active {
+        color: hsl(var(--foreground));
+    }
+
+    .period-label em {
+        display: block;
+        font-size: 0.75rem;
+        color: #22c55e;
+        font-style: normal;
+    }
+
+    .toggle-switch {
+        width: 50px;
+        height: 28px;
+        background: hsl(var(--primary));
+        border-radius: 100px;
+        position: relative;
+        cursor: pointer;
+        border: none;
+    }
+
+    .knob {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+
+    .toggle-switch.annually .knob {
+        transform: translateX(22px);
+    }
+
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 450px));
+        gap: 2.5rem;
+        justify-content: center;
+    }
+
+    .price-card {
+        background: hsl(var(--background));
+        padding: 3rem;
+        border-radius: 32px;
+        border: 1px solid hsl(var(--border));
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .price-card.featured {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 40px 80px -20px hsl(var(--primary) / 0.2);
+        transform: scale(1.05);
+        z-index: 1;
+    }
+
+    .price-card .badge {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: hsl(var(--primary));
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 700;
+    }
+
+    .plan-name {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .amount {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: baseline;
+    }
+
+    .currency {
+        font-size: 2rem;
+        vertical-align: super;
+    }
+
+    .period {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+        font-weight: 500;
+    }
+
+    .desc {
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 2.5rem;
+    }
+
+    .features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 3rem 0;
+        flex-grow: 1;
+    }
+
+    .features li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid hsl(var(--border));
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .features li::before {
+        content: "✓";
+        color: #22c55e;
+        font-weight: 900;
+    }
+
+    .btn {
+        padding: 1.25rem;
+        border-radius: 16px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .btn-primary {
+        background: hsl(var(--primary));
+        color: white;
+    }
+
+    .btn-secondary {
+        background: var(--surface-1);
+        color: hsl(var(--foreground));
+        border: 1px solid hsl(var(--border));
+    }
+
+    .trial-text {
+        text-align: center;
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+        .price-card.featured {
+            transform: scale(1);
+        }
+        .pricing-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .pricing {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+        }
+        .amount {
+            font-size: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .pricing {
+            padding: 3.5rem 0;
+        }
+        .price-card {
+            padding: 2rem;
+            border-radius: 24px;
+        }
+        .pricing-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+    }
+</style>
+
+<script>
+    const toggle = document.getElementById("ui-price-toggle");
+    const priceVal = document.getElementById("ui-price-val");
+    const pricePeriod = document.getElementById("ui-price-period");
+    const labels = document.querySelectorAll(".period-label");
+
+    if (toggle) {
+        toggle.addEventListener("click", () => {
+            toggle.classList.toggle("annually");
+            const isAnnually = toggle.classList.contains("annually");
+
+            if (isAnnually) {
+                // $60 / 12 = $5/mo effectively, but let's show $60/yr or keep the monthly view
+                if (priceVal) priceVal.textContent = "5"; // Effective monthly on yearly
+                if (pricePeriod)
+                    pricePeriod.textContent = "/mo (billed annually)";
+                labels[0].classList.remove("active");
+                labels[1].classList.add("active");
+            } else {
+                if (priceVal) priceVal.textContent = "9";
+                if (pricePeriod) pricePeriod.textContent = "/mo";
+                labels[0].classList.add("active");
+                labels[1].classList.remove("active");
+            }
+        });
+    }
+</script>

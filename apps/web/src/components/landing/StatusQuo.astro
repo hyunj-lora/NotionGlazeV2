@@ -1,0 +1,174 @@
+---
+
+---
+
+<section class="status-quo">
+    <div class="container">
+        <div class="header">
+            <h2 class="section-title">The "Standard" is Broken.</h2>
+            <p class="section-subtitle">
+                Turning Notion into a website shouldn't be a struggle. But for
+                years, it's been a compromise of speed, reliability, and
+                professionalism.
+            </p>
+        </div>
+
+        <div class="grid">
+            <div class="visual">
+                <div class="card glitch-card">
+                    <img
+                        src="/landing/status-quo.png"
+                        alt="Broken Notion Experience"
+                        class="status-img"
+                    />
+                    <div class="noise"></div>
+                </div>
+            </div>
+            <div class="pain-points">
+                <div class="pain-item">
+                    <div class="icon">🔗</div>
+                    <div class="text">
+                        <h3>Domain Dilemma</h3>
+                        <p>
+                            Ugly UUIDs and "notion.site" subdomains don't scream
+                            professional. Your blog's identity shouldn't feel
+                            like a database entry.
+                        </p>
+                    </div>
+                </div>
+                <div class="pain-item">
+                    <div class="icon">🔄</div>
+                    <div class="text">
+                        <h3>The Infinite Spinner</h3>
+                        <p>
+                            Waiting 4 seconds for a single page to hydrate. In
+                            the age of instant feedback, your audience has
+                            already closed the tab.
+                        </p>
+                    </div>
+                </div>
+                <div class="pain-item">
+                    <div class="icon">❌</div>
+                    <div class="text">
+                        <h3>Image Link Anxiety</h3>
+                        <p>
+                            Checking your own portfolio only to find dead AWS
+                            links. Notion's expiring images shouldn't be your
+                            problem.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .status-quo {
+        padding: 8rem 0;
+        background: hsl(var(--background));
+    }
+
+    .header {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 5rem;
+    }
+
+    .section-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-subtitle {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+    }
+
+    .visual {
+        position: relative;
+    }
+
+    .glitch-card {
+        background: #000;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid hsl(0 100% 50% / 0.2);
+        box-shadow: 0 0 50px -10px hsl(0 100% 50% / 0.1);
+    }
+
+    .status-img {
+        width: 100%;
+        display: block;
+        opacity: 0.8;
+    }
+
+    .pain-points {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .pain-item {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .pain-item .icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+    }
+
+    .pain-item h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .pain-item p {
+        color: hsl(var(--muted-foreground));
+        line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) {
+        .grid {
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+        .visual {
+            order: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .status-quo {
+            padding: 5rem 0;
+        }
+        .section-title {
+            font-size: 2.5rem;
+        }
+        .header {
+            margin-bottom: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .status-quo {
+            padding: 3.5rem 0;
+        }
+        .section-title {
+            font-size: 2rem;
+        }
+        .pain-item h3 {
+            font-size: 1.25rem;
+        }
+    }
+</style>

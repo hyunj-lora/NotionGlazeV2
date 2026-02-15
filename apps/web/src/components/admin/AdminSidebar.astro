@@ -1,0 +1,148 @@
+
+---
+---
+<aside class="admin-sidebar">
+    <div class="brand">NG<span>OPS</span></div>
+    <nav>
+        <a href="#overview" class="nav-item active" data-tab="overview">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 8px;"
+                ><rect width="7" height="9" x="3" y="3" rx="1"
+                ></rect><rect width="7" height="5" x="14" y="3" rx="1"
+                ></rect><rect width="7" height="9" x="14" y="12" rx="1"
+                ></rect><rect width="7" height="5" x="3" y="16" rx="1"
+                ></rect></svg
+            >
+            Overview
+        </a>
+        <a href="#tenants" class="nav-item" data-tab="tenants">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 8px;"
+                ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                ></path><circle cx="9" cy="7" r="4"></circle><path
+                    d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path
+                    d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
+            >
+            Tenants
+        </a>
+        <a href="#feedback" class="nav-item" data-tab="feedback">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 8px;"
+                ><path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                ></path></svg
+            >
+            Feedback
+        </a>
+        <a href="#system" class="nav-item" data-tab="system">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="margin-right: 8px;"
+                ><path d="M12 2v4"></path><path d="m16.2 7.8 2.9-2.9"
+                ></path><path d="M18 12h4"></path><path
+                    d="m16.2 16.2 2.9 2.9"></path><path d="M12 18v4"
+                ></path><path d="m4.9 19.1 2.9-2.9"></path><path
+                    d="M2 12h4"></path><path d="m4.9 4.9 2.9 2.9"
+                ></path></svg
+            >
+            System Health
+        </a>
+    </nav>
+    <div class="system-status">
+        <div class="pulse"></div>
+        Systems Nominal
+    </div>
+</aside>
+
+<style>
+    .admin-sidebar {
+        width: 240px;
+        background: var(--secondary);
+        border-right: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand {
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin-bottom: 3rem;
+        letter-spacing: -0.05em;
+        color: var(--foreground);
+    }
+    .brand span {
+        color: var(--primary);
+    }
+
+    nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    nav a {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        color: var(--muted-foreground);
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+    nav a:hover,
+    nav a.active {
+        color: var(--foreground);
+        background: var(--muted);
+    }
+
+    .system-status {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .pulse {
+        width: 8px;
+        height: 8px;
+        background: #22c55e;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #22c55e;
+    }
+</style>

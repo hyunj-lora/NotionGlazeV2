@@ -1,0 +1,355 @@
+---
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+
+interface Props {
+    config: any;
+    tenant: any;
+}
+
+const { config, tenant } = Astro.props;
+---
+
+<div class="space-y-8">
+    <!-- Workspace Info -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Workspace Information</h3>
+                <p class="text-sm text-muted-foreground">
+                    Basic information about your workspace
+                </p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2"
+                        >Workspace Name</label
+                    >
+                    <input
+                        type="text"
+                        id="workspace-name"
+                        value={config.workspace_name || ""}
+                        placeholder="My Workspace"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    />
+                    <p class="text-xs text-muted-foreground mt-1">
+                        Displayed in the dashboard sidebar
+                    </p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2"
+                        >Workspace Icon (Emoji or URL)</label
+                    >
+                    <input
+                        type="text"
+                        id="workspace-icon"
+                        value={config.workspace_icon || ""}
+                        placeholder="🚀 or https://example.com/icon.png"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    />
+                    <p class="text-xs text-muted-foreground mt-1">
+                        Use an emoji or image URL
+                    </p>
+                </div>
+            </div>
+        </div>
+    </DashboardCard>
+
+    <!-- Account Information -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Account Information</h3>
+                <p class="text-sm text-muted-foreground">
+                    Your account details
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center py-2">
+                    <div>
+                        <div class="font-medium">User ID</div>
+                        <div class="text-sm text-muted-foreground">
+                            {tenant?.owner_id}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <div>
+                        <div class="font-medium">Plan</div>
+                        <div class="text-sm text-muted-foreground">
+                            {tenant?.plan === "pro" ? "Professional" : "Trial"}
+                        </div>
+                    </div>
+                    {
+                        tenant?.plan !== "pro" && (
+                            <a
+                                href="/dashboard/billing"
+                                class="text-sm font-bold text-primary hover:underline"
+                            >
+                                Upgrade →
+                            </a>
+                        )
+                    }
+                </div>
+                {
+                    tenant?.created_at && (
+                        <div class="flex justify-between items-center py-2">
+                            <div>
+                                <div class="font-medium">Member Since</div>
+                                <div class="text-sm text-muted-foreground">
+                                    {new Date(
+                                        tenant.created_at,
+                                    ).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    </DashboardCard>
+
+    <!-- Preferences -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Preferences</h3>
+                <p class="text-sm text-muted-foreground">
+                    Customize your dashboard experience
+                </p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2"
+                        >Timezone</label
+                    >
+                    <select
+                        id="timezone"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    >
+                        <option
+                            value="UTC"
+                            selected={config.timezone === "UTC" ||
+                                !config.timezone}>UTC</option
+                        >
+                        <option
+                            value="America/New_York"
+                            selected={config.timezone === "America/New_York"}
+                            >Eastern Time (ET)</option
+                        >
+                        <option
+                            value="America/Chicago"
+                            selected={config.timezone === "America/Chicago"}
+                            >Central Time (CT)</option
+                        >
+                        <option
+                            value="America/Denver"
+                            selected={config.timezone === "America/Denver"}
+                            >Mountain Time (MT)</option
+                        >
+                        <option
+                            value="America/Los_Angeles"
+                            selected={config.timezone === "America/Los_Angeles"}
+                            >Pacific Time (PT)</option
+                        >
+                        <option
+                            value="Europe/London"
+                            selected={config.timezone === "Europe/London"}
+                            >London (GMT)</option
+                        >
+                        <option
+                            value="Europe/Paris"
+                            selected={config.timezone === "Europe/Paris"}
+                            >Paris (CET)</option
+                        >
+                        <option
+                            value="Asia/Tokyo"
+                            selected={config.timezone === "Asia/Tokyo"}
+                            >Tokyo (JST)</option
+                        >
+                        <option
+                            value="Asia/Seoul"
+                            selected={config.timezone === "Asia/Seoul"}
+                            >Seoul (KST)</option
+                        >
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2"
+                        >Language</label
+                    >
+                    <select
+                        id="language"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    >
+                        <option
+                            value="en"
+                            selected={config.language === "en" ||
+                                !config.language}>English</option
+                        >
+                        <option value="ko" selected={config.language === "ko"}
+                            >한국어 (Korean)</option
+                        >
+                        <option value="ja" selected={config.language === "ja"}
+                            >日本語 (Japanese)</option
+                        >
+                        <option value="zh" selected={config.language === "zh"}
+                            >中文 (Chinese)</option
+                        >
+                    </select>
+                </div>
+            </div>
+        </div>
+    </DashboardCard>
+
+    <!-- Danger Zone -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1 text-destructive">
+                    Danger Zone
+                </h3>
+                <p class="text-sm text-muted-foreground">
+                    Irreversible and destructive actions
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div
+                    class="p-4 rounded-lg border border-destructive/20 bg-destructive/5"
+                >
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="font-medium">Delete Workspace</div>
+                            <div class="text-sm text-muted-foreground">
+                                Permanently delete this workspace and all data
+                            </div>
+                        </div>
+                        <button
+                            id="delete-workspace-btn"
+                            class="px-4 py-2 rounded-lg bg-destructive text-destructive-foreground text-sm font-bold hover:opacity-90"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </DashboardCard>
+
+    <StickyFooter id="general-footer" saveId="save-general-btn" />
+</div>
+
+<script is:inline define:vars={{ initialConfig: config }}>
+    (function () {
+        const initGeneral = () => {
+            // Delete workspace
+            const deleteBtn = document.getElementById("delete-workspace-btn");
+            if (deleteBtn) {
+                const newDelete = deleteBtn.cloneNode(true);
+                deleteBtn.parentNode.replaceChild(newDelete, deleteBtn);
+                newDelete.addEventListener("click", async () => {
+                    const confirmation = prompt(
+                        'This action cannot be undone. Type "DELETE" to confirm:',
+                    );
+                    if (confirmation !== "DELETE") {
+                        if (window.showToast)
+                            window.showToast("Deletion cancelled", "info");
+                        return;
+                    }
+
+                    newDelete.disabled = true;
+                    newDelete.textContent = "Deleting...";
+
+                    try {
+                        const res = await fetch("/api/v1/tenant", {
+                            method: "DELETE",
+                        });
+                        if (res.ok) {
+                            if (window.showToast)
+                                window.showToast(
+                                    "Workspace deleted",
+                                    "success",
+                                );
+                            setTimeout(
+                                () => (window.location.href = "/"),
+                                1000,
+                            );
+                        } else {
+                            if (window.showToast)
+                                window.showToast("Deletion failed", "error");
+                            newDelete.disabled = false;
+                            newDelete.textContent = "Delete";
+                        }
+                    } catch (e) {
+                        if (window.showToast)
+                            window.showToast("Connection error", "error");
+                        newDelete.disabled = false;
+                        newDelete.textContent = "Delete";
+                    }
+                });
+            }
+
+            // Save settings
+            const saveBtn = document.getElementById("save-general-btn");
+            if (saveBtn) {
+                const newSave = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSave, saveBtn);
+
+                newSave.addEventListener("click", async () => {
+                    newSave.classList.add("btn-loading");
+                    newSave.disabled = true;
+
+                    // Fetch merge logic
+                    try {
+                        const currentConfigRes = await fetch(
+                            "/api/v1/setup/config",
+                        );
+                        let configToMerge = initialConfig;
+                        if (currentConfigRes.ok)
+                            configToMerge = await currentConfigRes.json();
+
+                        const payload = {
+                            ...configToMerge,
+                            workspace_name:
+                                document.getElementById("workspace-name")
+                                    ?.value,
+                            workspace_icon:
+                                document.getElementById("workspace-icon")
+                                    ?.value,
+                            timezone:
+                                document.getElementById("timezone")?.value,
+                            language:
+                                document.getElementById("language")?.value,
+                        };
+
+                        const res = await fetch("/api/v1/setup/config", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload),
+                        });
+
+                        if (res.ok) {
+                            if (window.showToast)
+                                window.showToast(
+                                    "Settings updated!",
+                                    "success",
+                                );
+                            setTimeout(() => window.location.reload(), 800);
+                        } else {
+                            if (window.showToast)
+                                window.showToast("Save failed", "error");
+                        }
+                    } catch (e) {
+                        if (window.showToast)
+                            window.showToast("Error saving", "error");
+                    } finally {
+                        newSave.disabled = false;
+                        newSave.classList.remove("btn-loading");
+                    }
+                });
+            }
+        };
+
+        initGeneral();
+        document.addEventListener("astro:page-load", initGeneral);
+    })();
+</script>

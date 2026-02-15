@@ -1,0 +1,628 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "jylPn",
+      "x": 0,
+      "y": 0,
+      "name": "Terminal Theme: Dark Mode",
+      "width": 800,
+      "fill": "#000000",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "uGPRV",
+          "fill": "#00FF00",
+          "content": "[ SYSTEM BOOT SUCCESSFUL ]",
+          "fontFamily": "Space Mono",
+          "fontSize": 13,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "8lCN3",
+          "name": "D_H1",
+          "fill": "#00FF00",
+          "content": "> Terminal.sh",
+          "fontFamily": "Space Mono",
+          "fontSize": 48,
+          "fontWeight": "900"
+        },
+        {
+          "type": "text",
+          "id": "Nf0xv",
+          "name": "D_H2",
+          "fill": "#00FF00",
+          "content": "## Core_Systems_Overview",
+          "fontFamily": "Space Mono",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "y0PSH",
+          "name": "D_P",
+          "fill": "#00CC00",
+          "content": "access_log: 2026-01-27. All systems are operational. The terminal theme provides a high-efficiency environment for developers and thinkers who prefer the clarity of the command line.",
+          "lineHeight": 1.6,
+          "fontFamily": "Space Mono",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "EYE6k",
+          "fill": "#004400",
+          "content": "==========================================================",
+          "fontFamily": "Space Mono",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "7o6xe",
+          "name": "D_Quote",
+          "width": "fill_container",
+          "fill": "#000000",
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "3HyYX",
+              "fill": "#00FF00",
+              "content": "\"There is no place like 127.0.0.1\"",
+              "textAlign": "center",
+              "fontFamily": "Space Mono",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "NlrB4",
+          "name": "D_Callout",
+          "width": "fill_container",
+          "fill": "#001100",
+          "gap": 16,
+          "padding": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "QWnb3",
+              "fill": "#FFB800",
+              "content": "●",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "i2RgG",
+              "fill": "#00CC00",
+              "content": "ALERT: Buffer overflow detected in mental_model. Please hydrate.",
+              "fontFamily": "Space Mono",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "NAfYe",
+          "name": "D_Lists",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "MxRip",
+              "fill": "#00CC00",
+              "content": "* fetch --all",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "hHUfy",
+              "fill": "#00CC00",
+              "content": "* commit -m 'update'",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "4UiYy",
+          "name": "D_Todo",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "okwFp",
+              "fill": "#00FF00",
+              "content": "[x]",
+              "fontFamily": "Space Mono",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "0REBi",
+              "fill": "#00CC00",
+              "content": "Fix production bugs",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "wjMPv",
+          "name": "D_Code",
+          "width": "fill_container",
+          "fill": "#050505",
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "FVm5Q",
+              "fill": "#33FF33",
+              "content": "while(true) { breathe(); }",
+              "fontFamily": "Space Mono",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gqAor",
+          "name": "D_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "UAs4R",
+              "name": "D_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "melozh",
+                "link": "https://unsplash.com/@melozh",
+                "author": "Helenn Melo"
+              },
+              "width": "fill_container",
+              "height": 320,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1584557699131-da728edb3bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MjE3NDd8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              }
+            },
+            {
+              "type": "text",
+              "id": "Gz5Ph",
+              "fill": "#004400",
+              "content": "stdout: rendering_image_matrix.png",
+              "textAlign": "center",
+              "fontFamily": "Space Mono",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Bd48B",
+          "name": "D_Bookmark",
+          "width": "fill_container",
+          "height": 60,
+          "fill": "#020202",
+          "padding": [
+            0,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "gRvTc",
+              "fill": "#008800",
+              "content": "LINK -> github.com/notionglaze",
+              "fontFamily": "Space Mono",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cTst6",
+          "name": "D_TableWrapper",
+          "width": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "hMuSF",
+              "name": "D_TR1",
+              "width": "fill_container",
+              "fill": "#001100",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wulGQ",
+                  "fill": "#00FF00",
+                  "content": "CMD",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "YXgDS",
+                  "fill": "#00FF00",
+                  "content": "STATUS",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "fvSAZ",
+          "name": "D_Toggle",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "BZI2G",
+              "fill": "#00FF00",
+              "content": "[+]",
+              "fontFamily": "Space Mono",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "ITfBY",
+              "fill": "#00AA00",
+              "content": "Expand_Internal_Log",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "aBxtR",
+      "x": 900,
+      "y": 0,
+      "name": "Terminal Theme: Light Mode",
+      "width": 800,
+      "fill": "#F0F0EE",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "9CydJ",
+          "fill": "#064E3B",
+          "content": "[ SYSTEM BOOT SUCCESSFUL ]",
+          "fontFamily": "Space Mono",
+          "fontSize": 13,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "BcgAk",
+          "name": "L_H1",
+          "fill": "#064E3B",
+          "content": "> Terminal.sh",
+          "fontFamily": "Space Mono",
+          "fontSize": 48,
+          "fontWeight": "900"
+        },
+        {
+          "type": "text",
+          "id": "8rmIU",
+          "name": "L_P",
+          "fill": "#065F46",
+          "content": "access_log: 2026-01-27. All systems are operational.",
+          "lineHeight": 1.6,
+          "fontFamily": "Space Mono",
+          "fontSize": 16,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "RihyJ",
+          "name": "L_Quote",
+          "width": "fill_container",
+          "fill": "#E5E7EB",
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "gWKkq",
+              "fill": "#064E3B",
+              "content": "\"There is no place like 127.0.0.1\"",
+              "textAlign": "center",
+              "fontFamily": "Space Mono",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "So5Wk",
+          "name": "L_Callout",
+          "width": "fill_container",
+          "fill": "#D1FAE5",
+          "gap": 16,
+          "padding": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "uQmaT",
+              "fill": "#D97706",
+              "content": "●",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "myOx5",
+              "fill": "#065F46",
+              "content": "ALERT: Buffer overflow detected.",
+              "fontFamily": "Space Mono",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "RthhV",
+          "name": "L_Todo",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "7f3dr",
+              "fill": "#059669",
+              "content": "[x]",
+              "fontFamily": "Space Mono",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "R36rz",
+              "fill": "#065F46",
+              "content": "Fix production bugs",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "wtPLl",
+          "name": "L_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "O0naV",
+              "name": "L_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "unavailable_parts",
+                "link": "https://unsplash.com/@unavailable_parts",
+                "author": "unavailable parts"
+              },
+              "width": "fill_container",
+              "height": 320,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1751887687523-bd5aa55a8c46?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MjE3NDh8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              }
+            },
+            {
+              "type": "text",
+              "id": "8RfUo",
+              "fill": "#6B7280",
+              "content": "stdout: rendering_image_matrix.png",
+              "textAlign": "center",
+              "fontFamily": "Space Mono",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PX6SL",
+          "name": "L_Bookmark",
+          "width": "fill_container",
+          "height": 60,
+          "fill": "#FFFFFF",
+          "padding": [
+            0,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "pZY6a",
+              "fill": "#065F46",
+              "content": "LINK -> github.com/notionglaze",
+              "fontFamily": "Space Mono",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "arSKE",
+          "name": "L_TableWrapper",
+          "width": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fWymG",
+              "name": "L_TR1",
+              "width": "fill_container",
+              "fill": "#F3F4F6",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "kp47Y",
+                  "fill": "#064E3B",
+                  "content": "CMD",
+                  "fontFamily": "Space Mono",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "xDCuE",
+                  "fill": "#064E3B",
+                  "content": "STATUS",
+                  "fontFamily": "Space Mono",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "1dsGY",
+          "name": "L_H2",
+          "fill": "#064E3B",
+          "content": "## Core_Systems_Overview",
+          "fontFamily": "Space Mono",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "OopjU",
+          "fill": "#D1D5DB",
+          "content": "==========================================================",
+          "fontFamily": "Space Mono",
+          "fontSize": 14,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "1lFnS",
+          "name": "L_Lists",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "8Mlli",
+              "fill": "#065F46",
+              "content": "* fetch --all",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "IxOml",
+          "name": "L_Code",
+          "width": "fill_container",
+          "fill": "#F9FAFB",
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "mbBP0",
+              "fill": "#065F46",
+              "content": "while(true) { breathe(); }",
+              "fontFamily": "Space Mono",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "q5OKw",
+          "name": "L_Toggle",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "WhtMy",
+              "fill": "#059669",
+              "content": "[+]",
+              "fontFamily": "Space Mono",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "OEgFW",
+              "fill": "#065F46",
+              "content": "Expand_Internal_Log",
+              "fontFamily": "Space Mono",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

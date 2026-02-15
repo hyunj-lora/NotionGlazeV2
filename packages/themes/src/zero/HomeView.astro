@@ -1,0 +1,159 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "NotionGlaze Blog";
+const siteDescription =
+    config.site_description ||
+    "Thoughts, essays, and technical captures sync'd from Notion.";
+
+// Pre-load PostCard
+const PostCardModule = await POST_CARDS.zero();
+const PostCard = PostCardModule.default;
+---
+
+<div class="zero-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1 class="gradient-text">{siteName}</h1>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>
+                            No posts found. Write something in Notion and watch
+                            the heist!
+                        </p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .zero-theme-home {
+        /* Theme Variables */
+        --primary: #6366f1;
+        --primary-rgb: 99, 102, 241;
+        --primary-foreground: #ffffff;
+
+        --secondary: #f1f5f9;
+        --secondary-rgb: 241, 245, 249;
+        --secondary-foreground: #0f172a;
+
+        --accent: #e0e7ff;
+        --accent-rgb: 224, 231, 255;
+        --accent-foreground: #312e81;
+
+        --background: #ffffff;
+        --foreground: #0f172a;
+        --muted: #f8fafc;
+        --muted-foreground: #64748b;
+        --border: #e2e8f0;
+    }
+
+    :global(.dark) .zero-theme-home {
+        --primary: #818cf8;
+        --primary-rgb: 129, 140, 248;
+        --primary-foreground: #ffffff;
+
+        --secondary: #1e293b;
+        --secondary-rgb: 30, 41, 59;
+        --secondary-foreground: #f8fafc;
+
+        --accent: #312e81;
+        --accent-rgb: 49, 46, 129;
+        --accent-foreground: #e0e7ff;
+
+        --background: #0f172a;
+        --foreground: #f8fafc;
+        --muted: #020617;
+        --muted-foreground: #94a3b8;
+        --border: #334155;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .blog-header {
+        margin: 6rem 0 8rem 0;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 5rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    .gradient-text {
+        background: linear-gradient(to bottom right, var(--primary), #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .blog-header p {
+        font-size: 1.5rem;
+        color: var(--muted-foreground);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .post-list {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .empty {
+        padding: 6rem;
+        text-align: center;
+        border: 2px dashed var(--border);
+        border-radius: 2rem;
+        color: var(--muted-foreground);
+        background: rgba(var(--primary-rgb), 0.02);
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+        .blog-header {
+            margin: 4rem 0 6rem 0;
+        }
+    }
+</style>

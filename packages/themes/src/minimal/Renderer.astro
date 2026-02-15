@@ -1,0 +1,192 @@
+---
+import NotionRenderer from "../core/NotionRenderer.astro";
+import Database from "../components/Database.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+}
+
+const { blocks, idToSlugMap } = Astro.props;
+
+const components = {
+    DatabaseLink: Database,
+};
+---
+
+<div class="minimal-theme">
+    <NotionRenderer
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        components={components}
+    />
+</div>
+
+<style>
+    .minimal-theme {
+        /* Theme Variables */
+        --min-fg: #334155;
+        --min-bg: #ffffff;
+        --min-heading: #0f172a;
+        --min-border: #e2e8f0;
+        --min-muted: #64748b;
+        --min-code-bg: #f1f5f9;
+        --min-quote-border: #cbd5e1;
+        --min-link: #2563eb;
+
+        max-width: 700px; /* Aligned with PostView */
+        margin: 0 auto;
+        line-height: 1.7;
+        font-size: 1.0625rem;
+        color: var(--min-fg);
+        font-family: "Inter", sans-serif;
+    }
+
+    /* Dark mode support */
+    :global(.dark) .minimal-theme {
+        --min-fg: #94a3b8;
+        --min-bg: #0f172a;
+        --min-heading: #f8fafc;
+        --min-border: #334155;
+        --min-muted: #94a3b8;
+        --min-code-bg: rgba(255, 255, 255, 0.1);
+        --min-quote-border: #334155;
+        --min-link: #60a5fa;
+    }
+
+    /* Shared Component Overrides */
+
+    /* Callout */
+    .minimal-theme :global(.notion-callout) {
+        background: var(--min-code-bg) !important;
+        border: 1px solid var(--min-border) !important;
+        border-radius: 8px !important;
+    }
+
+    /* CodeBlock */
+    .minimal-theme :global(.notion-code) {
+        background: var(--min-code-bg) !important;
+        border: 1px solid var(--min-border) !important;
+        border-radius: 8px !important;
+    }
+    .minimal-theme :global(.notion-code-header) {
+        border-bottom-color: var(--min-border) !important;
+    }
+
+    /* Quote */
+    .minimal-theme :global(.notion-quote) {
+        border-left: 4px solid var(--min-quote-border) !important;
+        color: var(--min-muted);
+    }
+
+    /* Bookmark */
+    .minimal-theme :global(.notion-bookmark) {
+        border: 1px solid var(--min-border) !important;
+        border-radius: 8px !important;
+    }
+
+    /* Todo */
+    .minimal-theme :global(.notion-todo-visual) {
+        border-color: var(--min-border) !important;
+    }
+    .minimal-theme :global(.notion-todo input:checked ~ .notion-todo-visual) {
+        background-color: var(--min-link) !important;
+        border-color: var(--min-link) !important;
+    }
+
+    /* Button */
+    .minimal-theme :global(.notion-button-link) {
+        background: var(--min-heading) !important;
+        color: var(--min-bg) !important;
+    }
+
+    /* File/Pdf */
+    .minimal-theme :global(.notion-file-link),
+    .minimal-theme :global(.notion-pdf-link) {
+        border: 1px solid var(--min-border) !important;
+        background: var(--min-bg) !important;
+    }
+    .minimal-theme :global(.notion-file-link:hover),
+    .minimal-theme :global(.notion-pdf-link:hover) {
+        background: var(--min-code-bg) !important;
+    }
+
+    /* Divider */
+    .minimal-theme :global(.notion-divider) {
+        border: 0 !important;
+        border-top: 1px solid var(--min-border) !important;
+        width: 100px !important;
+        margin: 4rem auto !important;
+        background: transparent !important;
+    }
+
+    .minimal-theme :global(p) {
+        margin-bottom: 1.5rem;
+    }
+
+    .minimal-theme :global(h1),
+    .minimal-theme :global(h2),
+    .minimal-theme :global(h3) {
+        color: var(--min-heading);
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.25;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    .minimal-theme :global(h1) {
+        font-size: 2.5rem;
+        letter-spacing: -0.03em;
+        margin-bottom: 2rem;
+    }
+
+    .minimal-theme :global(h2) {
+        font-size: 1.75rem;
+        border-bottom: 1px solid var(--min-border);
+        padding-bottom: 0.5rem;
+    }
+
+    .minimal-theme :global(h3) {
+        font-size: 1.35rem;
+    }
+
+    .minimal-theme :global(ul),
+    .minimal-theme :global(ol) {
+        margin-bottom: 2rem;
+        padding-left: 1.5rem;
+    }
+    .minimal-theme :global(li) {
+        margin-bottom: 0.5rem;
+    }
+
+    .minimal-theme :global(a) {
+        color: var(--min-link);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    .minimal-theme :global(a:hover) {
+        border-bottom-color: var(--min-link);
+    }
+
+    .minimal-theme :global(code) {
+        font-family:
+            "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+            "Courier New", monospace;
+        font-size: 0.85em;
+        background: var(--min-code-bg);
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+    }
+
+    @media (max-width: 720px) {
+        .minimal-theme {
+            padding: 0 1.5rem;
+        }
+        .minimal-theme :global(h1) {
+            font-size: 2rem;
+        }
+    }
+</style>

@@ -1,0 +1,22 @@
+{
+    "name": "@notionglaze/ui",
+    "version": "0.0.1",
+    "type": "module",
+    "main": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./*": "./src/*.astro"
+    },
+    "peerDependencies": {
+        "astro": "^5.0.0"
+    },
+    "dependencies": {
+        "@notionglaze/core": "*",
+        "@notionglaze/themes": "*",
+        "clsx": "^2.1.1",
+        "tailwind-merge": "^3.4.0"
+    },
+    "scripts": {
+        "build": "echo 'UI package does not require a build step'"
+    }
+}

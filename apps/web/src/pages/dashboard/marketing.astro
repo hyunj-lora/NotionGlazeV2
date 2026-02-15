@@ -1,0 +1,77 @@
+---
+import { DashboardLayout, GrowthSettings, StickyFooter } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+    } catch (e) {
+        console.error("Marketing Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="Growth & Marketing" tenant={tenant}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8">
+        <GrowthSettings config={config} />
+
+        <StickyFooter id="marketing-footer" saveId="save-marketing-btn" />
+    </div>
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Save logic
+            const saveBtn = document.getElementById("save-marketing-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    user_analytics_id:
+                        document.getElementById("user-analytics-id")?.value,
+                    social_links: Array.from(
+                        document.querySelectorAll(".social-link-item"),
+                    ).reduce((acc, item) => {
+                        const platform = item.dataset.platform;
+                        const url = item
+                            .querySelector(".url-text")
+                            ?.textContent.trim();
+                        acc[platform] = url;
+                        return acc;
+                    }, {}),
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast(
+                            "Marketing & Analytics updated!",
+                            "success",
+                        );
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</DashboardLayout>

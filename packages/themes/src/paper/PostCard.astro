@@ -1,0 +1,87 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 4rem;
+        padding-bottom: 3rem;
+        border-bottom: 2px solid var(--border);
+        max-width: 700px;
+    }
+    .post-card:last-child {
+        border-bottom: none;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    .meta {
+        font-family: "Inter", sans-serif;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        color: var(--muted-foreground);
+    }
+    h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.75rem;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+    p {
+        font-family: "Inter", sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: var(--muted-foreground);
+        margin-bottom: 1.5rem;
+    }
+    .read-more {
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        color: var(--foreground);
+    }
+    .post-card:hover h2 {
+        font-style: italic;
+    }
+</style>

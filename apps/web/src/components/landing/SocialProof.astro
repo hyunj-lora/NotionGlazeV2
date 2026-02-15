@@ -1,0 +1,116 @@
+---
+
+---
+
+<section class="social-proof">
+    <div class="container">
+        <h2 class="title text-center">
+            Built for High Performance.<br />Loved by Creators.
+        </h2>
+
+        <div class="testi-grid">
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p>
+                    "I love Notion, but image expiry was a dealbreaker for my
+                    design portfolio. NotionGlaze finally solved the reliability
+                    issue. I can sleep at night."
+                </p>
+                <div class="author">
+                    <strong>Senior Product Designer</strong>
+                    <span>via Reddit</span>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p>
+                    "Speed is everything for SEO. Delivering from the edge vault
+                    is the only way to rank. My bounce rate dropped by 40%."
+                </p>
+                <div class="author">
+                    <strong>SEO Specialist</strong>
+                    <span>Twitter / X</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .social-proof {
+        padding: 8rem 0;
+        background: var(--surface-1);
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 5rem;
+        line-height: 1.1;
+    }
+
+    .testi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .testi-card {
+        background: hsl(var(--background));
+        padding: 3rem;
+        border-radius: 30px;
+        border: 1px solid hsl(var(--border));
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .stars {
+        color: #f59e0b;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.1em;
+    }
+
+    .testi-card p {
+        font-size: 1.25rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-family: serif;
+        font-style: italic;
+    }
+
+    .author strong {
+        display: block;
+        font-size: 1.125rem;
+    }
+
+    .author span {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    @media (max-width: 1024px) {
+        .testi-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .social-proof {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .social-proof {
+            padding: 3.5rem 0;
+        }
+        .testi-card {
+            padding: 2rem;
+        }
+    }
+</style>

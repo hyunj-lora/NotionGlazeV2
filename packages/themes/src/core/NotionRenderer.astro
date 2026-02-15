@@ -1,0 +1,331 @@
+---
+import { groupBlocks } from "./utils";
+import RichText from "./RichText.astro";
+
+// Shared Core Blocks
+import CalloutBlock from "./blocks/Callout.astro";
+import CodeBlock from "./blocks/CodeBlock.astro";
+import QuoteBlock from "./blocks/Quote.astro";
+import EquationBlock from "./blocks/Equation.astro";
+import ToggleBlock from "./blocks/Toggle.astro";
+import TodoBlock from "./blocks/Todo.astro";
+import BookmarkBlock from "./blocks/Bookmark.astro";
+import TableBlock from "./blocks/Table.astro";
+import ImageBlock from "./blocks/Image.astro";
+import VideoBlock from "./blocks/Video.astro";
+import EmbedBlock from "./blocks/Embed.astro";
+import DividerBlock from "./blocks/Divider.astro";
+import ButtonBlock from "./blocks/Button.astro";
+import FileBlock from "./blocks/File.astro";
+import PdfBlock from "./blocks/Pdf.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+    // Theme-specific overrides
+    components?: {
+        CodeBlock?: any;
+        Callout?: any;
+        Quote?: any;
+        Equation?: any;
+        Toggle?: any;
+        Todo?: any;
+        Bookmark?: any;
+        Table?: any;
+        Divider?: any;
+        Image?: any;
+        Video?: any;
+        Embed?: any;
+        Button?: any;
+        DatabaseLink?: any;
+        File?: any;
+        Pdf?: any;
+        // Add more as needed
+    };
+}
+
+const { blocks, idToSlugMap = {}, components = {} } = Astro.props;
+const groupedBlocks = groupBlocks(blocks);
+
+// Component Mapping with Defaults
+const C = {
+    CodeBlock: components.CodeBlock || CodeBlock,
+    Callout: components.Callout || CalloutBlock,
+    Quote: components.Quote || QuoteBlock,
+    Equation: components.Equation || EquationBlock,
+    Toggle: components.Toggle || ToggleBlock,
+    Todo: components.Todo || TodoBlock,
+    Bookmark: components.Bookmark || BookmarkBlock,
+    Table: components.Table || TableBlock,
+    Divider: components.Divider || DividerBlock,
+    Image: components.Image || ImageBlock,
+    Video: components.Video || VideoBlock,
+    Embed: components.Embed || EmbedBlock,
+    Button: components.Button || ButtonBlock,
+    DatabaseLink: components.DatabaseLink,
+    File: components.File || FileBlock,
+    Pdf: components.Pdf || PdfBlock,
+};
+---
+
+{
+    groupedBlocks.map((block: any) => {
+        const { type, content, children } = block;
+
+        switch (type) {
+            case "paragraph":
+                return (
+                    <p>
+                        <RichText content={content.rich_text} />
+                    </p>
+                );
+            case "heading_1":
+                return (
+                    <h1>
+                        <RichText content={content.rich_text} />
+                    </h1>
+                );
+            case "heading_2":
+                return (
+                    <h2>
+                        <RichText content={content.rich_text} />
+                    </h2>
+                );
+            case "heading_3":
+                return (
+                    <h3>
+                        <RichText content={content.rich_text} />
+                    </h3>
+                );
+            case "bulleted_list_items":
+                return (
+                    <ul>
+                        {block.items.map((item: any) => (
+                            <li>
+                                <RichText content={item.content.rich_text} />
+                                {item.children && (
+                                    <Astro.self
+                                        blocks={item.children}
+                                        idToSlugMap={idToSlugMap}
+                                        components={components}
+                                    />
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                );
+            case "numbered_list_items":
+                return (
+                    <ol>
+                        {block.items.map((item: any) => (
+                            <li>
+                                <RichText content={item.content.rich_text} />
+                                {item.children && (
+                                    <Astro.self
+                                        blocks={item.children}
+                                        idToSlugMap={idToSlugMap}
+                                        components={components}
+                                    />
+                                )}
+                            </li>
+                        ))}
+                    </ol>
+                );
+            case "code":
+                return <C.CodeBlock content={content} />;
+            case "callout":
+                return (
+                    <C.Callout content={content}>
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </C.Callout>
+                );
+            case "quote":
+                return (
+                    <C.Quote content={content}>
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </C.Quote>
+                );
+            case "toggle":
+                return (
+                    <C.Toggle content={content}>
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </C.Toggle>
+                );
+            case "to_do":
+                return (
+                    <C.Todo content={content}>
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </C.Todo>
+                );
+            case "bookmark":
+                return <C.Bookmark content={content} />;
+            case "equation":
+                return <C.Equation content={content} />;
+            case "image":
+                return <C.Image content={content} />;
+            case "video":
+                return <C.Video content={content} />;
+            case "embed":
+                return <C.Embed content={content} />;
+            case "table":
+                return (
+                    <C.Table content={content}>
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </C.Table>
+                );
+            case "table_row":
+                return (
+                    <tr>
+                        {content.cells.map((cell: any) => (
+                            <td>
+                                <RichText content={cell} />
+                            </td>
+                        ))}
+                    </tr>
+                );
+            case "column_list":
+                return (
+                    <div class="column-list">
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </div>
+                );
+            case "column":
+                return (
+                    <div class="column">
+                        {children && (
+                            <Astro.self
+                                blocks={children}
+                                idToSlugMap={idToSlugMap}
+                                components={components}
+                            />
+                        )}
+                    </div>
+                );
+            case "divider":
+                return <C.Divider />;
+            case "button":
+                return C.Button ? (
+                    <C.Button content={content} />
+                ) : (
+                    <div class="notion-button">
+                        <RichText content={content.rich_text} />
+                    </div>
+                );
+            case "child_database":
+                return C.DatabaseLink ? (
+                    <C.DatabaseLink content={content} />
+                ) : (
+                    <div class="notion-database-link">
+                        <strong>{content.title}</strong>
+                    </div>
+                );
+            case "file":
+                return C.File ? (
+                    <C.File content={content} />
+                ) : (
+                    <a
+                        href={content.file?.url || content.external?.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Download File
+                    </a>
+                );
+            case "pdf":
+                return C.Pdf ? (
+                    <C.Pdf content={content} />
+                ) : (
+                    <a
+                        href={content.file?.url || content.external?.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View PDF
+                    </a>
+                );
+            default:
+                return null;
+        }
+    })
+}
+
+<style>
+    /* Base styles shared across themes (can be overridden) */
+    .column-list {
+        display: flex;
+        gap: 2rem;
+        margin: 2rem 0;
+        width: 100%;
+    }
+    .column {
+        flex: 1;
+        min-width: 0;
+    }
+    .notion-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background: hsl(var(--secondary, 240, 3.7%, 15.9%));
+        color: hsl(var(--secondary-foreground, 0, 0%, 98%));
+        border: 1px solid hsl(var(--border, 240, 3.7%, 15.9%));
+        font-weight: 500;
+        margin: 0.5rem 0;
+    }
+    :global(.dark) .notion-button {
+        background: hsl(var(--secondary));
+        border-color: hsl(var(--border));
+    }
+    .notion-database-link {
+        padding: 1rem;
+        background: hsl(var(--muted, 240, 3.7%, 15.9%) / 0.5);
+        border: 1px solid hsl(var(--border, 240, 3.7%, 15.9%));
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+    :global(.dark) .notion-database-link {
+        background: hsl(var(--muted));
+        border-color: hsl(var(--border));
+    }
+    @media (max-width: 640px) {
+        .column-list {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+</style>

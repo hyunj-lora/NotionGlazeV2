@@ -1,0 +1,182 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="zen-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <h1 class="post-title">{post.title}</h1>
+            <div class="meta">
+                {date && <time>{date}</time>}
+                {tags.length > 0 && <span class="dot">·</span>}
+                {
+                    tags.map((tag: string, i) => (
+                        <>
+                            <span class="tag">{tag}</span>
+                            {i < tags.length - 1 && <span class="dot">·</span>}
+                        </>
+                    ))
+                }
+            </div>
+            <div class="divider"></div>
+            {post.summary && <p class="summary">{post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <div class="footer-decoration"></div>
+            <a href="/blog" class="back-link">Return</a>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    :global(:root) {
+        --zen-bg: #f7f3f0;
+        --zen-bg-secondary: #fbfbfb;
+        --zen-text-main: #52525b;
+        --zen-text-muted: #a1a1aa;
+        --zen-heading: #18181b;
+        --zen-border: #e4e4e7;
+        --zen-accent: #2d2d2d;
+    }
+
+    :global(.dark) {
+        --zen-bg: #18181b;
+        --zen-bg-secondary: #27272a;
+        --zen-text-main: #a1a1aa;
+        --zen-text-muted: #71717a;
+        --zen-heading: #f4f4f5;
+        --zen-border: #3f3f46;
+        --zen-accent: #e4e4e7;
+    }
+
+    .zen-theme-post {
+        background-color: var(--zen-bg);
+        color: var(--zen-text-main);
+        font-family: "Inter", sans-serif;
+    }
+
+    :global(.dark) .zen-theme-post {
+        background-color: var(--zen-bg);
+        color: var(--zen-text-main);
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 10rem 0 6rem 0;
+        text-align: center;
+    }
+
+    .post-title {
+        font-size: 3.5rem;
+        font-weight: 300;
+        color: var(--zen-heading);
+        line-height: 1.3;
+        margin-bottom: 2.5rem;
+        letter-spacing: -0.01em;
+    }
+
+    .meta {
+        font-size: 0.85rem;
+        color: var(--zen-text-muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dot {
+        color: var(--zen-border);
+    }
+
+    .divider {
+        width: 30px;
+        height: 1px;
+        background: var(--zen-border);
+        margin: 0 auto 2.5rem auto;
+    }
+
+    .summary {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: var(--zen-text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+        font-weight: 300;
+    }
+
+    .content {
+        padding-bottom: 10rem;
+    }
+
+    .page-footer {
+        padding-bottom: 15rem;
+        text-align: center;
+    }
+
+    .footer-decoration {
+        width: 1px;
+        height: 60px;
+        background: var(--zen-border);
+        margin: 0 auto 3rem auto;
+    }
+
+    .back-link {
+        font-size: 0.9rem;
+        color: var(--zen-text-muted);
+        text-decoration: none;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition: color 0.3s;
+    }
+
+    .back-link:hover {
+        color: var(--zen-heading);
+    }
+
+    @media (max-width: 640px) {
+        .post-title {
+            font-size: 2.25rem;
+        }
+        .page-header {
+            margin: 6rem 0 4rem 0;
+        }
+    }
+</style>

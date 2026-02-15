@@ -1,0 +1,1716 @@
+---
+import Layout from "./Layout.astro";
+import ThemeToggle from "./components/ThemeToggle.astro";
+import Toast from "./components/Toast.astro";
+
+interface Props {
+    title: string;
+    tenant?: any;
+}
+
+const { title, tenant } = Astro.props;
+const tenantId = (Astro.locals as any).userId || "test-user";
+
+import { getLiveSiteUrl } from "@notionglaze/core";
+import { hexToHsl } from "./lib/utils";
+import "./styles/global.css";
+
+// --- Profile Enrichment ---
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+const workspaceName = config.workspace_name || "Nexus";
+const rawIcon = config.workspace_icon; // Could be emoji or URL
+const isEmoji = rawIcon && !rawIcon.startsWith("http");
+
+const blogUrl = getLiveSiteUrl(tenant);
+---
+
+<Layout
+    title={`${title} | NotionGlaze Dashboard`}
+    siteConfig={config}
+    isDashboard={true}
+>
+    <input
+        type="hidden"
+        id="tenant-id-data"
+        value={tenantId}
+        style="display: none;"
+    />
+    <div class="dashboard-shell">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="logo">NG</a>
+                <a href="/" class="logo logo-full">Notion<span>Glaze</span></a>
+                <button
+                    id="sidebar-collapse-btn"
+                    class="collapse-toggle"
+                    title="Toggle Sidebar"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="toggle-icon"
+                        ><path d="m11 17-5-5 5-5"></path><path
+                            d="m18 17-5-5 5-5"></path></svg
+                    >
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <!-- Publishing Group -->
+                <div class="nav-group">
+                    <span class="group-label">Publishing</span>
+                    <a
+                        href="/dashboard"
+                        class={`nav-item ${Astro.url.pathname === "/dashboard" || Astro.url.pathname === "/dashboard/" ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><rect width="7" height="9" x="3" y="3" rx="1"
+                                ></rect><rect
+                                    width="7"
+                                    height="5"
+                                    x="14"
+                                    y="3"
+                                    rx="1"></rect><rect
+                                    width="7"
+                                    height="9"
+                                    x="14"
+                                    y="12"
+                                    rx="1"></rect><rect
+                                    width="7"
+                                    height="5"
+                                    x="3"
+                                    y="16"
+                                    rx="1"></rect></svg
+                            >
+                        </span>
+                        <span class="label">Overview</span>
+                    </a>
+                    <a
+                        href="/dashboard/posts"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/posts") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                                ></path><polyline
+                                    points="14.5 2 14.5 7.5 20 7.5"
+                                ></polyline><line x1="16" y1="13" x2="8" y2="13"
+                                ></line><line x1="16" y1="17" x2="8" y2="17"
+                                ></line><line x1="10" y1="9" x2="8" y2="9"
+                                ></line></svg
+                            >
+                        </span>
+                        <span class="label">Posts</span>
+                    </a>
+                    <a
+                        href="/dashboard/sync"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/sync") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                                ></path><path d="M3 3v5h5"></path><path
+                                    d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"
+                                ></path><path d="M16 16h5v5"></path></svg
+                            >
+                        </span>
+                        <span class="label">Source & Sync</span>
+                    </a>
+                </div>
+
+                <!-- Branding Group -->
+                <div class="nav-group">
+                    <span class="group-label">Branding</span>
+                    <a
+                        href="/dashboard/design"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/design") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="m12 19 7-7 3 3-7 7-3-3z"></path><path
+                                    d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"
+                                ></path><path d="m2 2 7.586 7.586"
+                                ></path><circle cx="11" cy="11" r="2"
+                                ></circle></svg
+                            >
+                        </span>
+                        <span class="label">Design Studio</span>
+                    </a>
+                    <a
+                        href="/dashboard/navigation"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/navigation") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><rect
+                                    width="18"
+                                    height="11"
+                                    x="3"
+                                    y="11"
+                                    rx="2"
+                                    ry="2"></rect><path
+                                    d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg
+                            >
+                        </span>
+                        <span class="label">Navigation</span>
+                    </a>
+                    <a
+                        href="/dashboard/editor"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/editor") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M12 3v19"></path><path d="M5 8h14"
+                                ></path><path
+                                    d="M15 21a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6Z"
+                                ></path></svg
+                            >
+                        </span>
+                        <span class="label">Studio Builder</span>
+                    </a>
+                </div>
+
+                <!-- Growth & SEO Group -->
+                <div class="nav-group">
+                    <span class="group-label">Growth & SEO</span>
+                    <a
+                        href="/dashboard/seo"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/seo") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><circle cx="11" cy="11" r="8"></circle><path
+                                    d="m21 21-4.3-4.3"></path></svg
+                            >
+                        </span>
+                        <span class="label">SEO</span>
+                    </a>
+                    <a
+                        href="/dashboard/analytics"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/analytics") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M3 3v18h18"></path><path
+                                    d="m19 9-5 5-4-4-3 3"></path></svg
+                            >
+                        </span>
+                        <span class="label">Analytics</span>
+                    </a>
+                </div>
+
+                <!-- Settings Group -->
+                <div class="nav-group">
+                    <span class="group-label">Settings</span>
+                    <a
+                        href="/dashboard/settings"
+                        class={`nav-item ${Astro.url.pathname === "/dashboard/settings" || Astro.url.pathname === "/dashboard/settings/" ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.72l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                                ></path><circle cx="12" cy="12" r="3"
+                                ></circle></svg
+                            >
+                        </span>
+                        <span class="label">General</span>
+                    </a>
+                    <a
+                        href="/dashboard/domains"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/domains") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><circle cx="12" cy="12" r="10"></circle><line
+                                    x1="2"
+                                    y1="12"
+                                    x2="22"
+                                    y2="12"></line><path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                                ></path></svg
+                            >
+                        </span>
+                        <span class="label">Domains</span>
+                    </a>
+                    <a
+                        href="/dashboard/billing"
+                        class={`nav-item ${Astro.url.pathname.startsWith("/dashboard/billing") ? "active" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                                ></path></svg
+                            >
+                        </span>
+                        <span class="label">Billing</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-action">
+                    <a
+                        href={`https://notion.so/${tenant?.root_page_id?.replace(/-/g, "")}`}
+                        target="_blank"
+                        class={`btn-notion-editor ${!tenant?.root_page_id ? "hidden" : ""}`}
+                    >
+                        <span class="icon">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M12 20h9"></path><path
+                                    d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"
+                                ></path></svg
+                            >
+                        </span>
+                        Launch Notion Editor
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-card">
+                    <div class="profile-main">
+                        <div class="profile-info">
+                            <div class="avatar-wrapper">
+                                {
+                                    rawIcon ? (
+                                        isEmoji ? (
+                                            <span class="emoji-avatar">
+                                                {rawIcon}
+                                            </span>
+                                        ) : (
+                                            <img
+                                                src={rawIcon}
+                                                class="img-avatar"
+                                                alt=""
+                                            />
+                                        )
+                                    ) : (
+                                        <div class="letter-avatar">
+                                            {workspaceName.charAt(0)}
+                                        </div>
+                                    )
+                                }
+                            </div>
+                            <div class="profile-details">
+                                <span class="workspace-name"
+                                    >{workspaceName}</span
+                                >
+                                <div class="plan-badge-wrapper">
+                                    <span
+                                        class={`plan-badge ${tenant?.plan === "pro" ? "pro" : "trial"}`}
+                                    >
+                                        {
+                                            tenant?.plan === "pro"
+                                                ? "BOOTSTRAPPER"
+                                                : "TRIAL"
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            id="logout-trigger"
+                            class="btn-icon logout-icon-btn"
+                            title="Log Out"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path
+                                    d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+                                ></path><polyline points="16 17 21 12 16 7"
+                                ></polyline><line x1="21" y1="12" x2="9" y2="12"
+                                ></line></svg
+                            >
+                        </button>
+                    </div>
+                    <div class="profile-actions">
+                        <ThemeToggle />
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="dashboard-content">
+            <header class="content-header">
+                <div class="header-left">
+                    <h1>{title}</h1>
+                    <div
+                        id="sync-status-indicator"
+                        class={`sync-indicator ${tenant?.sync_status === "syncing" ? "" : "hidden"}`}
+                    >
+                        <span class="pulse-dot"></span>
+                        <span class="status-text">Synchronizing...</span>
+                        <span class="progress-percent" id="header-progress-val"
+                            >{tenant?.sync_progress || 0}%</span
+                        >
+                    </div>
+                </div>
+                <div class="actions">
+                    {
+                        !tenant || !tenant.notion_access_token ? (
+                            <a
+                                href="/dashboard/settings#engine"
+                                class="btn-primary-glow small"
+                            >
+                                Connect Notion
+                            </a>
+                        ) : (
+                            <button
+                                id="sync-btn"
+                                class={`btn-sync ${tenant.sync_status === "syncing" ? "loading" : ""}`}
+                            >
+                                <span class="icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <>
+                                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                                            <path d="M21 3v5h-5" />
+                                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                                            <path d="M8 16H3v5" />
+                                        </>
+                                    </svg>
+                                </span>{" "}
+                                Magic Sync
+                            </button>
+                        )
+                    }
+                    <a href={blogUrl} target="_blank" class="btn-view">
+                        Live Site <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="margin-left: 4px;"
+                            ><path
+                                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                            ></path><polyline points="15 3 21 3 21 9"
+                            ></polyline><line x1="10" y1="14" x2="21" y2="3"
+                            ></line></svg
+                        >
+                    </a>
+                </div>
+            </header>
+            <div
+                id="global-progress-bar"
+                class={`global-progress-container ${tenant?.sync_status === "syncing" ? "" : "hidden"}`}
+            >
+                <div
+                    class="progress-fill"
+                    style={`width: ${tenant?.sync_progress || 0}%`}
+                >
+                </div>
+            </div>
+            {
+                tenant && tenant.plan === "trial" && (
+                    <div
+                        class={`trial-banner ${Date.now() / 1000 > tenant.trial_ends_at ? "expired" : ""}`}
+                    >
+                        <div class="banner-content">
+                            {Date.now() / 1000 > tenant.trial_ends_at ? (
+                                <strong>Your trial has expired.</strong>
+                            ) : (
+                                <span>
+                                    You are on a{" "}
+                                    <strong>14-day launch pad</strong>.
+                                    <strong>
+                                        {Math.max(
+                                            0,
+                                            Math.ceil(
+                                                (tenant.trial_ends_at -
+                                                    Date.now() / 1000) /
+                                                    (24 * 60 * 60),
+                                            ),
+                                        )}{" "}
+                                        days
+                                    </strong>{" "}
+                                    to launch your project.
+                                </span>
+                            )}
+                            Activate the Bootstrapper Pack to keep your site
+                            live.
+                        </div>
+                        <a href="/dashboard/billing" class="banner-btn">
+                            Activate Now
+                        </a>
+                    </div>
+                )
+            }
+            <div class="content-body">
+                <slot />
+            </div>
+        </main>
+
+        <Toast />
+
+        <script>
+            declare global {
+                interface Window {
+                    showToast: (
+                        message: string,
+                        type?: "success" | "error" | "info",
+                        duration?: number,
+                    ) => void;
+                }
+            }
+
+            const syncBtn = document.getElementById("sync-btn");
+            const tenantIdInput = document.getElementById(
+                "tenant-id-data",
+            ) as HTMLInputElement;
+            const tenantId = tenantIdInput?.value || "test-user";
+
+            if (syncBtn) {
+                syncBtn.addEventListener("click", async () => {
+                    syncBtn.classList.add("loading");
+                    syncBtn.setAttribute("disabled", "true");
+
+                    try {
+                        // Trigger the unified sync endpoint
+                        const response = await fetch("/api/v1/sync", {
+                            method: "POST",
+                        });
+
+                        if (response.ok) {
+                            // Start polling immediately after trigger
+                            startSyncPolling();
+                        } else {
+                            const data = await response
+                                .json()
+                                .catch(() => ({}));
+                            window.showToast(
+                                `Sync failed: ${data.error || "Unknown engine error"}`,
+                                "error",
+                            );
+                            syncBtn.classList.remove("loading");
+                            syncBtn.removeAttribute("disabled");
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        window.showToast("Sync connection failed.", "error");
+                        syncBtn.classList.remove("loading");
+                        syncBtn.removeAttribute("disabled");
+                    }
+                });
+            }
+
+            // --- Real-time Sync Polling ---
+            let pollInterval: any = null;
+
+            function startSyncPolling() {
+                if (pollInterval) return;
+
+                const progressBar = document.getElementById(
+                    "global-progress-bar",
+                );
+                const progressFill = progressBar?.querySelector(
+                    ".progress-fill",
+                ) as HTMLElement;
+                const statusIndicator = document.getElementById(
+                    "sync-status-indicator",
+                );
+                const progressVal = document.getElementById(
+                    "header-progress-val",
+                );
+                const syncBtn = document.getElementById("sync-btn");
+
+                progressBar?.classList.remove("hidden");
+                statusIndicator?.classList.remove("hidden");
+                syncBtn?.classList.add("loading");
+                syncBtn?.setAttribute("disabled", "true");
+
+                let lastProcessedCount = -1;
+                let stalledCount = 0;
+
+                pollInterval = setInterval(async () => {
+                    try {
+                        const res = await fetch("/api/v1/tenant/status");
+                        if (!res.ok) return;
+                        const data = await res.json();
+
+                        if (data.sync_status === "syncing") {
+                            if (progressFill)
+                                progressFill.style.width = `${data.sync_progress}%`;
+                            if (progressVal)
+                                progressVal.textContent = `${data.sync_progress}%`;
+
+                            // Safety: check if progress is stalled
+                            if (data.sync_processed === lastProcessedCount) {
+                                stalledCount++;
+                            } else {
+                                stalledCount = 0;
+                                lastProcessedCount = data.sync_processed;
+                            }
+
+                            // If stalled for ~1 minute (24 * 2.5s)
+                            if (stalledCount > 24) {
+                                console.warn(
+                                    "Sync seems stalled. Stopping poll.",
+                                );
+                                clearInterval(pollInterval);
+                                pollInterval = null;
+                                statusIndicator?.classList.add("hidden");
+                                progressBar?.classList.add("hidden");
+                                syncBtn?.classList.remove("loading");
+                                syncBtn?.removeAttribute("disabled");
+                            }
+                        } else {
+                            // Sync finished or failed
+                            clearInterval(pollInterval);
+                            pollInterval = null;
+
+                            if (
+                                data.sync_status === "error" ||
+                                data.sync_status === "failed"
+                            ) {
+                                window.showToast(
+                                    `Sync encountered an error: ${data.last_sync_error}`,
+                                    "error",
+                                );
+                            }
+
+                            // Refresh page to show new content
+                            window.location.reload();
+                        }
+                    } catch (e) {
+                        console.error("Polling error:", e);
+                    }
+                }, 2500);
+            }
+
+            // Initialize polling if already syncing on load
+            const initialStatus = document
+                .getElementById("sync-status-indicator")
+                ?.classList.contains("hidden")
+                ? "idle"
+                : "syncing";
+            if (initialStatus === "syncing") {
+                startSyncPolling();
+            }
+
+            // --- Sidebar Collapse Logic ---
+            const sidebar = document.querySelector(".sidebar");
+            const collapseBtn = document.getElementById("sidebar-collapse-btn");
+            const isCollapsed =
+                localStorage.getItem("sidebar-collapsed") === "true";
+
+            if (isCollapsed && sidebar) {
+                sidebar.classList.add("collapsed");
+            }
+
+            collapseBtn?.addEventListener("click", () => {
+                sidebar?.classList.toggle("collapsed");
+                localStorage.setItem(
+                    "sidebar-collapsed",
+                    sidebar?.classList.contains("collapsed") ? "true" : "false",
+                );
+            });
+
+            // --- Logout Logic ---
+            const logoutBtn = document.getElementById("logout-trigger");
+            logoutBtn?.addEventListener("click", async () => {
+                if (!confirm("Are you sure you want to log out?")) return;
+
+                try {
+                    const res = await fetch("/api/v1/auth/logout", {
+                        method: "POST",
+                    });
+                    if (res.ok) {
+                        window.location.href = "/login";
+                    } else {
+                        // Fallback: manual cookie clear and redirect if endpoint fails
+                        document.cookie =
+                            "session_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                        window.location.href = "/login";
+                    }
+                } catch (e) {
+                    window.location.href = "/";
+                }
+            });
+
+            // --- Sidebar Item Highlighting ---
+            const updateSidebarActive = () => {
+                const path = window.location.pathname;
+                const navItems = document.querySelectorAll(".nav-item");
+
+                navItems.forEach((item) => {
+                    const href = item.getAttribute("href");
+                    if (!href) return;
+
+                    try {
+                        const url = new URL(href, window.location.origin);
+                        let isActive = false;
+
+                        if (
+                            url.pathname === "/dashboard" ||
+                            url.pathname === "/dashboard/"
+                        ) {
+                            isActive =
+                                path === "/dashboard" || path === "/dashboard/";
+                        } else {
+                            isActive = path.startsWith(url.pathname);
+                        }
+
+                        item.classList.toggle("active", isActive);
+                    } catch (e) {}
+                });
+            };
+
+            updateSidebarActive();
+        </script>
+
+        <style>
+            .dashboard-shell {
+                display: flex;
+                min-height: 100vh;
+                background: hsl(var(--background));
+                color: hsl(var(--foreground));
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+                width: 260px;
+                background: hsl(var(--secondary));
+                border-right: 1px solid hsl(var(--border));
+                display: flex;
+                flex-direction: column;
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 50;
+                overflow: visible; /* Changed from hidden to allow toggle button to stick out */
+            }
+
+            .sidebar::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .sidebar::-webkit-scrollbar-thumb {
+                background-color: hsl(var(--border));
+                border-radius: 20px;
+            }
+
+            .collapsed {
+                width: 80px;
+            }
+
+            .sidebar-header {
+                padding: 0.5rem 0.75rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-height: 48px;
+                flex-shrink: 0; /* Prevent header from shrinking */
+            }
+
+            .logo {
+                font-size: 1.2rem;
+                font-weight: 800;
+                color: hsl(var(--primary));
+                text-decoration: none;
+                display: none;
+            }
+
+            .collapsed .logo {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+
+            .logo-full {
+                font-size: 1.25rem;
+                display: block;
+                color: hsl(var(--foreground));
+                font-weight: 800;
+                letter-spacing: -0.03em;
+            }
+            .logo-full span {
+                color: hsl(var(--primary));
+            }
+            .collapsed .logo-full {
+                display: none;
+            }
+
+            .collapse-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                min-height: 28px;
+                flex: none;
+                background: hsl(var(--background));
+                border: 1px solid hsl(var(--border) / 0.8);
+                color: hsl(var(--muted-foreground));
+                border-radius: 8px;
+                cursor: pointer;
+                position: relative;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                z-index: 100;
+                padding: 0;
+                margin-left: 0.5rem;
+            }
+
+            .collapse-toggle:hover {
+                background: hsl(var(--foreground) / 0.05);
+                color: hsl(var(--foreground));
+                border-color: hsl(var(--foreground) / 0.1);
+                transform: translateY(-1px);
+            }
+
+            .toggle-icon {
+                width: 16px !important;
+                height: 16px !important;
+                display: block !important;
+                stroke-width: 3px !important;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .collapsed .collapse-toggle {
+                position: absolute;
+                right: -16px;
+                top: 24px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+            .collapsed .toggle-icon {
+                transform: rotate(180deg);
+            }
+
+            .sidebar-nav {
+                flex: 1;
+                padding: 0 0.5rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+                overflow-y: auto; /* Make nav area scrollable */
+                overflow-x: hidden;
+                scrollbar-width: thin;
+                scrollbar-color: hsl(var(--border)) transparent;
+            }
+
+            .sidebar-nav::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .sidebar-nav::-webkit-scrollbar-thumb {
+                background-color: hsl(var(--border));
+                border-radius: 20px;
+            }
+
+            .nav-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1px;
+                padding-bottom: 0.5rem;
+                margin-bottom: 0.5rem;
+                position: relative;
+            }
+
+            .nav-group:not(:last-of-type)::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0.75rem;
+                right: 0.75rem;
+                height: 1px;
+                background: linear-gradient(
+                    to right,
+                    transparent,
+                    hsl(var(--border) / 0.4) 20%,
+                    hsl(var(--border) / 0.4) 80%,
+                    transparent
+                );
+            }
+
+            .group-label {
+                font-size: 0.55rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                color: hsl(var(--muted-foreground));
+                letter-spacing: 0.1em;
+                margin-bottom: 0;
+                margin-top: 0.25rem;
+                padding: 0 0.75rem;
+                opacity: 0.5;
+                line-height: 1.2;
+            }
+
+            .collapsed .group-label {
+                display: none;
+            }
+
+            .nav-item .label {
+                transition:
+                    opacity 0.2s,
+                    visibility 0.2s;
+            }
+
+            .collapsed .nav-item {
+                justify-content: center;
+                padding: 0.75rem;
+            }
+            .collapsed .nav-item .label {
+                display: none;
+            }
+            .collapsed .nav-item .icon {
+                margin: 0;
+            }
+            .sidebar-action {
+                margin-top: 0.25rem;
+                padding: 0 0.5rem 0.25rem 0.5rem;
+            }
+
+            .btn-notion-editor {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.4rem 0.6rem;
+                border-radius: 0.5rem;
+                background: hsl(var(--foreground) / 0.03);
+                border: 1px solid hsl(var(--border));
+                color: hsl(var(--foreground));
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-decoration: none;
+                transition: all 0.2s;
+                width: 100%;
+                min-height: 32px;
+            }
+
+            .btn-notion-editor:hover {
+                background: hsl(var(--foreground) / 0.06);
+                border-color: hsl(var(--foreground) / 0.1);
+                transform: translateY(-1px);
+            }
+
+            .btn-notion-editor.hidden {
+                display: none;
+            }
+
+            .collapsed .btn-notion-editor {
+                padding: 0.75rem;
+                justify-content: center;
+            }
+
+            .collapsed .btn-notion-editor .label {
+                display: none;
+            }
+
+            .collapsed .profile-details {
+                display: none;
+            }
+            .collapsed .profile-actions {
+                flex-direction: column;
+                width: 100%;
+                align-items: center;
+                background: transparent;
+                border: none;
+                padding: 0;
+                margin-top: 1rem;
+                gap: 0.5rem;
+            }
+            .collapsed .profile-main {
+                justify-content: center;
+                flex-direction: column;
+                padding: 0;
+                gap: 0.75rem;
+            }
+            .collapsed .profile-info {
+                justify-content: center;
+            }
+            .collapsed .sidebar-footer {
+                padding: 1.5rem 0.5rem;
+            }
+            .nav-item {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                padding: 0.25rem 0.6rem;
+                border-radius: 0.4rem;
+                color: hsl(var(--muted-foreground));
+                text-decoration: none;
+                transition: all 0.2s;
+                margin-bottom: 0;
+                font-weight: 500;
+                font-size: 0.8125rem;
+                line-height: 1.4;
+            }
+            .nav-item:hover {
+                background: hsl(var(--foreground) / 0.05);
+                color: hsl(var(--foreground));
+            }
+            .nav-item.active {
+                background: hsl(var(--primary) / 0.1);
+                color: hsl(var(--primary));
+            }
+            .text-destructive {
+                color: #ef4444 !important;
+            }
+            .logout-nav-item:hover {
+                background: rgba(239, 68, 68, 0.1) !important;
+            }
+            .icon {
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+            }
+
+            .sidebar-footer {
+                padding: 0.35rem 0.5rem;
+                border-top: 1px solid hsl(var(--border));
+                background: hsl(var(--secondary));
+                flex-shrink: 0; /* Prevent footer from shrinking */
+                position: sticky;
+                bottom: 0;
+                z-index: 10;
+                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            }
+            .user-profile-card {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            .profile-main {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.5rem 0.75rem;
+                gap: 0.75rem;
+                background: hsl(var(--foreground) / 0.04);
+                border: 1px solid hsl(var(--border) / 0.5);
+                border-radius: 10px;
+                margin-bottom: 0.5rem;
+            }
+            .profile-info {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                min-width: 0;
+                flex: 1;
+            }
+            .avatar-wrapper {
+                width: 26px;
+                height: 26px;
+                border-radius: 6px;
+                background: hsl(var(--foreground) / 0.05);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                border: 1px solid hsl(var(--border));
+                flex-shrink: 0;
+            }
+            .emoji-avatar {
+                font-size: 0.9rem;
+            }
+            .img-avatar {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .letter-avatar {
+                font-weight: 800;
+                color: hsl(var(--primary));
+                font-size: 0.85rem;
+            }
+            .profile-details {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                min-width: 0;
+            }
+            .workspace-name {
+                font-weight: 600;
+                font-size: 0.75rem;
+                color: hsl(var(--foreground));
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.2;
+            }
+            .plan-badge-wrapper {
+                line-height: 1;
+            }
+            .plan-badge {
+                font-size: 0.55rem;
+                font-weight: 800;
+                padding: 0.05rem 0.3rem;
+                border-radius: 3px;
+                display: inline-block;
+                line-height: normal;
+            }
+            .plan-badge.trial {
+                background: hsl(var(--primary) / 0.1);
+                color: hsl(var(--primary));
+            }
+            .plan-badge.pro {
+                background: hsl(var(--primary));
+                color: hsl(var(--primary-foreground));
+            }
+            .profile-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.15rem;
+                background: hsl(var(--foreground) / 0.04);
+                border: 1px solid hsl(var(--border));
+                border-radius: 6px;
+                margin-top: 0.1rem;
+                width: 100%;
+                justify-content: center;
+            }
+            .btn-icon {
+                background: transparent;
+                border: none;
+                color: hsl(var(--muted-foreground));
+                cursor: pointer;
+                width: 24px;
+                height: 24px;
+                border-radius: 4px;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .btn-icon:hover {
+                background: hsl(var(--foreground) / 0.05);
+                color: hsl(var(--foreground));
+            }
+            .logout-icon-btn {
+                width: 30px !important;
+                height: 30px !important;
+                min-width: 30px !important;
+                min-height: 30px !important;
+                flex: none !important;
+                padding: 0 !important;
+                background: transparent !important;
+                border: 1px solid transparent !important;
+                color: hsl(var(--muted-foreground)) !important;
+                border-radius: 8px !important;
+                transition: all 0.2s ease !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            .logout-icon-btn svg {
+                width: 18px !important;
+                height: 18px !important;
+                stroke-width: 2.5px !important;
+            }
+
+            .logout-icon-btn:hover {
+                background: #fef2f2 !important;
+                border-color: #fee2e2 !important;
+                color: #ef4444 !important;
+                transform: scale(1.05);
+            }
+
+            [data-theme="dark"] .logout-icon-btn:hover {
+                background: #450a0a !important;
+                border-color: #7f1d1d !important;
+            }
+
+            /* Content Area Styles */
+            .dashboard-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+            }
+            .content-header {
+                padding: 0.75rem 1.5rem;
+                border-bottom: 1px solid hsl(var(--border) / 0.8);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: hsl(var(--background));
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                box-shadow:
+                    0 4px 6px -1px rgb(0 0 0 / 0.05),
+                    0 2px 4px -2px rgb(0 0 0 / 0.05);
+            }
+            .content-header h1 {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: hsl(var(--foreground));
+            }
+            .actions {
+                display: flex;
+                gap: 0.75rem;
+            }
+            .btn-sync,
+            .btn-view {
+                padding: 0.4rem 0.8rem;
+                border-radius: 0.4rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                text-decoration: none;
+            }
+            .btn-sync {
+                background: hsl(var(--secondary));
+                border: 1px solid hsl(var(--border));
+                color: hsl(var(--foreground));
+            }
+            .btn-sync:hover:not(:disabled) {
+                background: hsl(var(--muted));
+            }
+            .btn-sync.loading .icon {
+                animation: spin 1s linear infinite;
+            }
+            .header-left {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            .sync-indicator {
+                font-size: 0.7rem;
+                background: hsl(var(--primary) / 0.08);
+                border: 1px solid hsl(var(--primary) / 0.15);
+                color: hsl(var(--primary));
+                padding: 0.25rem 0.6rem;
+                border-radius: 2rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: all 0.3s ease;
+            }
+            .sync-indicator.hidden {
+                display: none;
+            }
+            .pulse-dot {
+                width: 5px;
+                height: 5px;
+                background: hsl(var(--primary));
+                border-radius: 50%;
+                animation: indicator-pulse 1.5s infinite;
+            }
+            .progress-percent {
+                opacity: 0.7;
+                font-family: monospace;
+            }
+
+            @keyframes indicator-pulse {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.5);
+                    opacity: 0.5;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+
+            /* Global Progress Bar */
+            .global-progress-container {
+                height: 2px;
+                width: 100%;
+                background: hsl(var(--foreground) / 0.03);
+                position: sticky;
+                top: 50px; /* Adjusted roughly for header height */
+                z-index: 99;
+                overflow: hidden;
+            }
+            .global-progress-container.hidden {
+                display: none;
+            }
+            .progress-fill {
+                height: 100%;
+                background: hsl(var(--primary));
+                box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+                transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .btn-primary-glow.small {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            .btn-primary-glow {
+                background: hsl(var(--primary));
+                color: hsl(var(--primary-foreground));
+                padding: 0.6rem 1.2rem;
+                border-radius: 0.4rem;
+                font-weight: 700;
+                text-decoration: none;
+                box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                border: none;
+                cursor: pointer;
+            }
+            .btn-primary-glow:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 0 25px hsl(var(--primary) / 0.5);
+            }
+
+            .btn-view {
+                background: hsl(var(--secondary));
+                color: hsl(var(--foreground));
+                border: 1px solid hsl(var(--border));
+            }
+            .btn-view:hover {
+                opacity: 0.9;
+            }
+
+            .trial-banner {
+                background: hsl(var(--primary) / 0.1);
+                border-bottom: 1px solid hsl(var(--primary) / 0.2);
+                padding: 0.5rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+                font-size: 0.8rem;
+                color: hsl(var(--foreground));
+            }
+
+            .trial-banner.expired {
+                background: rgba(239, 68, 68, 0.1);
+                border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+            }
+
+            .banner-content {
+                flex: 1;
+            }
+
+            .banner-btn {
+                background: hsl(var(--primary));
+                color: white;
+                padding: 0.3rem 0.8rem;
+                border-radius: 0.4rem;
+                font-weight: 700;
+                text-decoration: none;
+                font-size: 0.75rem;
+                white-space: nowrap;
+                transition: transform 0.2s;
+            }
+
+            .banner-btn:hover {
+                transform: translateY(-1px);
+            }
+
+            .content-body {
+                padding: 1.5rem;
+                flex: 1;
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            /* Responsive Sidebar - Viewport Height Based */
+            /* Comfortable density for medium-height screens (800px - 1000px) */
+            @media (min-height: 800px) {
+                .sidebar-nav {
+                    gap: 0.75rem;
+                }
+
+                .nav-group {
+                    gap: 0.25rem;
+                    padding-bottom: 0.75rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                .nav-group:not(:last-of-type)::after {
+                    left: 1rem;
+                    right: 1rem;
+                }
+
+                .nav-item {
+                    padding: 0.5rem 0.75rem;
+                    font-size: 0.875rem;
+                    gap: 0.75rem;
+                }
+
+                .group-label {
+                    font-size: 0.65rem;
+                    margin-bottom: 0.35rem;
+                    margin-top: 0.5rem;
+                    letter-spacing: 0.15em;
+                }
+
+                .icon {
+                    font-size: 1.1rem;
+                }
+
+                .icon svg {
+                    width: 18px;
+                    height: 18px;
+                }
+
+                .avatar-wrapper {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                }
+
+                .emoji-avatar {
+                    font-size: 1.1rem;
+                }
+
+                .letter-avatar {
+                    font-size: 1rem;
+                }
+
+                .workspace-name {
+                    font-size: 0.85rem;
+                }
+
+                .plan-badge {
+                    font-size: 0.6rem;
+                    padding: 0.05rem 0.4rem;
+                    border-radius: 4px;
+                }
+
+                .sidebar-footer {
+                    padding: 0.75rem;
+                }
+
+                .user-profile-card {
+                    gap: 0.5rem;
+                }
+
+                .profile-main {
+                    padding: 0.5rem;
+                }
+
+                .profile-info {
+                    gap: 0.75rem;
+                }
+
+                .btn-notion-editor {
+                    padding: 0.6rem 0.8rem;
+                    font-size: 0.8rem;
+                    gap: 0.6rem;
+                }
+
+                .sidebar-action {
+                    padding: 0.5rem 0.75rem;
+                }
+
+                .btn-icon:not(.logout-icon-btn) {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 6px;
+                }
+
+                .profile-actions {
+                    padding: 0.25rem;
+                    border-radius: 8px;
+                    margin-top: 0.25rem;
+                }
+            }
+
+            /* Spacious density for large-height screens (> 1000px) */
+            @media (min-height: 1000px) {
+                .sidebar-nav {
+                    gap: 1rem;
+                }
+
+                .nav-group {
+                    gap: 0.3rem;
+                    padding-bottom: 1rem;
+                    margin-bottom: 1rem;
+                }
+
+                .nav-group:not(:last-of-type)::after {
+                    left: 1.25rem;
+                    right: 1.25rem;
+                    background: linear-gradient(
+                        to right,
+                        transparent,
+                        hsl(var(--border) / 0.5) 15%,
+                        hsl(var(--border) / 0.5) 85%,
+                        transparent
+                    );
+                }
+
+                .nav-item {
+                    padding: 0.65rem 0.85rem;
+                    font-size: 0.9rem;
+                    gap: 0.8rem;
+                }
+
+                .group-label {
+                    font-size: 0.7rem;
+                    margin-bottom: 0.5rem;
+                    margin-top: 0.75rem;
+                    letter-spacing: 0.2em;
+                }
+
+                .sidebar-header {
+                    padding: 1rem;
+                    min-height: 64px;
+                }
+
+                .logo-full {
+                    font-size: 1.4rem;
+                }
+
+                .btn-notion-editor {
+                    padding: 0.75rem 1rem;
+                    font-size: 0.85rem;
+                }
+
+                .sidebar-action {
+                    padding: 0.75rem;
+                    margin-top: 0.5rem;
+                }
+
+                .sidebar-footer {
+                    padding: 1rem;
+                }
+
+                .user-profile-card {
+                    gap: 0.75rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .dashboard-shell {
+                    flex-direction: column;
+                    padding-bottom: 60px;
+                }
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                    position: fixed;
+                    bottom: 0;
+                    top: auto;
+                    left: 0;
+                    right: 0;
+                    z-index: 1000;
+                    flex-direction: row;
+                    padding: 0;
+                    border-right: none;
+                    border-top: 1px solid hsl(var(--border));
+                    background: hsl(var(--background));
+                    backdrop-filter: blur(10px);
+                }
+                .sidebar-header {
+                    display: none;
+                }
+                .sidebar-nav {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    padding: 0.25rem;
+                    width: 100%;
+                    gap: 0;
+                }
+                .nav-item {
+                    flex-direction: column;
+                    gap: 0.15rem;
+                    padding: 0.25rem;
+                    margin-bottom: 0;
+                    font-size: 0.65rem;
+                    flex: 1;
+                    justify-content: center;
+                    border-radius: 4px;
+                }
+                .nav-item .icon {
+                    font-size: 1.1rem;
+                }
+                .sidebar-footer {
+                    display: none;
+                }
+
+                /* Hide groups that don't make sense in mobile bottom nav or simplify */
+                .group-label {
+                    display: none;
+                }
+                .nav-group {
+                    flex-direction: row;
+                    gap: 0;
+                }
+                .sidebar-action {
+                    display: none;
+                }
+
+                .content-header {
+                    padding: 0.75rem 1rem;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 0.75rem;
+                }
+                .content-header h1 {
+                    font-size: 1.1rem;
+                }
+                .actions {
+                    width: 100%;
+                    overflow-x: auto;
+                    padding-bottom: 0.25rem;
+                }
+                .btn-sync,
+                .btn-view {
+                    padding: 0.35rem 0.7rem;
+                    font-size: 0.7rem;
+                    white-space: nowrap;
+                }
+                .content-body {
+                    padding: 1rem;
+                }
+            }
+        </style>
+    </div>
+</Layout>

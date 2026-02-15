@@ -1,0 +1,225 @@
+---
+/**
+ * GrowthSettings.astro
+ * Handles Social Footprint and Analytics configuration.
+ */
+import DashboardSection from "../DashboardSection.astro";
+import DashboardCard from "../DashboardCard.astro";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+---
+
+<div class="settings-panel">
+    <DashboardSection
+        id="sec-social"
+        number="06"
+        title="Social Footprint"
+        description="Link your other platforms for universal reach. Enter full URLs or handles."
+    >
+        <DashboardCard>
+            <div id="social-links-list" class="social-links-list space-y-3">
+                {
+                    config.social_links &&
+                        Object.entries(config.social_links).map(
+                            ([platform, url]) => (
+                                <div
+                                    class="social-link-item flex items-center justify-between p-3 rounded-xl bg-secondary/10 border border-border group"
+                                    data-platform={platform}
+                                >
+                                    <div class="flex items-center gap-3 overflow-hidden">
+                                        <div class="h-8 w-8 rounded-lg bg-background border flex items-center justify-center text-xs font-black uppercase text-primary">
+                                            {platform.charAt(0)}
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-[9px] font-black uppercase text-muted-foreground tracking-widest leading-none mb-1">
+                                                {platform}
+                                            </span>
+                                            <span class="url-text text-xs font-bold truncate max-w-[200px]">
+                                                {url as string}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="remove-social-btn h-8 w-8 rounded-lg flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors text-muted-foreground/50"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="3"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <>
+                                                <path d="M18 6 6 18" />
+                                                <path d="m6 6 12 12" />
+                                            </>
+                                        </svg>
+                                    </button>
+                                </div>
+                            ),
+                        )
+                }
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-border/50">
+                <div class="flex flex-wrap items-center gap-3">
+                    <select
+                        id="social-platform-select"
+                        class="flex h-10 w-[140px] rounded-xl border border-input bg-background px-3 py-2 text-xs font-black uppercase tracking-wider focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                        <option value="twitter">X (Twitter)</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="github">GitHub</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="threads">Threads</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input
+                        type="text"
+                        id="social-url-input"
+                        class="flex-1 min-w-[200px] h-10 rounded-xl border border-input bg-background/50 px-4 py-2 text-xs font-bold placeholder:text-muted-foreground/30 focus:outline-none focus:ring-1 focus:ring-primary"
+                        placeholder="URL or @handle..."
+                    />
+                    <button
+                        id="add-social-btn"
+                        type="button"
+                        class="h-10 px-6 rounded-xl bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-primary/20"
+                    >
+                        Add Link
+                    </button>
+                </div>
+            </div>
+        </DashboardCard>
+    </DashboardSection>
+
+    <DashboardSection
+        id="sec-analytics"
+        number="07"
+        title="Analytics Engine"
+        description="Measure visitor behavior and performance."
+    >
+        <DashboardCard>
+            <div class="grid w-full max-w-sm gap-2">
+                <label
+                    class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block"
+                    >Google Analytics (GA4) ID</label
+                >
+                <div class="relative">
+                    <div
+                        class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/40"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M3 3v18h18"></path><path
+                                d="m19 9-5 5-4-4-3 3"></path></svg
+                        >
+                    </div>
+                    <input
+                        type="text"
+                        id="user-analytics-id"
+                        class="flex h-11 w-full rounded-xl border border-input bg-background/50 pl-10 pr-4 py-2 text-sm font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-muted-foreground/30"
+                        value={config.user_analytics_id || ""}
+                        placeholder="G-XXXXXXXXXX"
+                    />
+                </div>
+                <p
+                    class="text-[10px] text-muted-foreground italic font-medium px-1"
+                >
+                    Connect GA4 to track page views and interactions.
+                </p>
+            </div>
+        </DashboardCard>
+    </DashboardSection>
+</div>
+
+<script is:inline>
+    (function () {
+        // Change Tracking Signal
+        const notifyChange = () => {
+            document.dispatchEvent(new CustomEvent("settings-change"));
+        };
+
+        const addBtn = document.getElementById("add-social-btn");
+        const list = document.getElementById("social-links-list");
+        const platformSelect = document.getElementById(
+            "social-platform-select",
+        );
+        const urlInput = document.getElementById("social-url-input");
+
+        addBtn?.addEventListener("click", () => {
+            const plat = platformSelect.value;
+            let url = urlInput.value.trim();
+            if (!url) return;
+
+            const bases = {
+                twitter: "https://x.com/",
+                github: "https://github.com/",
+                instagram: "https://instagram.com/",
+                linkedin: "https://linkedin.com/in/",
+                youtube: "https://youtube.com/@",
+                facebook: "https://facebook.com/",
+            };
+
+            if (bases[plat] && !url.startsWith("http")) {
+                url = bases[plat] + url.replace("@", "");
+            }
+
+            const div = document.createElement("div");
+            div.className =
+                "social-link-item flex items-center justify-between p-3 rounded-xl bg-secondary/10 border border-border group";
+            div.setAttribute("data-platform", plat);
+            div.innerHTML = `
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="h-8 w-8 rounded-lg bg-background border flex items-center justify-center text-xs font-black uppercase text-primary">
+                        ${plat.charAt(0)}
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[9px] font-black uppercase text-muted-foreground tracking-widest leading-none mb-1">
+                            ${plat}
+                        </span>
+                        <span class="url-text text-xs font-bold truncate max-w-[200px]">
+                            ${url}
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="remove-social-btn h-8 w-8 rounded-lg flex items-center justify-center hover:bg-destructive/10 hover:text-destructive transition-colors text-muted-foreground/50">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            `;
+            list.appendChild(div);
+            urlInput.value = "";
+            notifyChange();
+        });
+
+        // Delegate removal
+        list?.addEventListener("click", (e) => {
+            const removeBtn = e.target.closest(".remove-social-btn");
+            if (removeBtn) {
+                removeBtn.closest(".social-link-item").remove();
+                notifyChange();
+            }
+        });
+
+        // Analytics ID change tracking
+        document
+            .getElementById("user-analytics-id")
+            ?.addEventListener("input", notifyChange);
+    })();
+</script>

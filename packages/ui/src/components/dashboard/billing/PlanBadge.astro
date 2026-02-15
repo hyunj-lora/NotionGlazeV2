@@ -1,0 +1,85 @@
+---
+import type { Tenant } from "@notionglaze/core";
+
+interface Props {
+    tenant: Tenant | null;
+}
+
+const { tenant } = Astro.props;
+
+const daysLeft = Math.max(
+    0,
+    Math.ceil(
+        ((tenant?.trial_ends_at || 0) - Date.now() / 1000) / (24 * 60 * 60),
+    ),
+);
+---
+
+<div
+    class="group relative overflow-hidden rounded-[2rem] border border-border bg-muted/30 p-8 md:p-12 flex flex-col md:flex-row md:items-center justify-between gap-8"
+>
+    <div
+        class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all"
+    >
+    </div>
+
+    <div class="relative z-10 flex flex-col gap-1">
+        <span
+            class="text-[10px] font-bold uppercase text-muted-foreground tracking-widest"
+        >
+            Current Plan
+        </span>
+        <h2
+            class="text-5xl font-black tracking-tighter text-primary leading-none my-2"
+        >
+            {tenant?.plan === "pro" ? "BOOTSTRAPPER" : "TRIAL"}
+        </h2>
+        <p
+            class="text-sm text-muted-foreground font-medium max-w-sm leading-relaxed"
+        >
+            {
+                tenant?.plan === "pro"
+                    ? "You have full access to all premium features. Your site is glazy and fast."
+                    : "Your 14-day trial gives you full access. Upgrade to keep your site live after the trial ends."
+            }
+        </p>
+    </div>
+
+    {
+        tenant?.plan === "pro" ? (
+            <div class="relative z-10 p-6 rounded-3xl bg-background/50 border border-border/50 backdrop-blur-sm shadow-sm min-w-[200px]">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">
+                            Status
+                        </span>
+                        <span
+                            class={`text-sm font-black uppercase tracking-widest ${tenant?.subscription_status === "active" ? "text-green-500" : "text-destructive"}`}
+                        >
+                            {tenant?.subscription_status}
+                        </span>
+                    </div>
+                    {tenant?.subscription_ends_at && (
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">
+                                Renewal Date
+                            </span>
+                            <span class="text-xs font-bold">
+                                {new Date(
+                                    tenant.subscription_ends_at * 1000,
+                                ).toLocaleDateString()}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        ) : (
+            <div class="relative z-10 flex flex-col items-center justify-center p-8 rounded-full border-4 border-primary/20 aspect-square w-32 shadow-xl shadow-primary/10 bg-background">
+                <span class="text-3xl font-black leading-none">{daysLeft}</span>
+                <span class="text-[9px] font-bold uppercase text-muted-foreground tracking-widest mt-1">
+                    Days Left
+                </span>
+            </div>
+        )
+    }
+</div>

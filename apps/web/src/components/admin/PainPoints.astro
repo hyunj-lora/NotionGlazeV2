@@ -1,0 +1,65 @@
+---
+import type { PainPoint } from "@notionglaze/core";
+
+interface Props {
+    painPoints: PainPoint[];
+}
+
+const { painPoints } = Astro.props;
+---
+
+<section class="data-section">
+    <h2>User Pain Points & Feedback</h2>
+    <div class="pp-logs">
+        {
+            painPoints.map((p) => (
+                <div class="pp-item">
+                    <div class="pp-meta">
+                        <span class="email">{p.email || "Anonymous"}</span>
+                        <span class="date">
+                            {new Date(p.created_at).toLocaleString()}
+                        </span>
+                    </div>
+                    <p class="pp-content">{p.content}</p>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .data-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: var(--muted-foreground);
+    }
+    .pp-logs {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .pp-item {
+        background: var(--muted);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+    }
+    .pp-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    .pp-meta .email {
+        font-weight: 700;
+        color: var(--primary);
+    }
+    .pp-meta .date {
+        color: var(--muted-foreground);
+    }
+    .pp-content {
+        font-size: 0.9rem;
+        color: var(--foreground);
+        line-height: 1.5;
+    }
+</style>

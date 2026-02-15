@@ -1,0 +1,185 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "NotionGlaze Blog";
+const siteDescription =
+    config.site_description || "Cyberpunk thoughts from the future.";
+
+// Pre-load Tech PostCard
+const PostCardModule = await POST_CARDS.tech();
+const PostCard = PostCardModule.default;
+---
+
+<!-- Font loader -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet"
+/>
+
+<div class="tech-theme-home">
+    <div class="scan-grid"></div>
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <div class="glitch-wrapper">
+                <h1 class="glitch" data-text={siteName}>{siteName}</h1>
+            </div>
+            <div class="terminal-prompt">
+                <span class="prompt-text">> {siteDescription}</span>
+                <span class="cursor">_</span>
+            </div>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <div class="tech-post-wrapper">
+                        <PostCard
+                            title={post.title}
+                            summary={post.summary}
+                            tags={post.tags}
+                            publishedAt={post.published_at}
+                            slug={post.slug}
+                        />
+                    </div>
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>NO DATA FOUND. THE HEIST IS PENDING.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .tech-theme-home {
+        background-color: hsl(var(--background));
+        color: hsl(var(--primary));
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    .scan-grid {
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(hsl(var(--primary) / 0.05) 1px, transparent 1px),
+            linear-gradient(
+                90deg,
+                hsl(var(--primary) / 0.05) 1px,
+                transparent 1px
+            );
+        background-size: 50px 50px;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .blog-header {
+        margin: 10rem 0 12rem 0;
+        text-align: left;
+    }
+
+    .glitch-wrapper {
+        margin-bottom: 2rem;
+    }
+
+    h1 {
+        font-size: 6rem;
+        font-weight: 900;
+        color: hsl(var(--primary));
+        text-transform: uppercase;
+        letter-spacing: -0.05em;
+        line-height: 1;
+    }
+
+    .terminal-prompt {
+        font-family: "Space Mono", monospace;
+        font-size: 1.25rem;
+        color: hsl(var(--primary));
+        background: hsl(var(--primary) / 0.1);
+        padding: 0.5rem 1rem;
+        display: inline-block;
+        border-left: 4px solid hsl(var(--primary));
+    }
+
+    .cursor {
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .post-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 3rem;
+        padding-bottom: 10rem;
+    }
+
+    .tech-post-wrapper {
+        border: 1px solid hsl(var(--primary) / 0.2);
+        padding: 2rem;
+        background: hsl(var(--primary) / 0.02);
+        transition: all 0.3s ease;
+    }
+
+    .tech-post-wrapper:hover {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 0 30px hsl(var(--primary) / 0.2);
+        transform: translateY(-5px);
+    }
+
+    .empty {
+        grid-column: 1 / -1;
+        padding: 10rem;
+        text-align: center;
+        border: 1px solid hsl(var(--primary) / 0.3);
+        font-family: "Space Mono", monospace;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 3.5rem;
+        }
+        .post-list {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

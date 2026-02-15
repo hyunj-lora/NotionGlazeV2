@@ -1,0 +1,158 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "root",
+      "x": 0,
+      "y": 0,
+      "name": "Dashboard Preview",
+      "width": 1440,
+      "height": 900,
+      "fill": "#F9FAFB",
+      "children": [
+        {
+          "type": "frame",
+          "id": "sidebar",
+          "name": "Sidebar",
+          "width": 260,
+          "height": "fill_container",
+          "fill": "#F3F4F6",
+          "borderRight": "#E5E7EB",
+          "layout": "vertical",
+          "padding": 0,
+          "children": [
+            {
+              "type": "frame",
+              "id": "sidebarHeader",
+              "name": "Header",
+              "width": "fill_container",
+              "padding": [12, 20],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "content": "NotionGlaze",
+                  "fill": "#1F2937",
+                  "fontSize": 20,
+                  "fontWeight": "800"
+                },
+                {
+                  "type": "frame",
+                  "id": "collapseToggle",
+                  "name": "Collapse Toggle",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "#3B82F6",
+                  "cornerRadius": 16,
+                  "border": "#FFFFFF",
+                  "borderWidth": 2,
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "boxShadow": "0 4px 6px rgba(0,0,0,0.1)",
+                  "children": [
+                    {
+                      "type": "text",
+                      "content": "←",
+                      "fill": "#FFFFFF",
+                      "fontSize": 14,
+                      "fontWeight": "900"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "nav",
+              "name": "Navigation",
+              "width": "fill_container",
+              "height": "fill_container",
+              "padding": 12,
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                { "type": "frame", "name": "Nav Item", "width": "fill_container", "padding": [8, 12], "fill": "#3B82F610", "cornerRadius": 6, "children": [{ "type": "text", "content": "Overview", "fill": "#3B82F6", "fontWeight": "600" }] },
+                { "type": "frame", "name": "Nav Item", "width": "fill_container", "padding": [8, 12], "children": [{ "type": "text", "content": "Posts", "fill": "#6B7280" }] },
+                { "type": "frame", "name": "Nav Item", "width": "fill_container", "padding": [8, 12], "children": [{ "type": "text", "content": "Theme", "fill": "#6B7280" }] }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sidebarFooter",
+              "name": "Sidebar Footer",
+              "width": "fill_container",
+              "padding": 16,
+              "borderTop": "#E5E7EB",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Profile Section",
+                  "width": "fill_container",
+                  "layout": "horizontal",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "User",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        { "type": "frame", "width": 32, "height": 32, "fill": "#374151", "cornerRadius": 6, "children": [{ "type": "text", "content": "H", "fill": "#FFFFFF", "fontWeight": "800" }] },
+                        { "type": "text", "content": "HUMANERD", "fill": "#111827", "fontWeight": "700", "fontSize": 14 }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "logoutButton",
+                      "name": "Logout Button",
+                      "width": 32,
+                      "height": 32,
+                      "fill": "#EF444410",
+                      "cornerRadius": 8,
+                      "border": "#EF444430",
+                      "borderWidth": 1,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "content": "⏻",
+                          "fill": "#EF4444",
+                          "fontSize": 16,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "name": "Main Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "padding": 40,
+          "children": [
+            {
+              "type": "text",
+              "content": "Overview",
+              "fontSize": 32,
+              "fontWeight": "800",
+              "fill": "#111827"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

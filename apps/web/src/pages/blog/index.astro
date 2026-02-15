@@ -1,0 +1,84 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import {
+    resolvePostTheme,
+    resolveSiteTheme,
+    type SiteConfig,
+} from "@notionglaze/core";
+import { HOME_VIEWS, POST_VIEWS, type ThemeName } from "@notionglaze/themes";
+import { PostService } from "@notionglaze/core";
+
+const { blogTenantId: tenantId } = Astro.locals as any;
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+if (!tenantId) {
+    return Astro.redirect("/404");
+}
+
+let tenant = null;
+if (db) {
+    tenant = await db
+        .prepare("SELECT config_json, plan FROM tenants WHERE id = ?")
+        .bind(tenantId)
+        .first();
+}
+
+// Determine Global Config
+let config: SiteConfig = {};
+try {
+    config = JSON.parse(tenant?.config_json || "{}");
+    if (tenant?.plan) (config as any).plan = tenant.plan;
+} catch (e) {
+    console.error("Config parse failed", e);
+}
+
+// Resolve Home Data (Feed or Static Page)
+const postService = new PostService(db);
+const homeData = await postService.resolveHomeData(tenantId, config);
+
+// Resolve Theme
+const siteTheme = resolveSiteTheme({
+    config,
+    tenant,
+    tags: homeData.type === "page" && homeData.post ? homeData.post.tags : [],
+}) as ThemeName;
+
+// Load Appropriate View
+let View;
+let viewProps: any = { config, defaultTheme: siteTheme };
+
+if (homeData.type === "page" && homeData.post) {
+    // Custom Page Logic
+    const { post, idToSlugMap } = homeData;
+    const PostViewModule = await POST_VIEWS[siteTheme]();
+    View = PostViewModule.default;
+    viewProps = {
+        ...viewProps,
+        post,
+        blocks: post.content_json,
+        idToSlugMap,
+        tags: post.tags,
+    };
+} else {
+    // Default Feed Logic
+    const HomeViewModule = await HOME_VIEWS[siteTheme]();
+    View = HomeViewModule.default;
+    viewProps = {
+        ...viewProps,
+        posts: homeData.posts || [],
+    };
+}
+
+const siteName = config.site_name || "NotionGlaze Blog";
+const siteDescription =
+    config.site_description ||
+    "Thoughts, essays, and technical captures sync'd from Notion.";
+---
+
+<Layout
+    title={`${siteName} | NotionGlaze`}
+    description={siteDescription}
+    siteTheme={siteTheme}
+>
+    <View {...viewProps} />
+</Layout>

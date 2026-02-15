@@ -1,0 +1,71 @@
+---
+
+---
+
+<div class="live-ui-preview">
+    <div class="preview-label">Live Polish Preview</div>
+    <div class="preview-canvas">
+        <div class="preview-box" id="ui-preview-box">
+            <div class="preview-header"></div>
+            <div class="preview-body">
+                <div class="preview-line"></div>
+                <div class="preview-line mid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .live-ui-preview {
+        /* Add any container styles if needed, mainly it was used for layout */
+    }
+    .preview-label {
+        /* If original had styles for this, add them. I didn't see explicit styles for .preview-label in the snippet, might be inherited or missing. */
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+    }
+
+    .preview-canvas {
+        background: #f1f5f9;
+        border-radius: 20px;
+        padding: 4rem;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .preview-box {
+        background: white;
+        border: 1px solid var(--border);
+        transition: 0.3s;
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        min-width: 200px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    }
+    .preview-header {
+        height: 16px;
+        width: 60px;
+        background: var(--primary);
+        border-radius: 4px;
+    }
+    .preview-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .preview-line {
+        height: 10px;
+        width: 100%;
+        background: #e2e8f0;
+        border-radius: 4px;
+    }
+    .preview-line.mid {
+        width: 60%;
+    }
+</style>

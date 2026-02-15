@@ -1,0 +1,214 @@
+---
+import { ThemeToggle } from "@notionglaze/ui";
+---
+
+<nav class="landing-nav">
+    <div class="container nav-inner">
+        <a href="/" class="logo">
+            <img
+                src="/logo.png"
+                alt="NotionGlaze"
+                class="logo-img"
+            />Notion<span>Glaze</span>
+        </a>
+        <button class="hamburger" id="nav-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="links" id="nav-links">
+            <button class="close-nav" id="nav-close" aria-label="Close menu"
+                >×</button
+            >
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="/login" class="login">Login</a>
+            <ThemeToggle />
+            <a href="/login" class="btn-start">Start Free</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .landing-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: hsl(var(--background) / 0.7);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid hsl(var(--border));
+        height: 80px;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-decoration: none;
+        color: hsl(var(--foreground));
+        letter-spacing: -0.02em;
+    }
+
+    .logo span {
+        color: hsl(var(--primary)) !important;
+        display: inline-block;
+    }
+
+    .logo-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .links {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+    }
+
+    .links a:not(.btn-start) {
+        text-decoration: none;
+        color: hsl(var(--muted-foreground));
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: color 0.3s;
+    }
+
+    .links a:hover {
+        color: hsl(var(--foreground));
+    }
+
+    .links .login {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .btn-start {
+        background: hsl(var(--primary));
+        color: hsl(var(--primary-foreground)) !important;
+        padding: 0.6rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: transform 0.3s;
+    }
+
+    .btn-start:hover {
+        transform: translateY(-2px);
+    }
+
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 1001;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: hsl(var(--foreground));
+        transition: all 0.3s;
+    }
+
+    .close-nav {
+        display: none;
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 3rem;
+        color: hsl(var(--foreground));
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .hamburger {
+            display: flex;
+        }
+
+        .close-nav {
+            display: block;
+        }
+
+        .links {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: 320px;
+            background: hsl(var(--background));
+            border-left: 1px solid hsl(var(--border));
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 5rem 2rem 2rem;
+            gap: 1.5rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: -10px 0 30px hsl(0 0% 0% / 0.1);
+        }
+
+        .links.open {
+            transform: translateX(0);
+        }
+
+        .links a:not(.btn-start) {
+            display: block;
+            font-size: 1.125rem;
+        }
+
+        .btn-start {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    const navToggle = document.getElementById("nav-toggle");
+    const navLinks = document.getElementById("nav-links");
+    const navClose = document.getElementById("nav-close");
+
+    if (navToggle && navLinks) {
+        navToggle.addEventListener("click", () => {
+            navLinks.classList.add("open");
+        });
+    }
+
+    if (navClose && navLinks) {
+        navClose.addEventListener("click", () => {
+            navLinks.classList.remove("open");
+        });
+    }
+
+    // Close menu when clicking on a link
+    if (navLinks) {
+        navLinks.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("open");
+            });
+        });
+    }
+</script>

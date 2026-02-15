@@ -1,0 +1,95 @@
+---
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+import ThemeSelector from "./ThemeSelector.astro";
+
+interface Props {
+    config: any;
+    plan?: string;
+}
+
+const { config, plan } = Astro.props;
+---
+
+<div class="space-y-4">
+    <DashboardCard>
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Theme Selection</h3>
+                <p class="text-sm text-muted-foreground">
+                    Choose the visual foundation for your site.
+                </p>
+            </div>
+
+            <ThemeSelector config={config} plan={plan} />
+        </div>
+    </DashboardCard>
+</div>
+
+<StickyFooter id="theme-footer" saveId="save-theme-btn" />
+
+<script is:inline define:vars={{ initialConfig: config }}>
+    (function () {
+        const initThemeSettings = () => {
+            const saveBtn = document.getElementById("save-theme-btn");
+            if (saveBtn) {
+                const newSave = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSave, saveBtn);
+
+                newSave.addEventListener("click", async () => {
+                    newSave.classList.add("btn-loading");
+                    newSave.disabled = true;
+
+                    // Get selected theme
+                    const selectedTheme = document.querySelector(
+                        'input[name="site_theme"]:checked',
+                    )?.value;
+
+                    if (!selectedTheme) {
+                        newSave.disabled = false;
+                        newSave.classList.remove("btn-loading");
+                        return;
+                    }
+
+                    try {
+                        const currentConfigRes = await fetch(
+                            "/api/v1/setup/config",
+                        );
+                        let configToMerge = initialConfig;
+                        if (currentConfigRes.ok) {
+                            configToMerge = await currentConfigRes.json();
+                        }
+
+                        const newConfig = {
+                            ...configToMerge,
+                            site_theme: selectedTheme,
+                        };
+
+                        const res = await fetch("/api/v1/setup/config", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(newConfig),
+                        });
+
+                        if (res.ok) {
+                            if (window.showToast)
+                                window.showToast("Theme updated!", "success");
+                            setTimeout(() => window.location.reload(), 500);
+                        } else {
+                            if (window.showToast)
+                                window.showToast("Save failed", "error");
+                        }
+                    } catch (e) {
+                        if (window.showToast)
+                            window.showToast("Error saving", "error");
+                    } finally {
+                        newSave.disabled = false;
+                        newSave.classList.remove("btn-loading");
+                    }
+                });
+            }
+        };
+
+        initThemeSettings();
+        document.addEventListener("astro:page-load", initThemeSettings);
+    })();
+</script>

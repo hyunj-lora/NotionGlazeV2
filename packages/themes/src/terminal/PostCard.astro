@@ -1,0 +1,94 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 2rem;
+        border: 1px solid var(--terminal-border);
+        background: var(--terminal-code-bg);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+    .post-card:hover {
+        background: var(--terminal-bg);
+        box-shadow: 0 0 15px var(--terminal-dim);
+        transform: translateY(-2px);
+    }
+    .post-card a {
+        display: block;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: var(--terminal-fg);
+    }
+    .meta {
+        font-family: var(--terminal-font);
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+        color: var(--terminal-dim);
+    }
+    .meta::before {
+        content: "[DATE]: ";
+    }
+    h2 {
+        font-family: var(--terminal-font);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        color: var(--terminal-fg);
+    }
+    h2::before {
+        content: "> ";
+        color: var(--terminal-accent);
+    }
+    p {
+        font-family: var(--terminal-font);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        color: var(--terminal-fg);
+        opacity: 0.8;
+    }
+    .read-more {
+        font-weight: 700;
+        text-transform: uppercase;
+        border: 1px solid var(--terminal-accent);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        color: var(--terminal-accent);
+        display: inline-block;
+    }
+</style>

@@ -1,0 +1,187 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="minimal-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <h1 class="post-title">{post.title}</h1>
+            <div class="meta">
+                {date && <time>{date}</time>}
+                {tags.length > 0 && <span class="sep">/</span>}
+                {tags.map((tag: string) => <span class="tag">{tag}</span>)}
+            </div>
+            {post.summary && <p class="summary">{post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <div class="divider"></div>
+            <a href="/blog" class="back-link">← Back to Index</a>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .minimal-theme-post {
+        /* Define same variables for outer shell consistency */
+        --min-fg: #334155;
+        --min-bg: #ffffff;
+        --min-heading: #0f172a;
+        --min-border: #e2e8f0;
+        --min-muted: #64748b;
+
+        background-color: var(--min-bg);
+        color: var(--min-fg);
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+    }
+
+    :global(.dark) .minimal-theme-post {
+        --min-fg: #94a3b8;
+        --min-bg: #020617; /* Slightly darker than renderer for contrast or same? Let's use deep dark */
+        --min-heading: #f8fafc;
+        --min-border: #334155;
+        --min-muted: #94a3b8;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    .page-header {
+        margin: 6rem 0 4rem 0;
+        text-align: center;
+    }
+
+    .post-title {
+        font-family: "Inter", sans-serif;
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.03em;
+        color: var(--min-heading);
+    }
+
+    .meta {
+        font-size: 0.95rem;
+        color: var(--min-muted);
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .sep {
+        color: var(--min-border);
+    }
+
+    .tag {
+        background: var(--min-border);
+        color: var(--min-fg);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    :global(.dark) .tag {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--min-heading);
+    }
+
+    .summary {
+        font-size: 1.25rem;
+        color: var(--min-fg);
+        line-height: 1.6;
+        border-left: none; /* Removed border for cleaner look */
+        padding: 0;
+        max-width: 80%;
+        margin: 0 auto;
+        opacity: 0.9;
+    }
+
+    .content {
+        padding-bottom: 6rem;
+    }
+
+    .page-footer {
+        padding-bottom: 6rem;
+        text-align: center;
+    }
+
+    .divider {
+        height: 1px;
+        background: var(--min-border);
+        width: 100px;
+        margin: 0 auto 3rem auto;
+    }
+
+    .back-link {
+        font-size: 1rem;
+        color: var(--min-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+        border-bottom: 1px solid transparent;
+    }
+
+    .back-link:hover {
+        color: var(--min-heading);
+        border-bottom-color: var(--min-heading);
+    }
+
+    @media (max-width: 640px) {
+        .post-title {
+            font-size: 2.25rem;
+        }
+        .page-header {
+            margin: 4rem 0 3rem 0;
+            text-align: left;
+        }
+        .meta {
+            justify-content: flex-start;
+        }
+        .summary {
+            margin: 0;
+            max-width: 100%;
+            text-align: left;
+        }
+        .page-footer {
+            text-align: left;
+        }
+        .divider {
+            margin: 0 0 3rem 0;
+        }
+    }
+</style>

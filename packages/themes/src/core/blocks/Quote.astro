@@ -1,0 +1,35 @@
+---
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    children?: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<blockquote class={`notion-quote ${className || ""}`}>
+    <div class="notion-quote-content">
+        <RichText content={content.rich_text} />
+    </div>
+    <slot />
+</blockquote>
+
+<style>
+    .notion-quote {
+        margin: 2rem 0;
+        padding: 1rem 1.5rem;
+        border-left: 4px solid #eee;
+    }
+
+    .notion-quote-content {
+        font-size: 1.125rem;
+        line-height: 1.6;
+    }
+
+    .notion-quote :global(p) {
+        margin: 0;
+    }
+</style>

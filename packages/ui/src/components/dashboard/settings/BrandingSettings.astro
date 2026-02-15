@@ -1,0 +1,321 @@
+---
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+---
+
+<div class="space-y-8">
+    <!-- Logo & Icon -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Logo & Icon</h3>
+                <p class="text-sm text-muted-foreground">
+                    Upload your brand logo and favicon
+                </p>
+            </div>
+            <div class="space-y-4">
+                <div class="grid gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2"
+                            >Site Icon (Favicon)</label
+                        >
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="relative w-12 h-12 flex-shrink-0 border-2 border-dashed border-border rounded-lg overflow-hidden group"
+                            >
+                                <img
+                                    id="favicon-preview"
+                                    src={config.favicon_url || "/favicon.ico"}
+                                    class="w-full h-full object-contain"
+                                />
+                                <input
+                                    type="file"
+                                    id="favicon-upload"
+                                    accept="image/*"
+                                    class="absolute inset-0 opacity-0 cursor-pointer"
+                                />
+                            </div>
+                            <input
+                                type="url"
+                                id="favicon-url"
+                                value={config.favicon_url || ""}
+                                placeholder="https://example.com/favicon.ico"
+                                class="flex-1 px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                        </div>
+                        <p class="text-xs text-muted-foreground mt-1">
+                            Click the box to upload, or paste a URL.
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2"
+                            >Logo URL (Optional)</label
+                        >
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="relative w-12 h-12 flex-shrink-0 border-2 border-dashed border-border rounded-lg overflow-hidden group"
+                            >
+                                <div
+                                    id="logo-preview-placeholder"
+                                    class={`w-full h-full flex items-center justify-center bg-accent text-[10px] font-bold ${config.logo_url ? "hidden" : ""}`}
+                                >
+                                    Logo
+                                </div>
+                                <img
+                                    id="logo-preview"
+                                    src={config.logo_url || ""}
+                                    class={`w-full h-full object-contain ${config.logo_url ? "" : "hidden"}`}
+                                />
+                                <input
+                                    type="file"
+                                    id="logo-upload"
+                                    accept="image/*"
+                                    class="absolute inset-0 opacity-0 cursor-pointer"
+                                />
+                            </div>
+                            <input
+                                type="url"
+                                id="logo-url"
+                                value={config.logo_url || ""}
+                                placeholder="https://example.com/logo.png"
+                                class="flex-1 px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                        </div>
+                        <p class="text-xs text-muted-foreground mt-1">
+                            Displayed in header. Leave empty to use site name.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </DashboardCard>
+
+    {/* HIDDEN FOR BOOTSTRAP: Brand Colors & Typography */}
+    {
+        /*
+    <DashboardCard>
+        ...
+    </DashboardCard>
+    */
+    }
+
+    <!-- Social Media -->
+    <DashboardCard>
+        <div class="space-y-4">
+            <div>
+                <h3 class="text-lg font-bold mb-1">Social Media Links</h3>
+                <p class="text-sm text-muted-foreground">
+                    Add links to your social profiles
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium mb-1"
+                        >Twitter/X</label
+                    >
+                    <input
+                        type="url"
+                        id="social-twitter"
+                        value={config.social_twitter || ""}
+                        placeholder="https://twitter.com/yourhandle"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">GitHub</label>
+                    <input
+                        type="url"
+                        id="social-github"
+                        value={config.social_github || ""}
+                        placeholder="https://github.com/yourusername"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1"
+                        >LinkedIn</label
+                    >
+                    <input
+                        type="url"
+                        id="social-linkedin"
+                        value={config.social_linkedin || ""}
+                        placeholder="https://linkedin.com/in/yourprofile"
+                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                    />
+                </div>
+            </div>
+        </div>
+    </DashboardCard>
+</div>
+
+<StickyFooter id="branding-footer" saveId="save-branding-btn" />
+
+<script is:inline>
+    // Check if script already ran (for client-side nav optimization) or use event delegation
+    // Using a self-executing function to avoid global namespace pollution
+    (function () {
+        const initBranding = () => {
+            // Sync color picker and text input
+            /* HIDDEN FOR BOOTSTRAP
+            const colorPicker = document.getElementById("brand-color-picker");
+            const colorText = document.getElementById("brand-color-text");
+
+            if (colorPicker && colorText) {
+                // Remove old listeners to avoid duplicates if re-init
+                const newPicker = colorPicker.cloneNode(true);
+                colorPicker.parentNode.replaceChild(newPicker, colorPicker);
+                const newText = colorText.cloneNode(true);
+                colorText.parentNode.replaceChild(newText, colorText);
+
+                newPicker.addEventListener("input", (e) => {
+                    newText.value = e.target.value;
+                });
+
+                newText.addEventListener("input", (e) => {
+                    // Simple hex validation
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        newPicker.value = e.target.value;
+                    }
+                });
+            }
+            */
+
+            // File upload logic
+            const handleUpload = async (
+                file,
+                previewId,
+                urlInputId,
+                placeholderId = null,
+            ) => {
+                const preview = document.getElementById(previewId);
+                const urlInput = document.getElementById(urlInputId);
+                const placeholder = placeholderId
+                    ? document.getElementById(placeholderId)
+                    : null;
+
+                if (!preview || !urlInput) return;
+
+                try {
+                    preview.style.opacity = "0.3";
+                    const fd = new FormData();
+                    fd.append("file", file);
+                    const res = await fetch("/api/v1/setup/upload", {
+                        method: "POST",
+                        body: fd,
+                    });
+                    const data = await res.json();
+                    if (data.url) {
+                        urlInput.value = data.url;
+                        preview.src = data.url;
+                        preview.classList.remove("hidden");
+                        if (placeholder) placeholder.classList.add("hidden");
+                    }
+                } catch (err) {
+                    console.error("Upload failed", err);
+                    if (window.showToast)
+                        window.showToast("Upload failed", "error");
+                } finally {
+                    preview.style.opacity = "1";
+                }
+            };
+
+            const favUpload = document.getElementById("favicon-upload");
+            if (favUpload) {
+                // Clone to clear listeners
+                const newFav = favUpload.cloneNode(true);
+                favUpload.parentNode.replaceChild(newFav, favUpload);
+                newFav.addEventListener("change", (e) => {
+                    handleUpload(
+                        e.target.files[0],
+                        "favicon-preview",
+                        "favicon-url",
+                    );
+                });
+            }
+
+            const logoUpload = document.getElementById("logo-upload");
+            if (logoUpload) {
+                const newLogo = logoUpload.cloneNode(true);
+                logoUpload.parentNode.replaceChild(newLogo, logoUpload);
+                newLogo.addEventListener("change", (e) => {
+                    handleUpload(
+                        e.target.files[0],
+                        "logo-preview",
+                        "logo-url",
+                        "logo-preview-placeholder",
+                    );
+                });
+            }
+
+            // Save settings
+            const saveBtn = document.getElementById("save-branding-btn");
+            if (saveBtn) {
+                const newSave = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSave, saveBtn);
+
+                newSave.addEventListener("click", async () => {
+                    newSave.classList.add("btn-loading");
+                    newSave.disabled = true;
+
+                    const payload = {
+                        favicon_url:
+                            document.getElementById("favicon-url")?.value,
+                        logo_url: document.getElementById("logo-url")?.value,
+                        /* HIDDEN FOR BOOTSTRAP
+                            brand_color:
+                                document.getElementById("brand-color-text")?.value,
+                            site_font: document.querySelector(
+                                'input[name="site-font"]:checked',
+                            )?.value,
+                            */
+                        social_twitter:
+                            document.getElementById("social-twitter")?.value,
+                        social_github:
+                            document.getElementById("social-github")?.value,
+                        social_linkedin:
+                            document.getElementById("social-linkedin")?.value,
+                    };
+
+                    try {
+                        const res = await fetch("/api/v1/setup/config", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload),
+                        });
+                        if (res.ok) {
+                            if (window.showToast)
+                                window.showToast(
+                                    "Branding updated!",
+                                    "success",
+                                );
+                            // Using a smooth reload or toast instead of hard reload if possible, but keep original behavior for now
+                            setTimeout(() => window.location.reload(), 800);
+                        } else {
+                            const data = await res.json().catch(() => ({}));
+                            if (window.showToast)
+                                window.showToast(
+                                    data.error || "Save failed",
+                                    "error",
+                                );
+                        }
+                    } catch (e) {
+                        if (window.showToast)
+                            window.showToast("Connection error", "error");
+                    } finally {
+                        newSave.classList.remove("btn-loading");
+                        newSave.disabled = false;
+                    }
+                });
+            }
+        };
+
+        // Init immediately and on navigation events if using ViewTransitions (Astro specific)
+        initBranding();
+        document.addEventListener("astro:page-load", initBranding);
+    })();
+</script>

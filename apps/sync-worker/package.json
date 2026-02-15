@@ -1,0 +1,17 @@
+{
+    "name": "@notionglaze/sync-worker",
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy",
+        "build": "echo 'Sync worker does not require a build step'"
+    },
+    "dependencies": {
+        "@notionglaze/core": "*"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20260122.0",
+        "wrangler": "^4.62.0"
+    }
+}

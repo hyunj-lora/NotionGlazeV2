@@ -1,0 +1,84 @@
+---
+import { getMediaUrl, getCaption } from "../../shared/media-utils";
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const imageUrl = getMediaUrl(content);
+const caption = getCaption(content);
+---
+
+<div class={`notion-image-wrapper ${className || ""}`}>
+    {
+        imageUrl ? (
+            <figure class="notion-figure">
+                <img
+                    src={imageUrl}
+                    alt={caption || "Content image"}
+                    loading="lazy"
+                    decoding="async"
+                    class="notion-image"
+                />
+                {content.caption?.length > 0 && (
+                    <figcaption class="notion-figcaption">
+                        <RichText content={content.caption} />
+                    </figcaption>
+                )}
+            </figure>
+        ) : (
+            <div class="notion-media-error">
+                <div class="notion-error-content">
+                    <span class="notion-error-icon">⚠️</span>
+                    <p>IMAGE UNAVAILABLE</p>
+                </div>
+            </div>
+        )
+    }
+</div>
+
+<style>
+    .notion-image-wrapper {
+        margin: 3rem 0;
+    }
+
+    .notion-figure {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .notion-image {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .notion-figcaption {
+        margin-top: 1rem;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .notion-media-error {
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+
+    .notion-error-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .notion-error-icon {
+        font-size: 1.5rem;
+    }
+</style>

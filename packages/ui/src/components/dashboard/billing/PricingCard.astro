@@ -1,0 +1,137 @@
+---
+interface Props {
+    monthlyPriceId: string;
+    annuallyPriceId: string;
+    tenantId: string;
+}
+
+const { monthlyPriceId, annuallyPriceId, tenantId } = Astro.props;
+
+const features = [
+    "Custom Domain & Free SSL",
+    "AI-Powered SEO & Copy Assistant",
+    "Premium Bootstrap-ready Themes",
+    "No 'NotionGlaze' branding",
+    "Priority Smart Sync (every 5m)",
+    "Global Edge Media Delivery",
+    "Advanced CSS & Script Injection",
+];
+---
+
+<div class="flex flex-col items-center gap-10 py-12">
+    <div
+        class="flex items-center gap-4 bg-muted/50 p-1.5 rounded-full border border-border scale-110"
+    >
+        <span
+            class="text-xs font-bold px-4 text-muted-foreground transition-colors"
+            id="label-monthly"
+        >
+            Monthly
+        </span>
+        <div
+            class="relative w-12 h-6 bg-primary rounded-full cursor-pointer transition-all"
+            id="billing-period-toggle"
+        >
+            <div
+                class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform"
+                id="toggle-knob"
+            >
+            </div>
+        </div>
+        <div class="flex items-center gap-2 pr-4">
+            <span
+                class="text-xs font-bold text-muted-foreground transition-colors"
+                id="label-yearly"
+            >
+                Yearly
+            </span>
+            <span
+                class="px-2 py-0.5 rounded-full bg-green-500/10 text-green-500 text-[9px] font-black uppercase"
+            >
+                Save 45%
+            </span>
+        </div>
+    </div>
+
+    <div class="w-full max-w-xl">
+        <div
+            class="relative p-10 rounded-[2.5rem] bg-background border-4 border-primary bg-gradient-to-br from-primary/5 to-transparent shadow-2xl shadow-primary/10 overflow-hidden group"
+        >
+            <div
+                class="absolute top-0 right-0 px-6 py-2 bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest rounded-bl-3xl"
+            >
+                Bootstrapper Pack
+            </div>
+            <div class="mb-8">
+                <div class="flex items-baseline gap-1 mb-2">
+                    <span
+                        class="text-2xl font-black text-primary tracking-tighter"
+                    >
+                        $
+                    </span>
+                    <span
+                        class="text-7xl font-black tracking-tighter leading-none"
+                        id="display-amount"
+                    >
+                        9
+                    </span>
+                    <span
+                        class="text-lg font-bold text-muted-foreground tracking-tight"
+                        id="display-period"
+                    >
+                        /month
+                    </span>
+                </div>
+                <div class="mb-4">
+                    <span
+                        class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20"
+                    >
+                        Most Popular
+                    </span>
+                </div>
+                <h2 class="text-4xl font-black tracking-tighter mb-4">
+                    Glaze Bootstrapper
+                </h2>
+                <p class="text-muted-foreground font-medium mb-8">
+                    Everything you need to launch a professional bootstrap site
+                    or blog.
+                </p>
+                <p class="text-sm font-bold text-primary" id="yearly-hint-text">
+                    Billed monthly. Cancel anytime.
+                </p>
+            </div>
+            <ul class="space-y-4 mb-10">
+                {
+                    features.map((feature) => (
+                        <li class="flex items-center gap-3 text-sm font-medium">
+                            <svg
+                                class="text-green-500 shrink-0"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            {feature}
+                        </li>
+                    ))
+                }
+            </ul>
+            <button
+                id="upgrade-pro-btn"
+                class="w-full py-5 rounded-2xl bg-primary text-primary-foreground text-lg font-black tracking-tight hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-primary/20"
+                data-monthly-id={monthlyPriceId}
+                data-annually-id={annuallyPriceId}
+                data-email={tenantId || ""}
+            >
+                Activate Bootstrapper Pack
+            </button>
+        </div>
+    </div>
+</div>

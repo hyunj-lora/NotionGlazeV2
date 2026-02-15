@@ -1,0 +1,165 @@
+---
+import {
+    DashboardLayout,
+    ThemeSettings,
+    BrandingSettings,
+    LayoutSettings,
+    ThemePreviewModal,
+} from "@notionglaze/ui";
+import { PostService } from "@notionglaze/core";
+import "../../styles/globals.css";
+
+const { tenant, runtime } = Astro.locals;
+const db = runtime?.env?.DB;
+
+let posts: any[] = [];
+
+if (db && tenant) {
+    try {
+        const postService = new PostService(db);
+        posts = await postService.getPostsSimple(tenant.id);
+    } catch (e) {
+        console.error("Design Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="Design & Structure" tenant={tenant || undefined}>
+    <div class="max-w-6xl mx-auto pb-24 pt-8 px-4">
+        <header class="mb-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                Design Studio
+            </h1>
+            <p class="text-muted-foreground">
+                Customize your site's look, feel, and navigation structure.
+            </p>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="mb-8 border-b border-border overflow-x-auto">
+            <nav
+                class="flex space-x-8"
+                id="design-tabs"
+                aria-label="Design tabs"
+            >
+                <button
+                    data-tab="themes"
+                    class="tab-btn active border-b-2 border-primary pb-4 px-1 text-sm font-bold text-primary whitespace-nowrap"
+                >
+                    Themes
+                </button>
+                <button
+                    data-tab="branding"
+                    class="tab-btn border-b-2 border-transparent pb-4 px-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground whitespace-nowrap"
+                >
+                    Branding
+                </button>
+                <button
+                    data-tab="layout"
+                    class="tab-btn border-b-2 border-transparent pb-4 px-1 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground whitespace-nowrap"
+                >
+                    Layout
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="content-themes" class="tab-content">
+            <ThemeSettings config={config} plan={tenant?.plan} />
+        </div>
+
+        <div id="content-branding" class="tab-content hidden">
+            <BrandingSettings config={config} />
+        </div>
+
+        <div id="content-layout" class="tab-content hidden">
+            <LayoutSettings config={config} />
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <ThemePreviewModal />
+</DashboardLayout>
+
+<style>
+    .tab-content {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        const initTabs = () => {
+            const tabs = document.querySelectorAll(".tab-btn");
+            const contents = document.querySelectorAll(".tab-content");
+
+            const hash = window.location.hash.replace("#", "");
+            if (hash) {
+                const targetBtn = document.querySelector(
+                    `.tab-btn[data-tab="${hash}"]`,
+                );
+                if (targetBtn) {
+                    activateTab(targetBtn);
+                }
+            }
+
+            tabs.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    activateTab(btn);
+                    const tabName = btn.getAttribute("data-tab");
+                    history.replaceState(null, null, `#${tabName}`);
+                });
+            });
+
+            function activateTab(btn) {
+                tabs.forEach((t) => {
+                    t.classList.remove(
+                        "border-primary",
+                        "text-primary",
+                        "font-bold",
+                        "active",
+                    );
+                    t.classList.add(
+                        "border-transparent",
+                        "text-muted-foreground",
+                        "font-medium",
+                    );
+                });
+                contents.forEach((c) => c.classList.add("hidden"));
+
+                btn.classList.remove(
+                    "border-transparent",
+                    "text-muted-foreground",
+                    "font-medium",
+                );
+                btn.classList.add(
+                    "border-primary",
+                    "text-primary",
+                    "font-bold",
+                    "active",
+                );
+
+                const tabName = btn.getAttribute("data-tab");
+                const content = document.getElementById(`content-${tabName}`);
+                if (content) content.classList.remove("hidden");
+
+                window.dispatchEvent(new Event("resize"));
+            }
+        };
+
+        initTabs();
+        document.addEventListener("astro:page-load", initTabs);
+    })();
+</script>

@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "declaration": true,
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "jsx": "preserve"
+    },
+    "include": [
+        "src/**/*",
+        "src/env.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

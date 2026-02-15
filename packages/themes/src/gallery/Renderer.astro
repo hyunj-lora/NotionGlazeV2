@@ -1,0 +1,147 @@
+---
+import NotionRenderer from "../core/NotionRenderer.astro";
+import Database from "../components/Database.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+}
+
+const { blocks, idToSlugMap } = Astro.props;
+
+const components = {
+    DatabaseLink: Database,
+};
+---
+
+<div class="gallery-theme">
+    <NotionRenderer
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        components={components}
+    />
+</div>
+
+<style>
+    .gallery-theme {
+        max-width: 900px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-size: 1.125rem; /* 18px base */
+        color: #334155;
+        padding: 2rem 0;
+        font-family: "Inter", sans-serif;
+    }
+
+    :global(.dark) .gallery-theme {
+        color: #9ca3af;
+    }
+
+    /* Shared Component Overrides */
+
+    /* Bookmark */
+    .gallery-theme :global(.notion-bookmark) {
+        margin: 4rem 0 !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 16px !important;
+        display: flex !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+        transition: transform 0.2s !important;
+    }
+    :global(.dark) .gallery-theme :global(.notion-bookmark) {
+        background: #111827 !important;
+        border-color: #1f2937 !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    }
+    .gallery-theme :global(.notion-bookmark:hover) {
+        transform: translateY(-4px) !important;
+    }
+
+    /* Divider */
+    .gallery-theme :global(.notion-divider) {
+        border: 0 !important;
+        height: 1px !important;
+        background: radial-gradient(
+            circle,
+            #e2e8f0 0%,
+            transparent 100%
+        ) !important;
+        margin: 8rem 0 !important;
+    }
+    :global(.dark) .gallery-theme :global(.notion-divider) {
+        background: radial-gradient(
+            circle,
+            #1f2937 0%,
+            transparent 100%
+        ) !important;
+    }
+
+    /* Image/Video */
+    .gallery-theme :global(.notion-figure) {
+        margin: 6rem -6rem !important;
+    }
+    @media (max-width: 1100px) {
+        .gallery-theme :global(.notion-figure) {
+            margin: 4rem 0 !important;
+        }
+    }
+    .gallery-theme :global(.notion-image),
+    .gallery-theme :global(.notion-video) {
+        border-radius: 20px !important;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid #f1f5f9 !important;
+    }
+    :global(.dark) .gallery-theme :global(.notion-image),
+    :global(.dark) .gallery-theme :global(.notion-video) {
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .gallery-theme :global(p) {
+        margin-bottom: 2rem;
+    }
+
+    .gallery-theme :global(h1),
+    .gallery-theme :global(h2),
+    .gallery-theme :global(h3) {
+        color: #0f172a;
+        margin-top: 5rem;
+        margin-bottom: 2rem;
+        font-family: "Outfit", sans-serif;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    :global(.dark) .gallery-theme :global(h1),
+    :global(.dark) .gallery-theme :global(h2),
+    :global(.dark) .gallery-theme :global(h3) {
+        color: #f8fafc;
+    }
+
+    .gallery-theme :global(h1) {
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    .gallery-theme :global(h2) {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    }
+    .gallery-theme :global(h3) {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .gallery-theme :global(ul),
+    .gallery-theme :global(ol) {
+        margin-bottom: 2.5rem;
+        padding-left: 2rem;
+    }
+    .gallery-theme :global(li) {
+        margin-bottom: 1rem;
+    }
+</style>

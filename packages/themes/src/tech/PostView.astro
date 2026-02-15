@@ -1,0 +1,178 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<!-- Font loader -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet"
+/>
+
+<div class="tech-theme-post">
+    <div class="scanline"></div>
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <div class="data-stream">
+                {date && <span class="data-item">[PUB: {date}]</span>}
+                {
+                    tags.map((tag: string) => (
+                        <span class="data-item">#{tag.toUpperCase()}</span>
+                    ))
+                }
+            </div>
+            <h1>{post.title}</h1>
+            <div class="hud-line"></div>
+            {post.summary && <p class="summary">// {post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <div class="terminal">
+                <p>> END OF TRANSMISSION.</p>
+                <p>> STATUS: SYNCED.</p>
+            </div>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .tech-theme-post {
+        background-color: hsl(var(--background));
+        color: hsl(var(--primary));
+        min-height: 100vh;
+        position: relative;
+    }
+
+    .scanline {
+        width: 100%;
+        height: 100px;
+        z-index: 3;
+        background: linear-gradient(
+            0deg,
+            hsla(0, 0%, 0%, 0) 0%,
+            hsl(var(--primary) / 0.1) 50%,
+            hsla(0, 0%, 0%, 0) 100%
+        );
+        opacity: 0.1;
+        position: absolute;
+        bottom: 100%;
+        animation: scanline 10s linear infinite;
+    }
+
+    @keyframes scanline {
+        0% {
+            bottom: 100%;
+        }
+        100% {
+            bottom: -100px;
+        }
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 8rem 0 6rem 0;
+    }
+
+    .data-stream {
+        font-family: "Space Mono", monospace;
+        font-size: 0.8rem;
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1.5rem;
+        color: hsl(var(--primary) / 0.6);
+    }
+
+    h1 {
+        font-size: 4rem;
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+    }
+
+    .hud-line {
+        width: 100%;
+        height: 1px;
+        background: hsl(var(--primary) / 0.2);
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .hud-line::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: -2px;
+        width: 40px;
+        height: 5px;
+        background: hsl(var(--primary));
+    }
+
+    .summary {
+        font-family: "Space Mono", monospace;
+        font-size: 1.1rem;
+        color: hsl(var(--primary) / 0.8);
+        line-height: 1.6;
+    }
+
+    .content {
+        padding-bottom: 10rem;
+    }
+
+    .page-footer {
+        padding-bottom: 10rem;
+    }
+
+    .terminal {
+        border-left: 2px solid hsl(var(--primary));
+        padding-left: 1.5rem;
+        font-family: "Space Mono", monospace;
+        color: hsl(var(--primary) / 0.6);
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+        .page-header {
+            margin: 4rem 0 6rem 0;
+        }
+    }
+</style>

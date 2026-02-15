@@ -1,0 +1,2144 @@
+---
+
+---
+
+<!-- Theme Preview Modal (Overlay) -->
+<div id="theme-preview-modal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-header-left">
+                <h2 id="modal-theme-title">Theme Preview</h2>
+                <p>Experience the design across different modes.</p>
+            </div>
+            <div class="modal-controls">
+                <div class="preview-mode-toggle">
+                    <button class="mode-btn active" data-mode="light"
+                        >Light</button
+                    >
+                    <button class="mode-btn" data-mode="dark">Dark</button>
+                </div>
+                <button class="modal-close">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="modal-body" id="modal-frame">
+            <!-- Dynamic Content -->
+        </div>
+        <div class="modal-footer">
+            <button class="modal-apply-btn apply-btn-premium">Apply</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const THEME_PREVIEWS = {
+        zero: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Zero) -->
+            <div class="theme-preview-light" style="padding: 60px 80px; font-family: 'Outfit', sans-serif; color: #334155; background: #ffffff; min-height: 100%;">
+                
+                <!-- Main Title / Cover imitation -->
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="margin-bottom: 48px;">
+                        <div style="font-size: 40px; margin-bottom: 16px;">🪐</div>
+                        <h1 style="font-size: 48px; font-weight: 800; letter-spacing: -1.5px; color: #0f172a; margin: 0; line-height: 1.1;">The Zero Protocol</h1>
+                        <div style="font-size: 18px; color: #64748b; margin-top: 12px; font-weight: 500;">A clean slate for your best ideas.</div>
+                    </div>
+
+                    <!-- H1 / Section -->
+                    <h2 style="font-size: 32px; font-weight: 700; letter-spacing: -1px; color: #0f172a; margin: 40px 0 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Typography & Text</h2>
+                    
+                    <p style="font-size: 17px; line-height: 1.7; margin-bottom: 16px;">
+                        The Zero theme focuses on <strong>absolute readability</strong>. It strips away distractions, leaving only <em>essential content</em>. You can even use <code style="font-family: 'SF Mono', monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #ef4444; font-size: 0.9em;">inline code</code> for technical terms.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="border-left: 3px solid #0f172a; padding-left: 16px; margin: 32px 0;">
+                        <p style="font-size: 19px; font-style: italic; color: #334155; margin: 0; line-height: 1.6;">
+                            "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."
+                        </p>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; display: flex; gap: 14px; margin-bottom: 32px;">
+                        <span style="font-size: 20px;">💡</span>
+                        <div>
+                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">Zero Distraction</div>
+                            <div style="font-size: 15px; color: #475569;">Callouts stand out gently with soft backgrounds and subtle borders.</div>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 32px;">
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Checklist</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 3px;"></div>
+                                    <span style="color: #475569;">Draft content</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 18px; height: 18px; background: #0f172a; border: 2px solid #0f172a; border-radius: 3px; display: flex; align-items: center; justify-content: center;">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><path d="M1 6l3.5 3.5L11 2"/></svg>
+                                    </div>
+                                    <span style="text-decoration: line-through; color: #94a3b8;">Review design</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Standard List</h3>
+                            <ul style="margin: 0; padding-left: 20px; color: #475569;">
+                                <li style="margin-bottom: 6px;">Minimalist aesthetics</li>
+                                <li style="margin-bottom: 6px;">Fast loading times</li>
+                                <li>Focus on typography</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                     <!-- Image -->
+                    <figure style="margin: 32px 0;">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80" style="width: 100%; border-radius: 4px; display: block;" alt="Minimal Landscape">
+                        <figcaption style="font-size: 14px; color: #64748b; margin-top: 8px; text-align: center;">Figure 1: The minimalist landscape of data.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px;">
+                         <span style="font-size: 12px; color: #64748b; margin-top: 4px;">▶</span> 
+                         <div>
+                            <span style="font-weight: 600; color: #1e293b;">Hidden Details</span>
+                             <div style="margin-top: 4px; color: #475569; font-size: 15px;">
+                                This content is collapsible. Ideally used for FAQs or clutter reduction in your documents.
+                            </div>
+                         </div>
+                    </div>
+
+                    <!-- Table (Simple) -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Data Representation</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 15px;">
+                        <thead>
+                            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                <th style="padding: 12px; text-align: left; color: #64748b; font-weight: 600; width: 40%;">Metric</th>
+                                <th style="padding: 12px; text-align: left; color: #64748b; font-weight: 600;">Growth</th>
+                                <th style="padding: 12px; text-align: left; color: #64748b; font-weight: 600;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px; color: #334155;">User Base</td>
+                                <td style="padding: 12px; color: #334155;">+24%</td>
+                                <td style="padding: 12px;"><span style="background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 500;">Active</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px; color: #334155;">Revenue</td>
+                                <td style="padding: 12px; color: #334155;">+12%</td>
+                                <td style="padding: 12px;"><span style="background: #fff7ed; color: #9a3412; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 500;">Review</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Database (Gallery View) -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Gallery Database</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05); background: white; transition: box-shadow 0.2s;">
+                            <div style="height: 120px; background: #cbd5e1; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=60" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #0f172a;">Project A</div>
+                                <div style="font-size: 13px; color: #64748b;">The beginning of everything.</div>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05); background: white;">
+                            <div style="height: 120px; background: #cbd5e1; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=60" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #0f172a;">Project B</div>
+                                <div style="font-size: 13px; color: #64748b;"> Scaling up the infrastructure.</div>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05); background: white;">
+                             <div style="height: 120px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                📝
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #0f172a;">Documentation</div>
+                                <div style="font-size: 13px; color: #64748b;">Internal wikis.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Block -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px;">Code Syntax</h3>
+                    <div style="background: #0f172a; border-radius: 8px; padding: 20px; font-family: 'SF Mono', monospace; font-size: 13px; color: #f8fafc; margin-bottom: 32px; overflow-x: auto; border: 1px solid #1e293b;">
+                        <div>
+                            <span style="color: #c084fc;">const</span> theme = {<br>
+                            &nbsp;&nbsp;name: <span style="color: #4ade80;">'Zero'</span>,<br>
+                            &nbsp;&nbsp;version: <span style="color: #fbbf24;">2.0</span>,<br>
+                            &nbsp;&nbsp;features: [<span style="color: #4ade80;">'Light'</span>, <span style="color: #4ade80;">'Dark'</span>, <span style="color: #4ade80;">'Minimal'</span>]<br>
+                            };
+                        </div>
+                    </div>
+
+                    <!-- Button / Bookmark imitation -->
+                    <div style="border: 1px solid #e2e8f0; border-radius: 6px; display: flex; overflow: hidden; height: 100px; margin-bottom: 32px;">
+                        <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">NotionGlaze Documentation</div>
+                            <div style="font-size: 14px; color: #64748b; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">The official guide to building beautiful sites.</div>
+                        </div>
+                        <div style="width: 140px; background: #f1f5f9; display: flex; align-items: center; justify-content: center;">
+                             <img src="https://images.unsplash.com/photo-1499750310159-a52f3316533c?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dark Mode (Zero) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px 80px; font-family: 'Outfit', sans-serif; color: #94a3b8; background: #020617; min-height: 100%;">
+                
+                 <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="margin-bottom: 48px;">
+                        <div style="font-size: 40px; margin-bottom: 16px;">🪐</div>
+                        <h1 style="font-size: 48px; font-weight: 800; letter-spacing: -1.5px; color: #f8fafc; margin: 0; line-height: 1.1;">The Zero Protocol</h1>
+                        <div style="font-size: 18px; color: #64748b; margin-top: 12px; font-weight: 500;">A clean slate for your best ideas.</div>
+                    </div>
+
+                    <!-- H1 / Section -->
+                    <h2 style="font-size: 32px; font-weight: 700; letter-spacing: -1px; color: #f8fafc; margin: 40px 0 16px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">Typography & Text</h2>
+                    
+                    <p style="font-size: 17px; line-height: 1.7; margin-bottom: 16px; color: #cbd5e1;">
+                        The Zero theme focuses on <strong>absolute readability</strong>. It strips away distractions, leaving only <em>essential content</em>. You can even use <code style="font-family: 'SF Mono', monospace; background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #f87171; font-size: 0.9em;">inline code</code> for technical terms.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="border-left: 3px solid #f8fafc; padding-left: 16px; margin: 32px 0;">
+                        <p style="font-size: 19px; font-style: italic; color: #e2e8f0; margin: 0; line-height: 1.6;">
+                            "Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."
+                        </p>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 16px; display: flex; gap: 14px; margin-bottom: 32px;">
+                        <span style="font-size: 20px;">💡</span>
+                        <div>
+                            <div style="font-weight: 600; color: #f8fafc; margin-bottom: 4px;">Zero Distraction</div>
+                            <div style="font-size: 15px; color: #94a3b8;">Callouts stand out gently with soft backgrounds and subtle borders.</div>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 32px;">
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 12px;">Checklist</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 18px; height: 18px; border: 2px solid #475569; border-radius: 3px;"></div>
+                                    <span style="color: #94a3b8;">Draft content</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 18px; height: 18px; background: #f8fafc; border: 2px solid #f8fafc; border-radius: 3px; display: flex; align-items: center; justify-content: center;">
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="black" stroke-width="2"><path d="M1 6l3.5 3.5L11 2"/></svg>
+                                    </div>
+                                    <span style="text-decoration: line-through; color: #64748b;">Review design</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 12px;">Standard List</h3>
+                            <ul style="margin: 0; padding-left: 20px; color: #94a3b8;">
+                                <li style="margin-bottom: 6px;">Minimalist aesthetics</li>
+                                <li style="margin-bottom: 6px;">Fast loading times</li>
+                                <li>Focus on typography</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <figure style="margin: 32px 0;">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80" style="width: 100%; border-radius: 4px; display: block; opacity: 0.8;" alt="Minimal Landscape">
+                        <figcaption style="font-size: 14px; color: #64748b; margin-top: 8px; text-align: center;">Figure 1: The minimalist landscape of data.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px;">
+                         <span style="font-size: 12px; color: #64748b; margin-top: 4px;">▶</span> 
+                         <div>
+                            <span style="font-weight: 600; color: #e2e8f0;">Hidden Details</span>
+                             <div style="margin-top: 4px; color: #94a3b8; font-size: 15px;">
+                                This content is collapsible. Ideally used for FAQs or clutter reduction in your documents.
+                            </div>
+                         </div>
+                    </div>
+
+                     <!-- Table (Simple) -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 12px;">Data Representation</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 15px;">
+                        <thead>
+                            <tr style="background: #0f172a; border-bottom: 1px solid #1e293b;">
+                                <th style="padding: 12px; text-align: left; color: #94a3b8; font-weight: 600; width: 40%;">Metric</th>
+                                <th style="padding: 12px; text-align: left; color: #94a3b8; font-weight: 600;">Growth</th>
+                                <th style="padding: 12px; text-align: left; color: #94a3b8; font-weight: 600;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #1e293b;">
+                                <td style="padding: 12px; color: #cbd5e1;">User Base</td>
+                                <td style="padding: 12px; color: #cbd5e1;">+24%</td>
+                                <td style="padding: 12px;"><span style="background: #064e3b; color: #d1fae5; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 500;">Active</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1e293b;">
+                                <td style="padding: 12px; color: #cbd5e1;">Revenue</td>
+                                <td style="padding: 12px; color: #cbd5e1;">+12%</td>
+                                <td style="padding: 12px;"><span style="background: #451a03; color: #fed7aa; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: 500;">Review</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                     <!-- Database (Gallery View) -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 12px;">Gallery Database</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2); background: #0f172a;">
+                            <div style="height: 120px; background: #334155; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=60" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #f8fafc;">Project A</div>
+                                <div style="font-size: 13px; color: #94a3b8;">The beginning of everything.</div>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div style="border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2); background: #0f172a;">
+                            <div style="height: 120px; background: #334155; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=60" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #f8fafc;">Project B</div>
+                                <div style="font-size: 13px; color: #94a3b8;"> Scaling up the infrastructure.</div>
+                            </div>
+                        </div>
+                         <!-- Card 3 -->
+                        <div style="border: 1px solid #1e293b; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2); background: #0f172a;">
+                             <div style="height: 120px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                📝
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-weight: 600; font-size: 15px; margin-bottom: 4px; color: #f8fafc;">Documentation</div>
+                                <div style="font-size: 13px; color: #94a3b8;">Internal wikis.</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Code Block -->
+                    <h3 style="font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 12px;">Code Syntax</h3>
+                    <div style="background: #000000; border-radius: 8px; padding: 20px; font-family: 'SF Mono', monospace; font-size: 13px; color: #e2e8f0; margin-bottom: 32px; overflow-x: auto; border: 1px solid #1e293b;">
+                        <div>
+                            <span style="color: #c084fc;">const</span> theme = {<br>
+                            &nbsp;&nbsp;name: <span style="color: #4ade80;">'Zero'</span>,<br>
+                            &nbsp;&nbsp;version: <span style="color: #fbbf24;">2.0</span>,<br>
+                            &nbsp;&nbsp;features: [<span style="color: #4ade80;">'Light'</span>, <span style="color: #4ade80;">'Dark'</span>, <span style="color: #4ade80;">'Minimal'</span>]<br>
+                            };
+                        </div>
+                    </div>
+
+                    <!-- Button / Bookmark imitation -->
+                    <div style="border: 1px solid #1e293b; border-radius: 6px; display: flex; overflow: hidden; height: 100px; margin-bottom: 32px; background: #0f172a;">
+                        <div style="padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">NotionGlaze Documentation</div>
+                            <div style="font-size: 14px; color: #64748b; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">The official guide to building beautiful sites.</div>
+                        </div>
+                        <div style="width: 140px; background: #1e293b; display: flex; align-items: center; justify-content: center;">
+                             <img src="https://images.unsplash.com/photo-1499750310159-a52f3316533c?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;" />
+                        </div>
+                    </div>
+
+                 </div>
+            </div>
+        </div>`,
+        minimal: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Minimal) -->
+            <div class="theme-preview-light" style="padding: 60px; font-family: 'Inter', sans-serif; color: #374151; background: #f3f4f6; min-height: 100%;">
+                
+                <!-- The Card -->
+                <div style="background: white; max-width: 900px; margin: 0 auto; padding: 60px 80px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 8px;">
+                    
+                    <!-- Title Area -->
+                    <div style="margin-bottom: 40px; border-bottom: 1px solid #e5e7eb; padding-bottom: 24px;">
+                        <div style="font-size: 40px; margin-bottom: 16px;">⬜</div>
+                        <h1 style="font-size: 42px; font-weight: 700; color: #111827; margin: 0; letter-spacing: -0.02em;">The Standard Protocol</h1>
+                        <div style="display: flex; gap: 12px; margin-top: 16px; font-size: 14px; color: #6b7280;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span>👤</span> <span>Andrew Oong</span>
+                            </div>
+                            <span>•</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>Jan 28, 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Introduction -->
+                    <h2 style="font-size: 28px; font-weight: 600; color: #1f2937; margin: 32px 0 16px;">Structure & Focus</h2>
+                    <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+                        The Minimal theme creates a comfortable reading container. By elevating content onto a "card", it separates your words from the background noise, providing <code style="font-family: 'SF Mono', monospace; background: #f3f4f6; padding: 2px 4px; border-radius: 4px; color: #ef4444; font-size: 0.9em;">focus</code> and clarity.
+                    </p>
+
+                    <!-- Two Cols: Callout & Quote -->
+                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                        <!-- Callout -->
+                        <div style="background: #f9fafb; border-radius: 6px; padding: 16px; display: flex; gap: 12px; border: 1px solid #e5e7eb;">
+                            <span style="font-size: 20px;">ℹ️</span>
+                            <div>
+                                <div style="font-weight: 600; color: #111827; margin-bottom: 4px; font-size: 15px;">Information</div>
+                                <div style="font-size: 14px; color: #4b5563;">Content is bounded. Shadows are soft.</div>
+                            </div>
+                        </div>
+                        <!-- Quote -->
+                        <div style="border-left: 3px solid #111827; padding-left: 16px; display: flex; align-items: center;">
+                            <p style="font-size: 16px; font-style: italic; color: #374151; margin: 0;">
+                                "Good design is as little design as possible."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 12px;">Requirements</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" checked style="accent-color: #111827; transform: scale(1.2);">
+                                <span style="color: #374151; text-decoration: line-through; opacity: 0.7;">Define typography scale</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" style="transform: scale(1.2); border: 1px solid #d1d5db;">
+                                <span style="color: #374151;">Implement card shadows</span>
+                            </div>
+                             <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" style="transform: scale(1.2); border: 1px solid #d1d5db;">
+                                <span style="color: #374151;">Verify mobile responsiveness</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <figure style="margin: 32px 0;">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80" style="width: 100%; border-radius: 4px; display: block;" alt="Structure">
+                        <figcaption style="font-size: 13px; color: #6b7280; margin-top: 8px;">Architecture of a modern system.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <details style="margin-bottom: 24px; cursor: pointer;">
+                        <summary style="font-weight: 600; color: #374151; outline: none; list-style: none; display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 10px; color: #9ca3af;">▶</span> Expanded Details
+                        </summary>
+                        <div style="padding-left: 20px; margin-top: 8px; color: #4b5563; font-size: 15px;">
+                            This is how a toggle block renders. It keeps the interface clean until the user decides to dive deeper.
+                        </div>
+                    </details>
+
+                    <!-- Table -->
+                    <h3 style="font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 12px;">Quarterly Data</h3>
+                    <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden; margin-bottom: 32px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <thead style="background: #f9fafb; border-bottom: 1px solid #e5e7eb;">
+                                <tr>
+                                    <th style="padding: 10px 16px; text-align: left; color: #4b5563; font-weight: 600;">Item</th>
+                                    <th style="padding: 10px 16px; text-align: left; color: #4b5563; font-weight: 600;">Q1</th>
+                                    <th style="padding: 10px 16px; text-align: left; color: #4b5563; font-weight: 600;">Q2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="padding: 10px 16px; color: #111827;">Design</td>
+                                    <td style="padding: 10px 16px; color: #374151;">Complete</td>
+                                    <td style="padding: 10px 16px; color: #374151;">--</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 16px; color: #111827;">Development</td>
+                                    <td style="padding: 10px 16px; color: #374151;">Started</td>
+                                    <td style="padding: 10px 16px; color: #374151;">In Progress</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Board/Gallery Database -->
+                    <h3 style="font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 12px;">Components</h3>
+                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #e5e7eb; border-radius: 4px; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                            <div style="height: 100px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔷</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #111827;">Buttons</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px;">UI Kit</span>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                         <div style="border: 1px solid #e5e7eb; border-radius: 4px; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                            <div style="height: 100px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔶</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #111827;">Inputs</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #fef3c7; color: #b45309; padding: 2px 6px; border-radius: 4px;">Forms</span>
+                            </div>
+                        </div>
+                         <!-- Card 3 -->
+                         <div style="border: 1px solid #e5e7eb; border-radius: 4px; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                            <div style="height: 100px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔳</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #111827;">Modals</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #f3e8ff; color: #7e22ce; padding: 2px 6px; border-radius: 4px;">Overlay</span>
+                            </div>
+                        </div>
+                     </div>
+
+                    <!-- Code Block -->
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 13px; color: #374151; border: 1px solid #e5e7eb; margin-bottom: 24px;">
+                        <div style="color: #6b7280; font-style: italic;">// configuration.js</div>
+                        <div style="margin-top: 8px;">
+                            <span style="color: #9333ea;">export default</span> {<br>
+                            &nbsp;&nbsp;shadows: <span style="color: #2563eb;">true</span>,<br>
+                            &nbsp;&nbsp;rounded: <span style="color: #2563eb;">"8px"</span><br>
+                            }
+                        </div>
+                    </div>
+
+                     <!-- Bookmark -->
+                    <div style="border: 1px solid #e5e7eb; border-radius: 4px; display: flex; height: 100px; margin-bottom: 16px; transition: background 0.2s; cursor: pointer;">
+                        <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 500; color: #111827; margin-bottom: 4px; font-size: 14px;">Humanerd Design System</div>
+                            <div style="font-size: 12px; color: #6b7280;">The underlying principles of our themes.</div>
+                            <div style="font-size: 12px; color: #111827; margin-top: 6px;">humanerd.com</div>
+                        </div>
+                         <div style="width: 140px; background: #f3f4f6;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+             <!-- Dark Mode (Minimal) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px; font-family: 'Inter', sans-serif; color: #d1d5db; background: #111827; min-height: 100%;">
+                 <!-- The Card -->
+                <div style="background: #1f2937; max-width: 900px; margin: 0 auto; padding: 60px 80px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); border-radius: 8px; border: 1px solid #374151;">
+                    
+                    <!-- Title Area -->
+                    <div style="margin-bottom: 40px; border-bottom: 1px solid #374151; padding-bottom: 24px;">
+                        <div style="font-size: 40px; margin-bottom: 16px;">⬜</div>
+                        <h1 style="font-size: 42px; font-weight: 700; color: #f9fafb; margin: 0; letter-spacing: -0.02em;">The Standard Protocol</h1>
+                        <div style="display: flex; gap: 12px; margin-top: 16px; font-size: 14px; color: #9ca3af;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span>👤</span> <span>Andrew Oong</span>
+                            </div>
+                            <span>•</span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span>Jan 28, 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Introduction -->
+                    <h2 style="font-size: 28px; font-weight: 600; color: #f3f4f6; margin: 32px 0 16px;">Structure & Focus</h2>
+                    <p style="font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+                        The Minimal theme creates a comfortable reading container. By elevating content onto a "card", it separates your words from the background noise, providing <code style="font-family: 'SF Mono', monospace; background: #374151; padding: 2px 4px; border-radius: 4px; color: #f87171; font-size: 0.9em;">focus</code> and clarity.
+                    </p>
+
+                    <!-- Two Cols: Callout & Quote -->
+                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+                        <!-- Callout -->
+                        <div style="background: #111827; border-radius: 6px; padding: 16px; display: flex; gap: 12px; border: 1px solid #374151;">
+                            <span style="font-size: 20px;">ℹ️</span>
+                            <div>
+                                <div style="font-weight: 600; color: #f9fafb; margin-bottom: 4px; font-size: 15px;">Information</div>
+                                <div style="font-size: 14px; color: #9ca3af;">Content is bounded. Shadows are soft.</div>
+                            </div>
+                        </div>
+                        <!-- Quote -->
+                        <div style="border-left: 3px solid #f9fafb; padding-left: 16px; display: flex; align-items: center;">
+                            <p style="font-size: 16px; font-style: italic; color: #d1d5db; margin: 0;">
+                                "Good design is as little design as possible."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="font-size: 20px; font-weight: 600; color: #f3f4f6; margin-bottom: 12px;">Requirements</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" checked style="accent-color: #f9fafb; transform: scale(1.2);">
+                                <span style="color: #9ca3af; text-decoration: line-through; opacity: 0.7;">Define typography scale</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" style="transform: scale(1.2); border: 1px solid #4b5563; background: #374151;">
+                                <span style="color: #d1d5db;">Implement card shadows</span>
+                            </div>
+                             <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" style="transform: scale(1.2); border: 1px solid #4b5563; background: #374151;">
+                                <span style="color: #d1d5db;">Verify mobile responsiveness</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <figure style="margin: 32px 0;">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80" style="width: 100%; border-radius: 4px; display: block; opacity: 0.8;" alt="Structure">
+                        <figcaption style="font-size: 13px; color: #9ca3af; margin-top: 8px;">Architecture of a modern system.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <details style="margin-bottom: 24px; cursor: pointer;">
+                        <summary style="font-weight: 600; color: #e5e7eb; outline: none; list-style: none; display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 10px; color: #9ca3af;">▶</span> Expanded Details
+                        </summary>
+                        <div style="padding-left: 20px; margin-top: 8px; color: #9ca3af; font-size: 15px;">
+                            This is how a toggle block renders. It keeps the interface clean until the user decides to dive deeper.
+                        </div>
+                    </details>
+
+                    <!-- Table -->
+                    <h3 style="font-size: 20px; font-weight: 600; color: #f3f4f6; margin-bottom: 12px;">Quarterly Data</h3>
+                    <div style="border: 1px solid #374151; border-radius: 4px; overflow: hidden; margin-bottom: 32px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <thead style="background: #111827; border-bottom: 1px solid #374151;">
+                                <tr>
+                                    <th style="padding: 10px 16px; text-align: left; color: #9ca3af; font-weight: 600;">Item</th>
+                                    <th style="padding: 10px 16px; text-align: left; color: #9ca3af; font-weight: 600;">Q1</th>
+                                    <th style="padding: 10px 16px; text-align: left; color: #9ca3af; font-weight: 600;">Q2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #374151;">
+                                    <td style="padding: 10px 16px; color: #e5e7eb;">Design</td>
+                                    <td style="padding: 10px 16px; color: #d1d5db;">Complete</td>
+                                    <td style="padding: 10px 16px; color: #d1d5db;">--</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 16px; color: #e5e7eb;">Development</td>
+                                    <td style="padding: 10px 16px; color: #d1d5db;">Started</td>
+                                    <td style="padding: 10px 16px; color: #d1d5db;">In Progress</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Board/Gallery Database -->
+                    <h3 style="font-size: 20px; font-weight: 600; color: #f3f4f6; margin-bottom: 12px;">Components</h3>
+                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #374151; border-radius: 4px; background: #111827; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                            <div style="height: 100px; background: #374151; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔷</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #e5e7eb;">Buttons</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #172554; color: #60a5fa; padding: 2px 6px; border-radius: 4px;">UI Kit</span>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                         <div style="border: 1px solid #374151; border-radius: 4px; background: #111827; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                            <div style="height: 100px; background: #374151; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔶</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #e5e7eb;">Inputs</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #451a03; color: #fbbf24; padding: 2px 6px; border-radius: 4px;">Forms</span>
+                            </div>
+                        </div>
+                         <!-- Card 3 -->
+                         <div style="border: 1px solid #374151; border-radius: 4px; background: #111827; box-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                            <div style="height: 100px; background: #374151; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔳</div>
+                            <div style="padding: 12px;">
+                                <div style="font-size: 14px; font-weight: 600; color: #e5e7eb;">Modals</div>
+                                <span style="display: inline-block; margin-top: 6px; font-size: 11px; background: #3b0764; color: #c084fc; padding: 2px 6px; border-radius: 4px;">Overlay</span>
+                            </div>
+                        </div>
+                     </div>
+
+                    <!-- Code Block -->
+                    <div style="background: #111827; padding: 20px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 13px; color: #e5e7eb; border: 1px solid #374151; margin-bottom: 24px;">
+                        <div style="color: #6b7280; font-style: italic;">// configuration.js</div>
+                        <div style="margin-top: 8px;">
+                            <span style="color: #a855f7;">export default</span> {<br>
+                            &nbsp;&nbsp;shadows: <span style="color: #3b82f6;">true</span>,<br>
+                            &nbsp;&nbsp;rounded: <span style="color: #3b82f6;">"8px"</span><br>
+                            }
+                        </div>
+                    </div>
+
+                     <!-- Bookmark -->
+                    <div style="border: 1px solid #374151; border-radius: 4px; display: flex; height: 100px; margin-bottom: 16px; transition: background 0.2s; cursor: pointer; background: #111827;">
+                        <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 500; color: #f9fafb; margin-bottom: 4px; font-size: 14px;">Humanerd Design System</div>
+                            <div style="font-size: 12px; color: #9ca3af;">The underlying principles of our themes.</div>
+                            <div style="font-size: 12px; color: #e5e7eb; margin-top: 6px;">humanerd.com</div>
+                        </div>
+                         <div style="width: 140px; background: #374151;"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>`,
+        zen: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Zen) -->
+            <div class="theme-preview-light" style="padding: 60px 40px; font-family: 'Lora', 'Noto Serif KR', serif; color: #44403c; background: #f5f5f4; min-height: 100%;">
+                
+                <div style="max-width: 720px; margin: 0 auto;">
+                    
+                    <!-- Header Area -->
+                    <div style="text-align: center; margin-bottom: 60px;">
+                        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.8;">🎋</div>
+                        <h1 style="font-size: 44px; font-weight: 400; letter-spacing: -0.5px; color: #292524; margin: 0;">The Zen Garden</h1>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #78716c; margin-top: 16px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;">Simplicity is the ultimate sophistication</div>
+                    </div>
+
+                    <!-- Intro Text -->
+                    <p style="font-size: 19px; line-height: 1.9; margin-bottom: 32px; color: #44403c;">
+                        The Zen theme is a digital sanctuary. It uses <span style="background: #e7e5e4; padding: 2px 6px; border-radius: 4px; color: #292524;">warm earth tones</span> and elegance of <em>Myeongjo</em> typography to reduce eye strain and promote focus.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="text-align: center; margin: 48px 0;">
+                        <span style="font-size: 40px; color: #d6d3d1; display: block; line-height: 20px;">“</span>
+                        <p style="font-size: 24px; font-weight: 400; font-style: italic; color: #57534e; margin: 16px 0;">
+                            Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.
+                        </p>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #efeee9; border-radius: 2px; padding: 20px; display: flex; gap: 16px; margin-bottom: 40px; border: 1px solid #e7e5e4; border-left: 3px solid #78716c;">
+                        <span style="font-size: 20px;">🍵</span>
+                        <div style="font-family: 'Inter', sans-serif;">
+                            <div style="font-weight: 600; color: #292524; margin-bottom: 6px; font-size: 15px;">Mindful Design</div>
+                            <div style="font-size: 14px; color: #57534e; line-height: 1.6;">Elements are soft but structured. The interface feels like traditional paper.</div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border-radius: 2px; overflow: hidden; box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);">
+                            <img src="https://images.unsplash.com/photo-1528360983277-13d9b152c611?auto=format&fit=crop&w=1000&q=80" style="width: 100%; display: block;" alt="Zen Rock">
+                        </div>
+                        <figcaption style="font-size: 14px; color: #78716c; margin-top: 12px; text-align: center; font-style: italic; font-family: 'Inter', sans-serif;">Figure 1: Balance in all things.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; border-top: 1px solid #e7e5e4; border-bottom: 1px solid #e7e5e4; padding: 20px 0;">
+                        <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span style="font-size: 12px; color: #a8a29e;">▼</span>
+                            <span style="font-size: 17px; font-weight: 500; color: #44403c;">Hidden Wisdom</span>
+                        </div>
+                        <div style="padding-left: 24px; margin-top: 12px; color: #57534e; font-size: 16px; line-height: 1.7;">
+                            Information should appear only when needed, preserving the calmness of the page.
+                        </div>
+                    </div>
+
+                    <!-- Table (Simple) -->
+                    <h3 style="font-size: 22px; font-weight: 400; color: #292524; margin-bottom: 20px;">Daily Rituals</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 48px; font-size: 16px; font-family: 'Inter', sans-serif;">
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e7e5e4;">
+                                <td style="padding: 16px 0; color: #57534e;">Morning Meditation</td>
+                                <td style="padding: 16px 0; color: #57534e;">20 mins</td>
+                                <td style="padding: 16px 0; text-align: right;"><span style="color: #65a30d;">● Doing</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e7e5e4;">
+                                <td style="padding: 16px 0; color: #57534e;">Deep Work</td>
+                                <td style="padding: 16px 0; color: #57534e;">4 hours</td>
+                                <td style="padding: 16px 0; text-align: right;"><span style="color: #a8a29e;">○ Todo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Single Column Gallery / Cards -->
+                    <h3 style="font-size: 22px; font-weight: 400; color: #292524; margin-bottom: 24px;">Reflections</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="background: white; padding: 24px; border-radius: 2px; border: 1px solid #ebe9e5; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                             <div style="font-size: 24px; margin-bottom: 12px;">🌿</div>
+                             <div style="font-size: 17px; font-weight: 500; color: #292524; margin-bottom: 8px;">Nature</div>
+                             <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #78716c; line-height: 1.5;">Reconnecting with the organic world outside of screens.</div>
+                        </div>
+                         <!-- Card 2 -->
+                         <div style="background: white; padding: 24px; border-radius: 2px; border: 1px solid #ebe9e5; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                             <div style="font-size: 24px; margin-bottom: 12px;">💨</div>
+                             <div style="font-size: 17px; font-weight: 500; color: #292524; margin-bottom: 8px;">Breathing</div>
+                             <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #78716c; line-height: 1.5;">The anchor for a wandering mind. Simple and constant.</div>
+                        </div>
+                    </div>
+
+                    <!-- Bookmark -->
+                    <div style="border: 1px solid #e7e5e4; border-radius: 2px; display: flex; height: 110px; margin-bottom: 32px; background: white; overflow: hidden;">
+                        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 500; color: #292524; margin-bottom: 6px; font-size: 16px;">The philosophy of Zen</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #78716c;">Understanding the roots of mindfulness.</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: #a8a29e; margin-top: 8px;">wikipedia.org</div>
+                        </div>
+                         <div style="width: 140px; background: #e7e5e4;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dark Mode (Zen) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px 40px; font-family: 'Lora', 'Noto Serif KR', serif; color: #a8a29e; background: #1c1917; min-height: 100%;">
+                
+                 <div style="max-width: 720px; margin: 0 auto;">
+                    
+                    <!-- Header Area -->
+                    <div style="text-align: center; margin-bottom: 60px;">
+                        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.8;">🎋</div>
+                        <h1 style="font-size: 44px; font-weight: 400; letter-spacing: -0.5px; color: #e7e5e4; margin: 0;">The Zen Garden</h1>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #57534e; margin-top: 16px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;">Simplicity is the ultimate sophistication</div>
+                    </div>
+
+                    <!-- Intro Text -->
+                    <p style="font-size: 19px; line-height: 1.9; margin-bottom: 32px; color: #a8a29e;">
+                        The Zen theme is a digital sanctuary. It uses <span style="background: #292524; padding: 2px 6px; border-radius: 4px; color: #d6d3d1;">warm earth tones</span> and elegance of <em>Myeongjo</em> typography to reduce eye strain and promote focus.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="text-align: center; margin: 48px 0;">
+                        <span style="font-size: 40px; color: #44403c; display: block; line-height: 20px;">“</span>
+                        <p style="font-size: 24px; font-weight: 400; font-style: italic; color: #d6d3d1; margin: 16px 0;">
+                            Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.
+                        </p>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #292524; border-radius: 2px; padding: 20px; display: flex; gap: 16px; margin-bottom: 40px; border: 1px solid #44403c; border-left: 3px solid #78716c;">
+                        <span style="font-size: 20px;">🍵</span>
+                        <div style="font-family: 'Inter', sans-serif;">
+                            <div style="font-weight: 600; color: #e7e5e4; margin-bottom: 6px; font-size: 15px;">Mindful Design</div>
+                            <div style="font-size: 14px; color: #a8a29e; line-height: 1.6;">Elements are soft but structured. The interface feels like traditional paper.</div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border-radius: 2px; overflow: hidden; box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.5);">
+                            <img src="https://images.unsplash.com/photo-1528360983277-13d9b152c611?auto=format&fit=crop&w=1000&q=80" style="width: 100%; display: block; opacity: 0.8;" alt="Zen Rock">
+                        </div>
+                        <figcaption style="font-size: 14px; color: #57534e; margin-top: 12px; text-align: center; font-style: italic; font-family: 'Inter', sans-serif;">Figure 1: Balance in all things.</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; border-top: 1px solid #292524; border-bottom: 1px solid #292524; padding: 20px 0;">
+                        <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <span style="font-size: 12px; color: #57534e;">▼</span>
+                            <span style="font-size: 17px; font-weight: 500; color: #d6d3d1;">Hidden Wisdom</span>
+                        </div>
+                        <div style="padding-left: 24px; margin-top: 12px; color: #78716c; font-size: 16px; line-height: 1.7;">
+                            Information should appear only when needed, preserving the calmness of the page.
+                        </div>
+                    </div>
+
+                    <!-- Table (Simple) -->
+                    <h3 style="font-size: 22px; font-weight: 400; color: #e7e5e4; margin-bottom: 20px;">Daily Rituals</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 48px; font-size: 16px; font-family: 'Inter', sans-serif;">
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #292524;">
+                                <td style="padding: 16px 0; color: #a8a29e;">Morning Meditation</td>
+                                <td style="padding: 16px 0; color: #a8a29e;">20 mins</td>
+                                <td style="padding: 16px 0; text-align: right;"><span style="color: #84cc16;">● Doing</span></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #292524;">
+                                <td style="padding: 16px 0; color: #a8a29e;">Deep Work</td>
+                                <td style="padding: 16px 0; color: #a8a29e;">4 hours</td>
+                                <td style="padding: 16px 0; text-align: right;"><span style="color: #57534e;">○ Todo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Single Column Gallery / Cards -->
+                    <h3 style="font-size: 22px; font-weight: 400; color: #e7e5e4; margin-bottom: 24px;">Reflections</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="background: #0c0a09; padding: 24px; border-radius: 2px; border: 1px solid #292524;">
+                             <div style="font-size: 24px; margin-bottom: 12px;">🌿</div>
+                             <div style="font-size: 17px; font-weight: 500; color: #e7e5e4; margin-bottom: 8px;">Nature</div>
+                             <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #78716c; line-height: 1.5;">Reconnecting with the organic world outside of screens.</div>
+                        </div>
+                         <!-- Card 2 -->
+                         <div style="background: #0c0a09; padding: 24px; border-radius: 2px; border: 1px solid #292524;">
+                             <div style="font-size: 24px; margin-bottom: 12px;">💨</div>
+                             <div style="font-size: 17px; font-weight: 500; color: #e7e5e4; margin-bottom: 8px;">Breathing</div>
+                             <div style="font-family: 'Inter', sans-serif; font-size: 14px; color: #78716c; line-height: 1.5;">The anchor for a wandering mind. Simple and constant.</div>
+                        </div>
+                    </div>
+
+                    <!-- Bookmark -->
+                    <div style="border: 1px solid #292524; border-radius: 2px; display: flex; height: 110px; margin-bottom: 32px; background: #0c0a09; overflow: hidden;">
+                        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 500; color: #e7e5e4; margin-bottom: 6px; font-size: 16px;">The philosophy of Zen</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: #78716c;">Understanding the roots of mindfulness.</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 12px; color: #57534e; margin-top: 8px;">wikipedia.org</div>
+                        </div>
+                         <div style="width: 140px; background: #292524;"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>`,
+        paper: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Paper) -->
+            <div class="theme-preview-light" style="padding: 60px 40px; font-family: 'Lora', 'Times New Roman', serif; color: #2d2a26; background: #fdfbf7; min-height: 100%;">
+                
+                <div style="max-width: 680px; margin: 0 auto; background: #fff; padding: 60px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); border: 1px solid #f0f0e0;">
+                    
+                    <!-- Cover / Header imitation -->
+                     <div style="border-bottom: 2px solid #2d2a26; padding-bottom: 32px; margin-bottom: 40px;">
+                        <div style="font-family: 'Inter', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #78716c; margin-bottom: 12px;">The Monday Edition • Vol. 24</div>
+                        <h1 style="font-size: 56px; font-weight: 700; letter-spacing: -1.5px; color: #1c1917; margin: 0; line-height: 1;">The Editorial</h1>
+                        <p style="font-size: 20px; font-style: italic; color: #57534e; margin-top: 16px; font-weight: 400;">Crafting digital experiences that feel tangible.</p>
+                     </div>
+
+                    <!-- Intro Text (Drop cap style) -->
+                    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 24px; color: #2d2a26;">
+                        <span style="float: left; font-size: 56px; line-height: 48px; padding-top: 4px; padding-right: 8px; font-weight: 700;">T</span>he Paper theme mimics the tactile quality of a high-end journal. It prioritizes <em>readability</em> and <em>typographic hierarchy</em> over digital flair. It brings the comfort of the printed page to the screen.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="margin: 40px 0; padding: 20px 40px; border-left: 4px solid #d6d3d1; background: #faf9f6;">
+                        <p style="font-size: 22px; font-weight: 400; font-style: italic; color: #44403c; margin: 0; line-height: 1.5;">
+                            "Typography is the voice of the written word."
+                        </p>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #78716c; margin-top: 12px; text-transform: uppercase; letter-spacing: 1px;">— Robert Bringhurst</div>
+                    </div>
+
+                    <!-- Image with Caption -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border: 1px solid #e7e5e4; padding: 8px; background: white;">
+                             <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1000&q=80" style="width: 100%; display: block; filter: sepia(20%);" alt="Open Book">
+                        </div>
+                        <figcaption style="font-family: 'Inter', sans-serif; font-size: 12px; color: #78716c; margin-top: 12px; text-align: right; border-bottom: 1px solid #e7e5e4; padding-bottom: 8px;">Fig. 2: The classic medium.</figcaption>
+                    </figure>
+
+                    <!-- Callout -->
+                    <div style="background: white; border: 1px solid #2d2a26; padding: 24px; display: flex; gap: 16px; margin-bottom: 40px;">
+                        <span style="font-size: 24px;">✒️</span>
+                        <div>
+                            <div style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1c1917; margin-bottom: 4px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Editor's Note</div>
+                            <div style="font-size: 16px; color: #44403c; line-height: 1.6;">Use this block to highlight key takeaways or important context that shouldn't be missed by the reader.</div>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                     <h3 style="font-size: 24px; font-weight: 700; color: #1c1917; margin-bottom: 16px; border-bottom: 1px solid #e7e5e4; padding-bottom: 8px;">Key Elements</h3>
+                    <ul style="margin-bottom: 32px; padding-left: 20px; list-style-type: circle; color: #44403c; font-size: 17px; line-height: 1.8;">
+                        <li>Sophisticated Serif fonts (Lora, Playfair)</li>
+                        <li>Warm, off-white background (#fdfbf7)</li>
+                        <li>High contrast for text (#2d2a26)</li>
+                    </ul>
+
+                     <!-- Toggle -->
+                    <div style="margin-bottom: 32px;">
+                        <div style="display: flex; align-items: baseline; gap: 8px; cursor: pointer; border-bottom: 1px dashed #a8a29e; padding-bottom: 4px; display: inline-flex;">
+                            <span style="font-size: 12px; color: #78716c;">▶</span>
+                            <span style="font-size: 16px; font-weight: 600; color: #2d2a26;">Footnotes & References</span>
+                        </div>
+                        <div style="margin-top: 12px; color: #57534e; font-size: 15px; pl-4; font-style: italic;">
+                             1. Bringhurst, R. (2004). The Elements of Typographic Style.
+                        </div>
+                    </div>
+
+                    <!-- Table (Editorial Style) -->
+                    <h3 style="font-size: 24px; font-weight: 700; color: #1c1917; margin-top: 40px; margin-bottom: 20px;">Circulation Data</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 16px;">
+                        <thead style="border-top: 2px solid #1c1917; border-bottom: 1px solid #1c1917;">
+                            <tr>
+                                <th style="padding: 12px 8px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase;">Region</th>
+                                <th style="padding: 12px 8px; text-align: right; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase;">Subscribers</th>
+                                <th style="padding: 12px 8px; text-align: right; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase;">Growth</th>
+                            </tr>
+                        </thead>
+                        <tbody style="border-bottom: 2px solid #1c1917;">
+                            <tr>
+                                <td style="padding: 12px 8px; color: #2d2a26;">North America</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #57534e; font-variant-numeric: tabular-nums;">12,500</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #2d2a26; font-variant-numeric: tabular-nums;">+4.5%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 8px; color: #2d2a26;">Europe</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #57534e; font-variant-numeric: tabular-nums;">8,200</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #2d2a26; font-variant-numeric: tabular-nums;">+2.1%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Single Column Gallery / Cards -->
+                    <h3 style="font-size: 24px; font-weight: 700; color: #1c1917; margin-bottom: 24px;">Featured Articles</h3>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                             <div style="width: 100px; height: 100px; background: #e7e5e4; flex-shrink: 0; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: sepia(30%);">
+                             </div>
+                             <div>
+                                 <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #a8a29e; text-transform: uppercase; margin-bottom: 6px;">Fiction</div>
+                                 <h4 style="font-size: 20px; font-weight: 700; margin: 0 0 8px; color: #1c1917;">The Silent Echo</h4>
+                                 <p style="font-size: 15px; color: #57534e; margin: 0; line-height: 1.5;">A short story about memory and loss in a digital age.</p>
+                             </div>
+                        </div>
+                         <!-- Card 2 -->
+                         <div style="display: flex; gap: 20px; align-items: start;">
+                             <div style="width: 100px; height: 100px; background: #e7e5e4; flex-shrink: 0; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: sepia(30%);">
+                             </div>
+                             <div>
+                                 <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #a8a29e; text-transform: uppercase; margin-bottom: 6px;">Opinion</div>
+                                 <h4 style="font-size: 20px; font-weight: 700; margin: 0 0 8px; color: #1c1917;">Why Ink Matters</h4>
+                                 <p style="font-size: 15px; color: #57534e; margin: 0; line-height: 1.5;">Exploring the resurgence of print media.</p>
+                             </div>
+                        </div>
+                    </div>
+
+                     <!-- Bookmark -->
+                    <div style="border: 1px solid #d6d3d1; display: flex; height: 120px; margin-bottom: 32px; background: #faf9f6;">
+                        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 700; color: #1c1917; margin-bottom: 6px; font-size: 16px;">The Printing Press</div>
+                            <div style="font-size: 14px; color: #57534e; font-style: italic;">History relative to modern layouts.</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #78716c; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px;">history.org</div>
+                        </div>
+                         <div style="width: 140px; background: #e7e5e4; border-left: 1px solid #d6d3d1;">
+                             <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(50%);">
+                         </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dark Mode (Paper) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px 40px; font-family: 'Lora', 'Times New Roman', serif; color: #a8a29e; background: #1c1917; min-height: 100%;">
+                
+                 <div style="max-width: 680px; margin: 0 auto; background: #23201e; padding: 60px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); border: 1px solid #292524;">
+                    
+                    <!-- Cover / Header imitation -->
+                     <div style="border-bottom: 2px solid #a8a29e; padding-bottom: 32px; margin-bottom: 40px;">
+                        <div style="font-family: 'Inter', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #57534e; margin-bottom: 12px;">The Monday Edition • Vol. 24</div>
+                        <h1 style="font-size: 56px; font-weight: 700; letter-spacing: -1.5px; color: #e7e5e4; margin: 0; line-height: 1;">The Editorial</h1>
+                        <p style="font-size: 20px; font-style: italic; color: #78716c; margin-top: 16px; font-weight: 400;">Crafting digital experiences that feel tangible.</p>
+                     </div>
+
+                    <!-- Intro Text (Drop cap style) -->
+                    <p style="font-size: 18px; line-height: 1.8; margin-bottom: 24px; color: #a8a29e;">
+                        <span style="float: left; font-size: 56px; line-height: 48px; padding-top: 4px; padding-right: 8px; font-weight: 700; color: #e7e5e4;">T</span>he Paper theme mimics the tactile quality of a high-end journal. It prioritizes <em>readability</em> and <em>typographic hierarchy</em> over digital flair. It brings the comfort of the printed page to the screen.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="margin: 40px 0; padding: 20px 40px; border-left: 4px solid #57534e; background: #1f1d1b;">
+                        <p style="font-size: 22px; font-weight: 400; font-style: italic; color: #d6d3d1; margin: 0; line-height: 1.5;">
+                            "Typography is the voice of the written word."
+                        </p>
+                        <div style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #57534e; margin-top: 12px; text-transform: uppercase; letter-spacing: 1px;">— Robert Bringhurst</div>
+                    </div>
+
+                    <!-- Image with Caption -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border: 1px solid #292524; padding: 8px; background: #1c1917;">
+                             <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1000&q=80" style="width: 100%; display: block; filter: sepia(10%) brightness(0.8);" alt="Open Book">
+                        </div>
+                        <figcaption style="font-family: 'Inter', sans-serif; font-size: 12px; color: #57534e; margin-top: 12px; text-align: right; border-bottom: 1px solid #292524; padding-bottom: 8px;">Fig. 2: The classic medium.</figcaption>
+                    </figure>
+
+                    <!-- Callout -->
+                    <div style="background: #1f1d1b; border: 1px solid #44403c; padding: 24px; display: flex; gap: 16px; margin-bottom: 40px;">
+                        <span style="font-size: 24px;">✒️</span>
+                        <div>
+                            <div style="font-family: 'Inter', sans-serif; font-weight: 700; color: #e7e5e4; margin-bottom: 4px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Editor's Note</div>
+                            <div style="font-size: 16px; color: #a8a29e; line-height: 1.6;">Use this block to highlight key takeaways or important context that shouldn't be missed by the reader.</div>
+                        </div>
+                    </div>
+
+                    <!-- Lists -->
+                     <h3 style="font-size: 24px; font-weight: 700; color: #e7e5e4; margin-bottom: 16px; border-bottom: 1px solid #292524; padding-bottom: 8px;">Key Elements</h3>
+                    <ul style="margin-bottom: 32px; padding-left: 20px; list-style-type: circle; color: #a8a29e; font-size: 17px; line-height: 1.8;">
+                        <li>Sophisticated Serif fonts (Lora, Playfair)</li>
+                        <li>Warm, off-white background (#fdfbf7)</li>
+                        <li>High contrast for text (#2d2a26)</li>
+                    </ul>
+
+                     <!-- Toggle -->
+                    <div style="margin-bottom: 32px;">
+                        <div style="display: flex; align-items: baseline; gap: 8px; cursor: pointer; border-bottom: 1px dashed #57534e; padding-bottom: 4px; display: inline-flex;">
+                            <span style="font-size: 12px; color: #57534e;">▶</span>
+                            <span style="font-size: 16px; font-weight: 600; color: #d6d3d1;">Footnotes & References</span>
+                        </div>
+                        <div style="margin-top: 12px; color: #78716c; font-size: 15px; pl-4; font-style: italic;">
+                             1. Bringhurst, R. (2004). The Elements of Typographic Style.
+                        </div>
+                    </div>
+
+                    <!-- Table (Editorial Style) -->
+                    <h3 style="font-size: 24px; font-weight: 700; color: #e7e5e4; margin-top: 40px; margin-bottom: 20px;">Circulation Data</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px; font-size: 16px;">
+                        <thead style="border-top: 2px solid #a8a29e; border-bottom: 1px solid #a8a29e;">
+                            <tr>
+                                <th style="padding: 12px 8px; text-align: left; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase; color: #a8a29e;">Region</th>
+                                <th style="padding: 12px 8px; text-align: right; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase; color: #a8a29e;">Subscribers</th>
+                                <th style="padding: 12px 8px; text-align: right; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; text-transform: uppercase; color: #a8a29e;">Growth</th>
+                            </tr>
+                        </thead>
+                        <tbody style="border-bottom: 2px solid #a8a29e;">
+                            <tr>
+                                <td style="padding: 12px 8px; color: #d6d3d1;">North America</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #78716c; font-variant-numeric: tabular-nums;">12,500</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #d6d3d1; font-variant-numeric: tabular-nums;">+4.5%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 8px; color: #d6d3d1;">Europe</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #78716c; font-variant-numeric: tabular-nums;">8,200</td>
+                                <td style="padding: 12px 8px; text-align: right; color: #d6d3d1; font-variant-numeric: tabular-nums;">+2.1%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Single Column Gallery / Cards -->
+                    <h3 style="font-size: 24px; font-weight: 700; color: #e7e5e4; margin-bottom: 24px;">Featured Articles</h3>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="display: flex; gap: 20px; align-items: start;">
+                             <div style="width: 100px; height: 100px; background: #292524; flex-shrink: 0; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: sepia(10%) brightness(0.7);">
+                             </div>
+                             <div>
+                                 <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #57534e; text-transform: uppercase; margin-bottom: 6px;">Fiction</div>
+                                 <h4 style="font-size: 20px; font-weight: 700; margin: 0 0 8px; color: #e7e5e4;">The Silent Echo</h4>
+                                 <p style="font-size: 15px; color: #a8a29e; margin: 0; line-height: 1.5;">A short story about memory and loss in a digital age.</p>
+                             </div>
+                        </div>
+                         <!-- Card 2 -->
+                         <div style="display: flex; gap: 20px; align-items: start;">
+                             <div style="width: 100px; height: 100px; background: #292524; flex-shrink: 0; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: sepia(10%) brightness(0.7);">
+                             </div>
+                             <div>
+                                 <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #57534e; text-transform: uppercase; margin-bottom: 6px;">Opinion</div>
+                                 <h4 style="font-size: 20px; font-weight: 700; margin: 0 0 8px; color: #e7e5e4;">Why Ink Matters</h4>
+                                 <p style="font-size: 15px; color: #a8a29e; margin: 0; line-height: 1.5;">Exploring the resurgence of print media.</p>
+                             </div>
+                        </div>
+                    </div>
+
+                     <!-- Bookmark -->
+                    <div style="border: 1px solid #44403c; display: flex; height: 120px; margin-bottom: 32px; background: #1c1917;">
+                        <div style="padding: 24px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div style="font-weight: 700; color: #e7e5e4; margin-bottom: 6px; font-size: 16px;">The Printing Press</div>
+                            <div style="font-size: 14px; color: #a8a29e; font-style: italic;">History relative to modern layouts.</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 11px; color: #57534e; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px;">history.org</div>
+                        </div>
+                         <div style="width: 140px; background: #292524; border-left: 1px solid #44403c;">
+                             <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=300&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(80%) brightness(0.6);">
+                         </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>`,
+        brutal: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Brutal) -->
+            <div class="theme-preview-light" style="padding: 60px; font-family: 'Space Mono', 'Courier New', monospace; color: #000; background: #FFDE17; min-height: 100%; border: 6px solid #000;">
+                
+                <div style="background: #fff; padding: 40px; border: 4px solid #000; box-shadow: 12px 12px 0px #000; max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Header -->
+                    <div style="border-bottom: 4px solid #000; padding-bottom: 24px; margin-bottom: 40px;">
+                        <span style="background: #000; color: #fff; padding: 4px 12px; font-weight: 700; font-size: 14px;">SYSTEM_READY</span>
+                        <h1 style="font-size: 64px; font-weight: 900; line-height: 0.9; margin: 24px 0; text-transform: uppercase; letter-spacing: -2px;">Raw.<br>Power.</h1>
+                        <p style="font-size: 20px; font-weight: 700; background: #00FF00; display: inline-block; padding: 4px 8px; border: 2px solid #000;">NEO-BRUTALISM MODE ACTIVE</p>
+                    </div>
+
+                    <!-- Intro -->
+                    <p style="font-size: 18px; line-height: 1.6; font-weight: 700; margin-bottom: 32px;">
+                        We reject the soft. We reject the rounded. <span style="text-decoration: underline; text-decoration-thickness: 3px;">Neutrality is a weakness.</span> This theme renders Notion blocks with unapologetic bold borders, high contrast, and zero border-radius.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="border: 4px solid #000; padding: 24px; background: #FF00FF; color: #fff; margin-bottom: 40px; box-shadow: 8px 8px 0px #000;">
+                        <h3 style="font-size: 32px; font-weight: 900; line-height: 1.1; margin: 0;">"FORM FOLLOWS FUNCTION? NO. FORM PUNCHES FUNCTION IN THE FACE."</h3>
+                        <div style="margin-top: 16px; font-weight: 700; text-align: right;">— The Manifesto</div>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #000; color: #fff; padding: 24px; display: flex; gap: 16px; margin-bottom: 40px; border: 4px solid #000;">
+                        <span style="font-size: 32px;">⚠️</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 18px; margin-bottom: 8px; text-transform: uppercase; color: #FFDE17;">Warning: High Voltage</div>
+                             <div style="font-size: 16px; line-height: 1.5; font-family: sans-serif; font-weight: 600;">Standard UI patterns have been deprecated. Proceed with attitude.</div>
+                        </div>
+                    </div>
+
+                     <!-- Image -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border: 4px solid #000; box-shadow: 8px 8px 0px #000;">
+                            <img src="https://images.unsplash.com/photo-1496551572236-4d2d46e340a6?w=1000&auto=format&fit=crop&q=80" style="width: 100%; display: block; filter: grayscale(100%) contrast(150%);" alt="Concrete">
+                        </div>
+                        <figcaption style="font-weight: 700; font-size: 14px; margin-top: 16px; background: #000; color: #fff; display: inline-block; padding: 4px 8px;">FIG_03: CONCRETE_JUNGLE</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; border: 4px solid #000; background: #fff;">
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 4px solid #000; background: #eee;">
+                            <span style="font-size: 20px; font-weight: 900;">▼</span>
+                            <span style="font-size: 18px; font-weight: 900; text-transform: uppercase;">Hidden_Data_Structure</span>
+                        </div>
+                        <div style="padding: 24px; font-weight: 700; font-size: 16px;">
+                            &gt; Access granted.<br>
+                            &gt; Revealing core components.<br>
+                            &gt; No smoothing applied.
+                        </div>
+                    </div>
+
+                     <!-- Table -->
+                    <h3 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; background: #000; color: #fff; display: inline-block; padding: 4px 8px;">System Metrics</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 48px; font-size: 16px; border: 4px solid #000;">
+                        <thead style="background: #000; color: #fff;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border: 2px solid #fff; font-weight: 700;">METRIC</th>
+                                <th style="padding: 12px; text-align: right; border: 2px solid #fff; font-weight: 700;">VALUE</th>
+                                <th style="padding: 12px; text-align: right; border: 2px solid #fff; font-weight: 700;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 4px solid #000;">
+                                <td style="padding: 12px; border-right: 4px solid #000; font-weight: 700;">CPU_LOAD</td>
+                                <td style="padding: 12px; border-right: 4px solid #000; text-align: right;">98%</td>
+                                <td style="padding: 12px; text-align: right; background: #FF0000; color: #fff; font-weight: 700;">CRITICAL</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border-right: 4px solid #000; font-weight: 700;">MEMORY</td>
+                                <td style="padding: 12px; border-right: 4px solid #000; text-align: right;">45%</td>
+                                <td style="padding: 12px; text-align: right; background: #00FF00; color: #000; font-weight: 700;">STABLE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Board Cards -->
+                     <h3 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 24px; background: #000; color: #fff; display: inline-block; padding: 4px 8px;">Project_Queue</h3>
+                     <div style="display: flex; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="flex: 1; border: 4px solid #000; background: #fff; box-shadow: 8px 8px 0px #000;">
+                             <div style="height: 120px; background: #0000FF; border-bottom: 4px solid #000;"></div>
+                             <div style="padding: 20px;">
+                                 <div style="background: #000; color: #fff; display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 6px; margin-bottom: 8px;">URGENT</div>
+                                 <div style="font-weight: 900; font-size: 20px; margin-bottom: 8px; line-height: 1.2;">DEPLOY_MAINFRAME</div>
+                                 <div style="font-size: 14px; font-weight: 700;">#production</div>
+                             </div>
+                        </div>
+                        <!-- Card 2 -->
+                         <div style="flex: 1; border: 4px solid #000; background: #fff; box-shadow: 8px 8px 0px #000;">
+                             <div style="height: 120px; background: #FF0000; border-bottom: 4px solid #000;"></div>
+                             <div style="padding: 20px;">
+                                 <div style="border: 2px solid #000; color: #000; display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 6px; margin-bottom: 8px;">PENDING</div>
+                                 <div style="font-weight: 900; font-size: 20px; margin-bottom: 8px; line-height: 1.2;">REWRITE_KERNEL</div>
+                                 <div style="font-size: 14px; font-weight: 700;">#dev</div>
+                             </div>
+                        </div>
+                     </div>
+
+                     <!-- Code/Terminal -->
+                     <div style="background: #000; color: #00FF00; padding: 24px; border: 4px solid #000; font-family: monospace; position: relative;">
+                        <div style="position: absolute; top: 0; right: 0; background: #00FF00; color: #000; font-weight: 700; padding: 2px 8px; font-size: 12px;">BASH</div>
+                        <div style="opacity: 0.7;">$ init_sequence --force</div>
+                        <div style="margin-top: 8px;">> overriding safety protocols...</div>
+                        <div style="margin-top: 4px;">> aesthetics compiled successfully.</div>
+                        <div style="margin-top: 4px; animation: blink 1s infinite;">_</div>
+                     </div>
+
+                </div>
+            </div>
+
+             <!-- Dark Mode (Brutal) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px; font-family: 'Space Mono', 'Courier New', monospace; color: #fff; background: #111; min-height: 100%; border: 6px solid #fff;">
+                
+                <div style="background: #000; padding: 40px; border: 4px solid #fff; box-shadow: 12px 12px 0px #fff; max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Header -->
+                    <div style="border-bottom: 4px solid #fff; padding-bottom: 24px; margin-bottom: 40px;">
+                        <span style="background: #fff; color: #000; padding: 4px 12px; font-weight: 700; font-size: 14px;">SYSTEM_READY</span>
+                        <h1 style="font-size: 64px; font-weight: 900; line-height: 0.9; margin: 24px 0; text-transform: uppercase; letter-spacing: -2px; color: #fff;">Raw.<br>Power.</h1>
+                        <p style="font-size: 20px; font-weight: 700; background: #00FF00; color: #000; display: inline-block; padding: 4px 8px; border: 2px solid #fff;">NEO-BRUTALISM MODE ACTIVE</p>
+                    </div>
+
+                    <!-- Intro -->
+                    <p style="font-size: 18px; line-height: 1.6; font-weight: 700; margin-bottom: 32px; color: #eee;">
+                        We reject the soft. We reject the rounded. <span style="text-decoration: underline; text-decoration-thickness: 3px; text-decoration-color: #fff;">Neutrality is a weakness.</span> This theme renders Notion blocks with unapologetic bold borders.
+                    </p>
+
+                    <!-- Quote -->
+                    <div style="border: 4px solid #fff; padding: 24px; background: #FF00FF; color: #fff; margin-bottom: 40px; box-shadow: 8px 8px 0px #fff;">
+                        <h3 style="font-size: 32px; font-weight: 900; line-height: 1.1; margin: 0;">"FORM FOLLOWS FUNCTION? NO. FORM PUNCHES FUNCTION IN THE FACE."</h3>
+                        <div style="margin-top: 16px; font-weight: 700; text-align: right;">— The Manifesto</div>
+                    </div>
+
+                    <!-- Callout -->
+                    <div style="background: #fff; color: #000; padding: 24px; display: flex; gap: 16px; margin-bottom: 40px; border: 4px solid #fff;">
+                        <span style="font-size: 32px;">⚠️</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 18px; margin-bottom: 8px; text-transform: uppercase; color: #FF0000;">Warning: High Voltage</div>
+                             <div style="font-size: 16px; line-height: 1.5; font-family: sans-serif; font-weight: 600;">Standard UI patterns have been deprecated. Proceed with attitude.</div>
+                        </div>
+                    </div>
+
+                     <!-- Image -->
+                    <figure style="margin: 40px 0;">
+                        <div style="border: 4px solid #fff; box-shadow: 8px 8px 0px #fff;">
+                            <img src="https://images.unsplash.com/photo-1496551572236-4d2d46e340a6?w=1000&auto=format&fit=crop&q=80" style="width: 100%; display: block; filter: grayscale(100%) contrast(120%);" alt="Concrete">
+                        </div>
+                        <figcaption style="font-weight: 700; font-size: 14px; margin-top: 16px; background: #fff; color: #000; display: inline-block; padding: 4px 8px;">FIG_03: CONCRETE_JUNGLE</figcaption>
+                    </figure>
+
+                    <!-- Toggle -->
+                    <div style="margin-bottom: 32px; border: 4px solid #fff; background: #000;">
+                        <div style="padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 4px solid #fff; background: #222;">
+                            <span style="font-size: 20px; font-weight: 900;">▼</span>
+                            <span style="font-size: 18px; font-weight: 900; text-transform: uppercase;">Hidden_Data_Structure</span>
+                        </div>
+                        <div style="padding: 24px; font-weight: 700; font-size: 16px; color: #ddd;">
+                            &gt; Access granted.<br>
+                            &gt; Revealing core components.<br>
+                            &gt; No smoothing applied.
+                        </div>
+                    </div>
+
+                     <!-- Table -->
+                    <h3 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 16px; background: #fff; color: #000; display: inline-block; padding: 4px 8px;">System Metrics</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 48px; font-size: 16px; border: 4px solid #fff;">
+                         <thead style="background: #fff; color: #000;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border: 2px solid #000; font-weight: 700;">METRIC</th>
+                                <th style="padding: 12px; text-align: right; border: 2px solid #000; font-weight: 700;">VALUE</th>
+                                <th style="padding: 12px; text-align: right; border: 2px solid #000; font-weight: 700;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 4px solid #fff;">
+                                <td style="padding: 12px; border-right: 4px solid #fff; font-weight: 700;">CPU_LOAD</td>
+                                <td style="padding: 12px; border-right: 4px solid #fff; text-align: right;">98%</td>
+                                <td style="padding: 12px; text-align: right; background: #FF0000; color: #fff; font-weight: 700;">CRITICAL</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border-right: 4px solid #fff; font-weight: 700;">MEMORY</td>
+                                <td style="padding: 12px; border-right: 4px solid #fff; text-align: right;">45%</td>
+                                <td style="padding: 12px; text-align: right; background: #00FF00; color: #000; font-weight: 700;">STABLE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Cards -->
+                     <h3 style="font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 24px; background: #fff; color: #000; display: inline-block; padding: 4px 8px;">Project_Queue</h3>
+                     <div style="display: flex; gap: 24px; margin-bottom: 40px;">
+                        <!-- Card 1 -->
+                        <div style="flex: 1; border: 4px solid #fff; background: #000; box-shadow: 8px 8px 0px #fff;">
+                             <div style="height: 120px; background: #0000FF; border-bottom: 4px solid #fff;"></div>
+                             <div style="padding: 20px;">
+                                 <div style="background: #fff; color: #000; display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 6px; margin-bottom: 8px;">URGENT</div>
+                                 <div style="font-weight: 900; font-size: 20px; margin-bottom: 8px; line-height: 1.2;">DEPLOY_MAINFRAME</div>
+                                 <div style="font-size: 14px; font-weight: 700;">#production</div>
+                             </div>
+                        </div>
+                        <!-- Card 2 -->
+                         <div style="flex: 1; border: 4px solid #fff; background: #000; box-shadow: 8px 8px 0px #fff;">
+                             <div style="height: 120px; background: #FF0000; border-bottom: 4px solid #fff;"></div>
+                             <div style="padding: 20px;">
+                                 <div style="border: 2px solid #fff; color: #fff; display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 6px; margin-bottom: 8px;">PENDING</div>
+                                 <div style="font-weight: 900; font-size: 20px; margin-bottom: 8px; line-height: 1.2;">REWRITE_KERNEL</div>
+                                 <div style="font-size: 14px; font-weight: 700;">#dev</div>
+                             </div>
+                        </div>
+                     </div>
+
+                </div>
+            </div>
+        </div>`,
+        terminal: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Solarized Light inspired) -->
+            <div class="theme-preview-light" style="padding: 60px; font-family: 'Space Mono', 'Fira Code', monospace; color: #586e75; background: #fdf6e3; min-height: 100%;">
+                
+                <div style="margin-bottom: 40px; border-bottom: 2px dashed #93a1a1; padding-bottom: 24px;">
+                    <div style="color: #b58900; font-size: 14px; margin-bottom: 8px;">usr@local-machine:~/projects/notion-glaze $ ./init_theme.sh --light</div>
+                    <h1 style="font-size: 40px; font-weight: 700; color: #cb4b16; margin: 16px 0; letter-spacing: -1px;">> Terminal_Mode<span style="animation: blink 1s infinite;">_</span></h1>
+                    <p style="font-size: 16px; color: #657b83;">Loading retro aesthetic modules... [OK]</p>
+                </div>
+
+                <!-- Intro Text -->
+                <p style="font-size: 16px; line-height: 1.7; margin-bottom: 32px; color: #586e75;">
+                    The Terminal theme is built for developers. It focuses on <span style="background: #eee8d5; color: #d33682; padding: 2px 6px; border-radius: 4px;">monospaced typography</span>, clear code blocks, and a distraction-free writing environment reminiscent of your favorite IDE.
+                </p>
+
+                <!-- Quote / Blockquote -->
+                <div style="border-left: 4px solid #859900; padding: 16px 24px; background: #eee8d5; margin-bottom: 40px;">
+                    <p style="font-size: 18px; font-style: italic; color: #586e75; margin: 0;">"Talk is cheap. Show me the code."</p>
+                    <div style="margin-top: 12px; font-size: 14px; color: #93a1a1;">-- Linus Torvalds</div>
+                </div>
+
+                <!-- Callout -->
+                <div style="background: #eee8d5; border: 1px solid #93a1a1; padding: 20px; display: flex; gap: 16px; margin-bottom: 40px; border-radius: 4px;">
+                    <span style="font-size: 24px;">🔧</span>
+                    <div>
+                        <div style="font-weight: 700; font-size: 16px; color: #b58900; margin-bottom: 4px;">System Configuration</div>
+                        <div style="font-size: 15px; color: #657b83;">This theme supports all standard Notion blocks with a developer-centric twist.</div>
+                    </div>
+                </div>
+
+                 <!-- Image as ASCII-ish placeholder presentation -->
+                 <figure style="margin: 40px 0;">
+                    <div style="background: #073642; padding: 16px; border-radius: 4px; overflow: hidden;">
+                         <!-- Fake Image representation -->
+                         <div style="height: 200px; display: flex; align-items: center; justify-content: center; color: #839496; font-size: 14px; background: #002b36; border: 1px dashed #586e75;">
+                             [ IMG: binary_tree_visualization.png ]<br>
+                             (Image rendering disabled in TTY)
+                         </div>
+                    </div>
+                    <figcaption style="font-size: 12px; color: #93a1a1; margin-top: 8px; font-family: monospace;">Fig 1.0: Data Structure Visualization</figcaption>
+                </figure>
+
+                <!-- Code Block -->
+                <div style="background: #002b36; padding: 24px; border-radius: 8px; margin-bottom: 40px; color: #839496; font-size: 14px; border: 1px solid #586e75; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid #586e75; padding-bottom: 8px;">
+                        <span style="color: #93a1a1;">swr-config.ts</span>
+                        <span style="color: #859900;">TypeScript</span>
+                    </div>
+                    <div style="line-height: 1.6;">
+                        <span style="color: #859900;">import</span> { SWRConfig } <span style="color: #859900;">from</span> <span style="color: #2aa198;">'swr'</span>;<br>
+                        <br>
+                        <span style="color: #268bd2;">export const</span> ThemeProvider = ({ children }) => {<br>
+                        &nbsp;&nbsp;<span style="color: #859900;">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span style="color: #cb4b16;">SWRConfig</span> value={{ revalidateOnFocus: <span style="color: #d33682;">false</span> }}&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{children}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span style="color: #cb4b16;">SWRConfig</span>&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        };
+                    </div>
+                </div>
+
+                <!-- Database / Table (ASCII style) -->
+                <h3 style="font-size: 20px; font-weight: 700; color: #cb4b16; margin-bottom: 16px;">> process_list</h3>
+                <div style="overflow-x: auto; background: #eee8d5; padding: 16px; border-radius: 4px; border: 1px solid #93a1a1;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #586e75;">
+                        <thead style="border-bottom: 2px solid #586e75;">
+                            <tr>
+                                <th style="text-align: left; padding: 8px; color: #b58900;">PID</th>
+                                <th style="text-align: left; padding: 8px; color: #b58900;">COMMAND</th>
+                                <th style="text-align: left; padding: 8px; color: #b58900;">STATUS</th>
+                                <th style="text-align: right; padding: 8px; color: #b58900;">CPU</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;">1024</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;">node_server</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;"><span style="color: #859900;">running</span></td>
+                                <td style="padding: 8px; text-align: right; border-bottom: 1px solid #93a1a1;">2.4%</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;">8080</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;">docker-daemon</td>
+                                <td style="padding: 8px; border-bottom: 1px solid #93a1a1;"><span style="color: #859900;">running</span></td>
+                                <td style="padding: 8px; text-align: right; border-bottom: 1px solid #93a1a1;">0.8%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Toggle -->
+                <div style="margin: 32px 0;">
+                     <div style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #268bd2; font-weight: 700;">
+                        <span>[+]</span>
+                        <span>Show Stack Trace</span>
+                     </div>
+                     <div style="margin-top: 12px; padding: 16px; background: #eee8d5; border-left: 2px solid #dc322f; color: #dc322f; font-size: 13px;">
+                        Error: Connection refused at 127.0.0.1:5432<br>
+                        &nbsp;&nbsp;at Client.connect (/lib/db.js:42)<br>
+                        &nbsp;&nbsp;at init (/lib/main.js:12)
+                     </div>
+                </div>
+
+            </div>
+
+             <!-- Dark Mode (Matrix / Classic Terminal) -->
+            <div class="theme-preview-dark" style="display: none; padding: 60px; font-family: 'Space Mono', 'Courier New', monospace; color: #00ff00; background: #0c0c0c; min-height: 100%;">
+                
+                 <div style="margin-bottom: 40px; border-bottom: 1px dashed #003300; padding-bottom: 24px;">
+                    <div style="color: #008800; font-size: 14px; margin-bottom: 8px;">root@mainframe:~# ./inject_theme.sh --force</div>
+                    <h1 style="font-size: 40px; font-weight: 700; color: #00ff00; margin: 16px 0; text-shadow: 0 0 10px #00ff00;">> THE_MATRIX<span style="animation: blink 1s infinite;">_</span></h1>
+                    <p style="font-size: 16px; color: #00cc00;">Bypassing security protocols... [ACCESS GRANTED]</p>
+                </div>
+
+                 <!-- Intro Text -->
+                <p style="font-size: 16px; line-height: 1.7; margin-bottom: 32px; color: #00dd00;">
+                    The Terminal theme is built for developers. It focuses on <span style="background: #002200; color: #ffffff; padding: 2px 6px; border: 1px solid #00ff00;">monospaced typography</span> and a raw, command-line interface experience.
+                </p>
+
+                <!-- Quote / Blockquote -->
+                <div style="border-left: 4px solid #00ff00; padding: 16px 24px; background: #001100; margin-bottom: 40px;">
+                    <p style="font-size: 18px; font-style: italic; color: #00ff00; margin: 0;">"Wake up, Neo..."</p>
+                    <div style="margin-top: 12px; font-size: 14px; color: #008800;">-- Morpheus</div>
+                </div>
+
+                <!-- Callout -->
+                <div style="background: #001100; border: 1px solid #00ff00; padding: 20px; display: flex; gap: 16px; margin-bottom: 40px;">
+                    <span style="font-size: 24px;">📟</span>
+                    <div>
+                        <div style="font-weight: 700; font-size: 16px; color: #00ff00; margin-bottom: 4px;">System Notification</div>
+                        <div style="font-size: 15px; color: #00cc00;">Follow the white rabbit.</div>
+                    </div>
+                </div>
+
+                <!-- Code Block -->
+                <div style="background: #000000; padding: 24px; border: 1px solid #00ff00; margin-bottom: 40px; color: #00ff00; font-size: 14px; box-shadow: 0 0 15px rgba(0,255,0,0.2);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid #003300; padding-bottom: 8px;">
+                        <span style="color: #008800;">matrix.cpp</span>
+                        <span style="color: #ffffff;">C++</span>
+                    </div>
+                    <div style="line-height: 1.6;">
+                        <span style="color: #cc00cc;">void</span> enterMatrix() {<br>
+                        &nbsp;&nbsp;<span style="color: #ffff00;">while</span> (<span style="color: #0000ff;">true</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;renderDigitingRain();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #888888;">// Reality is just a simulation</span><br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- Database / Table (ASCII style) -->
+                <h3 style="font-size: 20px; font-weight: 700; color: #00ff00; margin-bottom: 16px;">> agent_list</h3>
+                <div style="overflow-x: auto; background: #000000; padding: 16px; border: 1px solid #00ff00;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #00ff00;">
+                        <thead style="border-bottom: 2px solid #00ff00;">
+                            <tr>
+                                <th style="text-align: left; padding: 8px;">ID</th>
+                                <th style="text-align: left; padding: 8px;">AGENT_NAME</th>
+                                <th style="text-align: left; padding: 8px;">STATUS</th>
+                                <th style="text-align: right; padding: 8px;">THREAT_LEVEL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;">001</td>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;">Smith</td>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;"><span style="color: #ff0000;">ROGUE</span></td>
+                                <td style="padding: 8px; text-align: right; border-bottom: 1px dashed #004400;">CRITICAL</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;">002</td>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;">Brown</td>
+                                <td style="padding: 8px; border-bottom: 1px dashed #004400;">ACTIVE</td>
+                                <td style="padding: 8px; text-align: right; border-bottom: 1px dashed #004400;">LOW</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                 <!-- Toggle -->
+                <div style="margin: 32px 0;">
+                     <div style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #00ff00; font-weight: 700;">
+                        <span>[+]</span>
+                        <span>Decode Signal</span>
+                     </div>
+                     <div style="margin-top: 12px; padding: 16px; background: #001100; border: 1px dashed #00ff00; color: #00ff00; font-size: 13px; font-family: monospace;">
+                        01010100 01010010 01010101 01010100 01001000<br>
+                        > Transmitting...
+                     </div>
+                </div>
+
+            </div>
+        </div>`,
+        tech: `
+        <div class="theme-wrapper" style="height: 100%; font-family: 'Inter', sans-serif;">
+            <!-- Light Mode (Technical Docs) -->
+            <div class="theme-preview-light" style="padding: 80px 100px; color: #334155; background: #ffffff; min-height: 100%; border: 1px solid #e2e8f0;">
+                <div style="display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Header -->
+                    <header style="border-left: 4px solid #2563eb; padding-left: 24px; margin-bottom: 8px;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #2563eb; margin-bottom: 12px; letter-spacing: 0.5px; font-weight: 700;">// SPEC.V2.0.1</div>
+                        <h1 style="font-size: 48px; font-weight: 800; letter-spacing: -0.03em; color: #0f172a; margin: 0; line-height: 1.1;">System Architecture<br>& Protocols</h1>
+                    </header>
+
+                    <!-- Intro / Callout-like -->
+                    <section style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 32px; border-radius: 6px; position: relative;">
+                         <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; margin-bottom: 12px; font-weight: 600;">ABSTRACT</div>
+                        <p style="font-size: 16px; line-height: 1.7; color: #475569; margin: 0;">
+                            The Tech theme is engineered for <span style="font-weight: 600; color: #0f172a;">high-density technical documentation</span>. It features a rigid grid system, monospaced functional elements, and high-contrast navigational aids suitable for API references and system blueprints.
+                        </p>
+                    </section>
+                    
+                    <!-- Toggle -->
+                    <div style="border-bottom: 1px solid #e2e8f0;">
+                         <div style="padding: 12px 0; display: flex; align-items: center; gap: 8px; cursor: pointer; color: #0f172a; font-weight: 600; font-size: 15px;">
+                            <span style="color: #64748b;">▶</span>
+                            <span>Expand Deprecation Notice</span>
+                         </div>
+                         <div style="padding: 16px 24px; background: #fff1f2; border-left: 3px solid #e11d48; margin-bottom: 16px; border-radius: 0 4px 4px 0;">
+                            <div style="font-size: 14px; color: #9f1239; line-height: 1.6;">
+                                <strong style="font-family: monospace;">WARNING:</strong> The legacy status API will be sunset in Q4. Migrate to <code style="background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px; font-family: monospace;">v2/health</code> immediately.
+                            </div>
+                         </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <!-- Quote -->
+                        <div style="background: #fff; padding: 0; border-left: 2px solid #cbd5e1; padding-left: 20px;">
+                            <p style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #64748b; margin-bottom: 8px; font-style: italic;">"Premature optimization is the root of all evil used in technical debt."</p>
+                            <div style="font-size: 12px; font-weight: 700; color: #0f172a;">— Engineering Handbook</div>
+                        </div>
+
+                         <!-- Checklist -->
+                        <div style="background: #f1f5f9; padding: 20px; border-radius: 4px;">
+                             <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #64748b; margin-bottom: 12px; letter-spacing: 0.5px;">PRE-FLIGHT CHECKS</h4>
+                             <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 16px; height: 16px; background: #2563eb; border-radius: 3px; display: flex; align-items: center; justify-content: center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                                    <span style="color: #64748b; text-decoration: line-through; font-size: 14px;">Linting Pass</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 16px; height: 16px; border: 2px solid #cbd5e1; background: #fff; border-radius: 3px;"></div>
+                                    <span style="color: #334155; font-size: 14px;">Integration Tests</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Table -->
+                    <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                         <div style="background: #f8fafc; padding: 10px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #64748b;">METRICS_TABLE // CLUSTER_A</span>
+                            <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%;"></span>
+                         </div>
+                         <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                            <thead style="background: #fff; border-bottom: 1px solid #e2e8f0; color: #475569;">
+                                <tr>
+                                    <th style="padding: 12px 20px; font-weight: 600;">Parameter</th>
+                                    <th style="padding: 12px 20px; font-weight: 600;">Value</th>
+                                    <th style="padding: 12px 20px; font-weight: 600; text-align: right;">Delta</th>
+                                </tr>
+                            </thead>
+                            <tbody style="color: #334155;">
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 12px 20px; font-family: monospace; color: #2563eb;">latency_ms</td>
+                                    <td style="padding: 12px 20px;">14.5ms</td>
+                                    <td style="padding: 12px 20px; text-align: right; color: #10b981;">-2.4%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px 20px; font-family: monospace; color: #2563eb;">uptime_rel</td>
+                                    <td style="padding: 12px 20px;">99.992%</td>
+                                    <td style="padding: 12px 20px; text-align: right; color: #64748b;">0.0%</td>
+                                </tr>
+                            </tbody>
+                         </table>
+                    </div>
+
+                    <!-- Code Block -->
+                    <div style="background: #0f172a; border-radius: 6px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #f8fafc;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid #334155; padding-bottom: 12px;">
+                            <span style="color: #94a3b8;">config.yml</span>
+                        </div>
+                        <div style="line-height: 1.6;">
+                            <span style="color: #c084fc;">server:</span><br>
+                            &nbsp;&nbsp;<span style="color: #38bdf8;">port:</span> <span style="color: #facc15;">8080</span><br>
+                            &nbsp;&nbsp;<span style="color: #38bdf8;">host:</span> <span style="color: #4ade80;">"0.0.0.0"</span><br>
+                            <span style="color: #c084fc;">logging:</span><br>
+                            &nbsp;&nbsp;<span style="color: #38bdf8;">level:</span> <span style="color: #4ade80;">"debug"</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dark Mode (Cyber / Blueprint) -->
+            <div class="theme-preview-dark" style="display: none; padding: 80px 100px; color: #94a3b8; background: #020617; min-height: 100%;">
+                <div style="display: flex; flex-direction: column; gap: 40px; max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Header -->
+                    <header style="border-left: 4px solid #38bdf8; padding-left: 24px; margin-bottom: 8px;">
+                    </header>
+
+                    <section style="background: #161e2e; border: 1px solid #1f2937; padding: 32px; border-radius: 4px;">
+                        <h2 style="font-size: 24px; font-weight: 600; color: #f8fafc; margin-bottom: 16px;">System Core</h2>
+                        <p style="font-size: 16px; line-height: 1.7; color: #cbd5e1; margin: 0;">
+                            The Tech theme dark mode utilizes deep navy canvases with high-contrast neon accents for a command-center aesthetic.
+                        </p>
+                    </section>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                        <div style="background: #1f2937; padding: 24px; border-radius: 4px;">
+                            <h4 style="font-family: monospace; font-size: 12px; color: #94a3b8; margin-bottom: 16px; text-transform: uppercase;">[ Deployment ]</h4>
+                            <ul style="margin: 0; padding-left: 18px; color: #f8fafc; line-height: 1.7;">
+                                <li>Edge-compatible bundles</li>
+                                <li>Isomorphic rendering engine</li>
+                            </ul>
+                        </div>
+                        <div style="background: #1f2937; padding: 24px; border-radius: 4px;">
+                             <h4 style="font-family: monospace; font-size: 12px; color: #94a3b8; margin-bottom: 16px; text-transform: uppercase;">[ Quality QA ]</h4>
+                             <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 16px; height: 16px; border: 1px solid #38bdf8; background: #38bdf8; border-radius: 2px;"></div>
+                                <span style="color: #94a3b8; text-decoration: line-through; font-size: 14px;">Encryption Audit</span>
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Table (Dark) -->
+                    <div style="border: 1px solid #1f2937; border-radius: 4px; overflow: hidden;">
+                         <div style="background: #1f2937; padding: 12px 20px; border-bottom: 1px solid #374151; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-family: monospace; font-size: 11px; font-weight: 700; color: #cbd5e1;">TABLE_DATA // ENCR_PROTO</span>
+                            <span style="width: 8px; height: 8px; background: #38bdf8; border-radius: 50%; box-shadow: 0 0 10px #38bdf8;"></span>
+                         </div>
+                         <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                            <tbody style="color: #cbd5e1;">
+                                <tr style="border-bottom: 1px solid #1f2937;">
+                                    <td style="padding: 12px 20px; background: #0f172a; font-weight: 600; width: 30%;">security_lvl</td>
+                                    <td style="padding: 12px 20px;">AES-256</td>
+                                </tr>
+                            </tbody>
+                         </table>
+                    </div>
+
+                    <!-- Code Block (Dark) -->
+                    <div style="background: #000; border-radius: 4px; padding: 24px; font-family: monospace; font-size: 14px; border: 1px solid #38bdf8;">
+                         <div style="color: #38bdf8;">&lt;TechSpec mode="dark" status="online" /&gt;</div>
+                    </div>
+
+                    <!-- Bookmark (Dark) -->
+                    <div style="border: 1px solid #1f2937; border-radius: 4px; display: flex; background: #161e2e;">
+                        <div style="flex: 1; padding: 20px;">
+                            <div style="font-size: 12px; font-family: monospace; color: #38bdf8; margin-bottom: 4px;">REL: DOCUMENTATION</div>
+                            <div style="font-size: 16px; font-weight: 700; color: #f8fafc;">System Architecture Map</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`,
+        gallery: `
+        <div class="theme-wrapper" style="height: 100%;">
+            <!-- Light Mode (Art Gallery) -->
+            <div class="theme-preview-light" style="padding: 80px; font-family: 'Inter', sans-serif; color: #334155; background: #ffffff; min-height: 100%;">
+                
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <!-- Curator Note -->
+                    <div style="font-size: 13px; font-weight: 600; letter-spacing: 2px; color: #94a3b8; margin-bottom: 24px; text-transform: uppercase; text-align: center;">Collection N°05</div>
+                    
+                    <!-- Title -->
+                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 64px; font-weight: 900; letter-spacing: -2px; text-align: center; color: #0f172a; margin-bottom: 24px; line-height: 1.1;">Visual<br>Perspectives.</h1>
+                    
+                    <p style="font-size: 20px; line-height: 1.6; margin-bottom: 56px; text-align: center; color: #475569; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        Designed to showcase imagery and visual content. The Gallery theme emphasizes <span style="border-bottom: 2px solid #cbd5e1;">negative space</span> and large media formats.
+                    </p>
+
+                    <!-- Feature Image -->
+                    <figure style="margin: 0 0 56px 0;">
+                        <div style="width: 100%; height: 480px; background: #f1f5f9; border-radius: 4px; overflow: hidden; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);">
+                             <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%);" />
+                        </div>
+                        <figcaption style="font-size: 13px; font-style: italic; color: #64748b; text-align: center; margin-top: 16px;">Fig 1. Interior composition study.</figcaption>
+                    </figure>
+
+                    <!-- Quote -->
+                    <div style="margin-bottom: 56px; padding: 0 40px;">
+                        <blockquote style="font-family: 'Playfair Display', serif; font-size: 32px; font-style: italic; text-align: center; color: #0f172a; line-height: 1.4; margin: 0;">
+                            "Design is intelligence made visible."
+                        </blockquote>
+                        <div style="text-align: center; font-size: 14px; font-weight: 600; color: #64748b; margin-top: 16px; letter-spacing: 1px;">ALINA WHEELER</div>
+                    </div>
+
+                    <!-- Gallery Grid (Database) -->
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 24px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">Recent Exhibitions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; transition: transform 0.2s;">
+                            <div style="height: 140px; background: #e2e8f0;">
+                                <img src="https://images.unsplash.com/photo-1513569771920-c9e1d31714b0?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">Architecture</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Minimalist Home</div>
+                                <div style="font-size: 13px; color: #64748b;">A study in reduction.</div>
+                            </div>
+                        </div>
+                         <!-- Card 2 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                            <div style="height: 140px; background: #e2e8f0;">
+                                 <img src="https://images.unsplash.com/photo-1549417855-46f903565251?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">Botany</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Organic Pattern</div>
+                                <div style="font-size: 13px; color: #64748b;">Textural explorations.</div>
+                            </div>
+                        </div>
+                         <!-- Card 3 -->
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                            <div style="height: 140px; background: #e2e8f0;">
+                                 <img src="https://images.unsplash.com/photo-1493934558415-9d19f0b2b4d2?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">Abstract</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Geometric Forms</div>
+                                <div style="font-size: 13px; color: #64748b;">Lines and circles.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle/Info -->
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; display: flex; align-items: start; gap: 16px;">
+                         <div style="font-size: 20px;">🎨</div>
+                         <div>
+                             <div style="font-weight: 700; font-size: 15px; color: #0f172a; margin-bottom: 4px;">Curator's Note</div>
+                             <div style="font-size: 14px; color: #64748b; line-height: 1.5;">Ideally suited for portfolios, mood boards, and brand guidelines where visual impact outweighs text density.</div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Dark Mode (Dark Gallery) -->
+             <div class="theme-preview-dark" style="display: none; padding: 80px; font-family: 'Inter', sans-serif; color: #9ca3af; background: #000000; min-height: 100%;">
+                
+                 <div style="max-width: 900px; margin: 0 auto;">
+                    <!-- Curator Note -->
+                    <div style="font-size: 13px; font-weight: 600; letter-spacing: 2px; color: #4b5563; margin-bottom: 24px; text-transform: uppercase; text-align: center;">Collection N°05 [Dark]</div>
+                    
+                    <!-- Title -->
+                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 64px; font-weight: 900; letter-spacing: -2px; text-align: center; color: #f8fafc; margin-bottom: 24px; line-height: 1.1;">Visual<br>Perspectives.</h1>
+                    
+                    <p style="font-size: 20px; line-height: 1.6; margin-bottom: 56px; text-align: center; color: #9ca3af; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        Designed to showcase imagery and visual content. The Gallery theme emphasizes <span style="border-bottom: 2px solid #4b5563; color: #e5e7eb;">negative space</span> and large media formats.
+                    </p>
+
+                    <!-- Feature Image -->
+                    <figure style="margin: 0 0 56px 0;">
+                        <div style="width: 100%; height: 480px; background: #111827; border-radius: 4px; overflow: hidden; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);">
+                             <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%) contrast(110%);" />
+                        </div>
+                        <figcaption style="font-size: 13px; font-style: italic; color: #6b7280; text-align: center; margin-top: 16px;">Fig 1. Interior composition study.</figcaption>
+                    </figure>
+
+                    <!-- Quote -->
+                    <div style="margin-bottom: 56px; padding: 0 40px;">
+                        <blockquote style="font-family: 'Playfair Display', serif; font-size: 32px; font-style: italic; text-align: center; color: #e5e7eb; line-height: 1.4; margin: 0;">
+                            "Design is intelligence made visible."
+                        </blockquote>
+                        <div style="text-align: center; font-size: 14px; font-weight: 600; color: #6b7280; margin-top: 16px; letter-spacing: 1px;">ALINA WHEELER</div>
+                    </div>
+
+                    <!-- Gallery Grid (Database) -->
+                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; color: #f8fafc; margin-bottom: 24px; border-bottom: 1px solid #1f2937; padding-bottom: 12px;">Recent Exhibitions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px;">
+                        <!-- Card 1 -->
+                        <div style="border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; background: #0a0a0a;">
+                            <div style="height: 140px; background: #1f2937;">
+                                <img src="https://images.unsplash.com/photo-1513569771920-c9e1d31714b0?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #4b5563; margin-bottom: 4px; text-transform: uppercase;">Architecture</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #e5e7eb; margin-bottom: 4px;">Minimalist Home</div>
+                                <div style="font-size: 13px; color: #9ca3af;">A study in reduction.</div>
+                            </div>
+                        </div>
+                         <!-- Card 2 -->
+                        <div style="border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; background: #0a0a0a;">
+                            <div style="height: 140px; background: #1f2937;">
+                                 <img src="https://images.unsplash.com/photo-1549417855-46f903565251?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #4b5563; margin-bottom: 4px; text-transform: uppercase;">Botany</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #e5e7eb; margin-bottom: 4px;">Organic Pattern</div>
+                                <div style="font-size: 13px; color: #9ca3af;">Textural explorations.</div>
+                            </div>
+                        </div>
+                         <!-- Card 3 -->
+                        <div style="border: 1px solid #1f2937; border-radius: 8px; overflow: hidden; background: #0a0a0a;">
+                            <div style="height: 140px; background: #1f2937;">
+                                 <img src="https://images.unsplash.com/photo-1493934558415-9d19f0b2b4d2?auto=format&fit=crop&w=600&q=80" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;" />
+                            </div>
+                            <div style="padding: 16px;">
+                                <div style="font-size: 11px; font-weight: 700; color: #4b5563; margin-bottom: 4px; text-transform: uppercase;">Abstract</div>
+                                <div style="font-size: 16px; font-weight: 700; color: #e5e7eb; margin-bottom: 4px;">Geometric Forms</div>
+                                <div style="font-size: 13px; color: #9ca3af;">Lines and circles.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle/Info -->
+                    <div style="background: #111827; padding: 20px; border-radius: 8px; display: flex; align-items: start; gap: 16px; border: 1px solid #1f2937;">
+                         <div style="font-size: 20px;">🎨</div>
+                         <div>
+                             <div style="font-weight: 700; font-size: 15px; color: #f8fafc; margin-bottom: 4px;">Curator's Note</div>
+                             <div style="font-size: 14px; color: #9ca3af; line-height: 1.5;">Ideally suited for portfolios, mood boards, and brand guidelines where visual impact outweighs text density.</div>
+                         </div>
+                    </div>
+                </div>
+             </div>
+        </div>`,
+    };
+
+    // Type Definitions
+    type ThemeKey = keyof typeof THEME_PREVIEWS;
+
+    declare global {
+        interface Window {
+            openThemePreview: (themeKey: string) => void;
+        }
+    }
+
+    let selectedTheme: string | null = null;
+    const modal = document.getElementById(
+        "theme-preview-modal",
+    ) as HTMLElement | null;
+    const modalTitle = document.getElementById(
+        "modal-theme-title",
+    ) as HTMLElement | null;
+    const modalFrame = document.getElementById(
+        "modal-frame",
+    ) as HTMLElement | null;
+
+    // Open Modal Logic (EXPOSED GLOBAL FUNCTION)
+    window.openThemePreview = (themeKey: string) => {
+        selectedTheme = themeKey;
+        if (!selectedTheme || !modal || !modalTitle || !modalFrame) return;
+
+        modalTitle.textContent = `Theme: ${selectedTheme.toUpperCase()}`;
+
+        // Inject the specific theme preview or fallback
+        const content = THEME_PREVIEWS[selectedTheme as ThemeKey];
+        if (content) {
+            modalFrame.innerHTML = content;
+        } else {
+            modalFrame.innerHTML = `<div style="padding:40px; text-align:center;">Preview loading...</div>`;
+        }
+
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden"; // Lock background scroll
+
+        // Reset to Light Mode on open
+        modalFrame.classList.remove("preview-dark-mode");
+        document
+            .querySelectorAll(".mode-btn")
+            .forEach((b) => b.classList.remove("active"));
+        document.querySelector('[data-mode="light"]')?.classList.add("active");
+    };
+
+    const closeModal = () => {
+        if (modal) modal.classList.remove("show");
+        document.body.style.overflow = ""; // Restore background scroll
+    };
+
+    // Events
+    if (modal) {
+        modal
+            .querySelector(".modal-close")
+            ?.addEventListener("click", closeModal);
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Apply Theme
+        modal
+            .querySelector(".modal-apply-btn")
+            ?.addEventListener("click", () => {
+                if (selectedTheme) {
+                    // Dispatch a custom event for the parent to handle saving/updating UI
+                    window.dispatchEvent(
+                        new CustomEvent("theme-selected", {
+                            detail: { theme: selectedTheme },
+                        }),
+                    );
+                    closeModal();
+                }
+            });
+    }
+
+    // Dark/Light Toggle
+    const modeBtns = document.querySelectorAll(".mode-btn");
+    modeBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            const targetBtn = target.closest(".mode-btn");
+            if (!targetBtn) return;
+
+            const mode = targetBtn.getAttribute("data-mode");
+
+            // Visual Update of Buttons
+            modeBtns.forEach((b) => b.classList.remove("active"));
+            targetBtn.classList.add("active");
+
+            // Logic Update: Show/Hide containers
+            if (!modalFrame) return;
+            const lightContainer = modalFrame.querySelector(
+                ".theme-preview-light",
+            ) as HTMLElement | null;
+            const darkContainer = modalFrame.querySelector(
+                ".theme-preview-dark",
+            ) as HTMLElement | null;
+
+            if (mode === "dark") {
+                if (lightContainer) lightContainer.style.display = "none";
+                if (darkContainer) darkContainer.style.display = "block";
+            } else {
+                if (lightContainer) lightContainer.style.display = "block";
+                if (darkContainer) darkContainer.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(12px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+    .modal-overlay.show {
+        display: flex;
+    }
+    .modal-content {
+        background: white;
+        width: 900px;
+        max-width: 90vw;
+        height: 80vh;
+        border-radius: 24px;
+        position: relative;
+        animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .modal-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e2e8f0;
+        background: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+    }
+    .modal-header-left h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    .modal-header-left p {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+
+    .modal-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .preview-mode-toggle {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 4px;
+        display: flex;
+        gap: 4px;
+    }
+    .mode-btn {
+        border: none;
+        background: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.2s;
+    }
+    .mode-btn.active {
+        background: white;
+        opacity: 1;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    :global(.dark-mode) .mode-btn.active {
+        background: #333;
+        color: white;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.5;
+        padding: 0.5rem;
+    }
+    .modal-close:hover {
+        opacity: 1;
+    }
+
+    /* Modal Body & Logic */
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        background: #e2e8f0;
+        padding: 0;
+    }
+
+    .modal-footer {
+        padding: 1.25rem 2.5rem;
+        border-top: 1px solid #e2e8f0;
+        background: #ffffff;
+        display: flex;
+        justify-content: flex-end;
+        box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.02);
+        z-index: 10;
+    }
+    .apply-btn-premium {
+        background: #000;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .apply-btn-premium:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    }
+    .apply-btn-premium:active {
+        transform: translateY(0);
+    }
+
+    @keyframes modalPop {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+</style>

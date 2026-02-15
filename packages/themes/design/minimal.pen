@@ -1,0 +1,930 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "PPqbu",
+      "x": 0,
+      "y": 0,
+      "name": "Minimal Theme: Light Mode",
+      "width": 800,
+      "fill": "#ffffff",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "EP5Oj",
+          "fill": "#94a3b8",
+          "content": "// THEME_CONFIG: MINIMAL_LIGHT",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal",
+          "letterSpacing": 1.5
+        },
+        {
+          "type": "text",
+          "id": "2v3jY",
+          "name": "L_H1",
+          "fill": "#0f172a",
+          "content": "The Art of Minimalism",
+          "fontFamily": "Inter",
+          "fontSize": 48,
+          "fontWeight": "bold",
+          "letterSpacing": -2
+        },
+        {
+          "type": "text",
+          "id": "q41ar",
+          "name": "L_H2",
+          "fill": "#0f172a",
+          "content": "Focus on Content",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "semibold",
+          "letterSpacing": -0.5
+        },
+        {
+          "type": "text",
+          "id": "NqMfJ",
+          "name": "L_P",
+          "fill": "#334155",
+          "content": "Minimalism isn't about the lack of something. It's about the perfect amount of something. In this theme, we prioritize readability and white space to let your thoughts breathe.",
+          "lineHeight": 1.7,
+          "fontFamily": "Inter",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "u5dNK",
+          "name": "L_ListContainer",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            0,
+            0,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "qbSRF",
+              "fill": "#334155",
+              "content": "• High precision typography",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "HgfDB",
+              "fill": "#334155",
+              "content": "• Intentional white space",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "cYgAW",
+              "fill": "#334155",
+              "content": "• Sub-pixel rendering optimization",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ABDQX",
+          "name": "L_Code",
+          "width": "fill_container",
+          "fill": "#f8fafc",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "FmNon",
+              "fill": "#0f172a",
+              "content": "export const minimalist = true;",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7tr9f",
+          "name": "L_Quote",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            16,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "ZvwI9",
+              "fill": "#475569",
+              "content": "“Simplicity is the ultimate sophistication.” — Leonardo da Vinci",
+              "lineHeight": 1.6,
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "tv2AT",
+          "name": "L_Callout",
+          "width": "fill_container",
+          "fill": "#f1f5f9",
+          "cornerRadius": 4,
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "w4B58",
+              "fill": "#1e293b",
+              "content": "Minimalist tip: Every element on the page should serve a purpose.",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "R0m7E",
+          "name": "L_H3",
+          "fill": "#0f172a",
+          "content": "Sub-section Title",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "semibold"
+        },
+        {
+          "type": "frame",
+          "id": "NmU8F",
+          "name": "L_Bookmark",
+          "width": "fill_container",
+          "height": 100,
+          "fill": "#ffffff",
+          "cornerRadius": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "ac5D3",
+              "name": "L_BmInfo",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FbPD6",
+                  "fill": "#0f172a",
+                  "content": "NotionGlaze - Minimal Design",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "vxw2c",
+                  "fill": "#64748b",
+                  "content": "notionglaze.com",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HkYwv",
+          "name": "L_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "4Se4x",
+              "name": "L_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "huefnerdesign",
+                "link": "https://unsplash.com/@huefnerdesign",
+                "author": "Tim Hüfner"
+              },
+              "width": "fill_container",
+              "height": 240,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1627490020133-c4a187cfd6f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MTI4NDB8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 8
+            },
+            {
+              "type": "text",
+              "id": "aTeC7",
+              "fill": "#64748b",
+              "content": "Figure 1: Minimal workspace aesthetic.",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "5QW5s",
+          "name": "L_TableWrapper",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "fb36j",
+              "name": "L_TR1",
+              "width": "fill_container",
+              "fill": "#f8fafc",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "hqx0h",
+                  "fill": "#64748b",
+                  "content": "Attribute",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "u8dCd",
+                  "fill": "#64748b",
+                  "content": "Description",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "csUcA",
+          "name": "L_Divider",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "frame",
+          "id": "nmC7r",
+          "name": "L_NumList",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            0,
+            0,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "xQ5L8",
+              "fill": "#334155",
+              "content": "1. Defined layout boundaries",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "mqLeU",
+              "fill": "#334155",
+              "content": "2. Consistent vertical rhythm",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "fjpDE",
+          "name": "L_TodoList",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "wdFxv",
+              "name": "L_TodoItem",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "oFxE9",
+                  "fill": "#ffffff",
+                  "width": 18,
+                  "height": 18
+                },
+                {
+                  "type": "text",
+                  "id": "eIBRL",
+                  "fill": "#334155",
+                  "content": "Incomplete task item",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "erf53",
+          "name": "L_Toggle",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Vh5cr",
+              "name": "L_ToggleHead",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "k8Zm4",
+                  "fill": "#94a3b8",
+                  "content": "▶",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "V8GVS",
+                  "fill": "#0f172a",
+                  "content": "Click to reveal more details",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "medium"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SqXcB",
+          "name": "L_Equation",
+          "width": "fill_container",
+          "fill": "#f8fafc",
+          "padding": 24,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "RSTjT",
+              "fill": "#0f172a",
+              "content": "E = mc²",
+              "fontFamily": "serif",
+              "fontSize": 24,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "F0WkR",
+          "name": "L_ColumnList",
+          "width": "fill_container",
+          "gap": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "2Czh4",
+              "name": "L_Col1",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uwXRe",
+                  "fill": "#0f172a",
+                  "content": "Column One",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "J2Dl1",
+                  "fill": "#475569",
+                  "content": "Detailed content for column one.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qOHnd",
+              "name": "L_Col2",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "UHnyP",
+                  "fill": "#0f172a",
+                  "content": "Column Two",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "OQ55S",
+                  "fill": "#475569",
+                  "content": "Detailed content for column two.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "VtGls",
+      "x": 900,
+      "y": 0,
+      "name": "Minimal Theme: Dark Mode",
+      "width": 800,
+      "fill": "#0f172a",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "gwrWz",
+          "fill": "#475569",
+          "content": "// THEME_CONFIG: MINIMAL_DARK",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "normal",
+          "letterSpacing": 1.5
+        },
+        {
+          "type": "text",
+          "id": "zsF9g",
+          "name": "D_H1",
+          "fill": "#f8fafc",
+          "content": "The Art of Minimalism",
+          "fontFamily": "Inter",
+          "fontSize": 48,
+          "fontWeight": "bold",
+          "letterSpacing": -2
+        },
+        {
+          "type": "text",
+          "id": "mc4v3",
+          "name": "D_H2",
+          "fill": "#f8fafc",
+          "content": "Focus on Content",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "semibold",
+          "letterSpacing": -0.5
+        },
+        {
+          "type": "text",
+          "id": "XuEMz",
+          "name": "D_P",
+          "fill": "#94a3b8",
+          "content": "Minimalism isn't about the lack of something. It's about the perfect amount of something. In this theme, we prioritize readability and white space to let your thoughts breathe.",
+          "lineHeight": 1.7,
+          "fontFamily": "Inter",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "27eHD",
+          "name": "D_Code",
+          "width": "fill_container",
+          "fill": "rgba(255,255,255,0.03)",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "j7Daj",
+              "fill": "#f8fafc",
+              "content": "export const minimalist = true;",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "IhbqM",
+          "name": "D_Quote",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            16,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "yN7ql",
+              "fill": "#64748b",
+              "content": "“Simplicity is the ultimate sophistication.” — Leonardo da Vinci",
+              "lineHeight": 1.6,
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "LzMZp",
+          "name": "D_H3",
+          "fill": "#f8fafc",
+          "content": "Sub-section Title",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "semibold"
+        },
+        {
+          "type": "frame",
+          "id": "4oUGb",
+          "name": "D_Bookmark",
+          "width": "fill_container",
+          "height": 100,
+          "fill": "#1e293b",
+          "cornerRadius": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "huOTH",
+              "name": "D_BmInfo",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Q4yOL",
+                  "fill": "#f8fafc",
+                  "content": "NotionGlaze - Minimal Design",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "semibold"
+                },
+                {
+                  "type": "text",
+                  "id": "qTU5P",
+                  "fill": "#94a3b8",
+                  "content": "notionglaze.com",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "P2k7c",
+          "name": "D_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "kRwn8",
+              "name": "D_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "stevenbinotto",
+                "link": "https://unsplash.com/@stevenbinotto",
+                "author": "Steven Binotto"
+              },
+              "width": "fill_container",
+              "height": 240,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1568074532275-b57393b08c64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MTI4NDF8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 8
+            },
+            {
+              "type": "text",
+              "id": "puXOi",
+              "fill": "#94a3b8",
+              "content": "Figure 1: Minimal dark atmosphere.",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "a5NK1",
+          "name": "D_Divider",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "frame",
+          "id": "bCnMj",
+          "name": "D_Toggle",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "IEcZZ",
+              "name": "D_ToggleHead",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CSPkq",
+                  "fill": "#475569",
+                  "content": "▶",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "kjbIK",
+                  "fill": "#f8fafc",
+                  "content": "Click to reveal more details",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "medium"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "2TnKL",
+          "name": "D_Equation",
+          "width": "fill_container",
+          "fill": "rgba(255,255,255,0.02)",
+          "padding": 24,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "u5Bf5",
+              "fill": "#f8fafc",
+              "content": "E = mc²",
+              "fontFamily": "serif",
+              "fontSize": 24,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d9aiU",
+          "name": "D_NumList",
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            0,
+            0,
+            0,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "tQqAf",
+              "fill": "#94a3b8",
+              "content": "1. Dark mode optimized typography",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "CuEqy",
+              "fill": "#94a3b8",
+              "content": "2. Consistent contrast ratios",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZXfwr",
+          "name": "D_TodoList",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "7o017",
+              "name": "D_TodoItem",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "LbQIW",
+                  "fill": "transparent",
+                  "width": 18,
+                  "height": 18
+                },
+                {
+                  "type": "text",
+                  "id": "dRhhB",
+                  "fill": "#94a3b8",
+                  "content": "Dark mode incomplete task",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "EUnNF",
+          "name": "D_TableWrapper",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ewZ8z",
+              "name": "D_TR1",
+              "width": "fill_container",
+              "fill": "rgba(255,255,255,0.03)",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "KvGR5",
+                  "fill": "#64748b",
+                  "content": "Property",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "IvR02",
+                  "fill": "#64748b",
+                  "content": "Dark Result",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "h3DyS",
+          "name": "D_ColumnList",
+          "width": "fill_container",
+          "gap": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "wpldr",
+              "name": "D_Col1",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "f9QQl",
+                  "fill": "#f8fafc",
+                  "content": "Efficiency",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "WfMuy",
+                  "fill": "#94a3b8",
+                  "content": "Reduced power consumption on OLED screens.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "2MIGI",
+              "name": "D_Col2",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "B0yb9",
+                  "fill": "#f8fafc",
+                  "content": "Comfort",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "spJ46",
+                  "fill": "#94a3b8",
+                  "content": "Better reading experience in low-light environments.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

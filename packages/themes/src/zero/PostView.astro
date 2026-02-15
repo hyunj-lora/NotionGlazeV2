@@ -1,0 +1,176 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="zero-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <div class="meta">
+                {date && <time>{date}</time>}
+                {tags.length > 0 && <span class="sep">·</span>}
+                {tags.map((tag: string) => <span class="tag">#{tag}</span>)}
+            </div>
+            <h1>{post.title}</h1>
+            {post.summary && <p class="summary">{post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <div class="end-marker"></div>
+            <p>Thanks for reading.</p>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .zero-theme-post {
+        /* Theme Variables */
+        --primary: #6366f1;
+        --primary-rgb: 99, 102, 241;
+        --primary-foreground: #ffffff;
+
+        --secondary: #f1f5f9;
+        --secondary-rgb: 241, 245, 249;
+        --secondary-foreground: #0f172a;
+
+        --accent: #e0e7ff;
+        --accent-rgb: 224, 231, 255;
+        --accent-foreground: #312e81;
+
+        --background: #ffffff;
+        --foreground: #0f172a;
+        --muted: #f8fafc;
+        --muted-foreground: #64748b;
+        --border: #e2e8f0;
+    }
+
+    :global(.dark) .zero-theme-post {
+        --primary: #818cf8;
+        --primary-rgb: 129, 140, 248;
+        --primary-foreground: #ffffff;
+
+        --secondary: #1e293b;
+        --secondary-rgb: 30, 41, 59;
+        --secondary-foreground: #f8fafc;
+
+        --accent: #312e81;
+        --accent-rgb: 49, 46, 129;
+        --accent-foreground: #e0e7ff;
+
+        --background: #0f172a;
+        --foreground: #f8fafc;
+        --muted: #020617;
+        --muted-foreground: #94a3b8;
+        --border: #334155;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 8rem 0 10rem 0;
+        text-align: center;
+    }
+
+    .meta {
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--muted-foreground);
+        margin-bottom: 2.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .tag {
+        color: var(--primary);
+    }
+
+    h1 {
+        font-size: 5rem;
+        line-height: 1;
+        margin-bottom: 2rem;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+    }
+
+    .summary {
+        font-size: 1.5rem;
+        color: var(--muted-foreground);
+        max-width: 750px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-weight: 500;
+    }
+
+    .content {
+        padding-bottom: 10rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .page-footer {
+        text-align: center;
+        padding-bottom: 10rem;
+        color: var(--muted-foreground);
+    }
+
+    .end-marker {
+        width: 60px;
+        height: 4px;
+        background: var(--primary);
+        margin: 0 auto 2.5rem auto;
+        border-radius: 2px;
+    }
+
+    @media (max-width: 1024px) {
+        h1 {
+            font-size: 3.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+        .page-header {
+            margin: 4rem 0 6rem 0;
+        }
+    }
+</style>

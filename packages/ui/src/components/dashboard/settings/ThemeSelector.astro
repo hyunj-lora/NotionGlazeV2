@@ -1,0 +1,339 @@
+---
+import { THEMES } from "@notionglaze/themes";
+
+interface Props {
+    config: any;
+    plan?: string;
+}
+
+const { config, plan } = Astro.props;
+
+const isPro = plan === "pro";
+
+const THEME_HEROES = {
+    zero: `<div style="width:100%; height:100%; background:white; padding:40px; display:flex; flex-direction:column; align-items:center; text-align:center;">
+        <div style="font-size:12px; font-weight:600; letter-spacing:2px; margin-bottom:20px; color:#94a3b8;">NOTION GLAZE</div>
+        <h1 style="font-family:'Outfit',sans-serif; font-size:48px; font-weight:300; letter-spacing:-1px; margin-bottom:16px; color:#0f172a;">The Invisible<br>Interface</h1>
+    </div>`,
+    notion: `<div style="width:100%; height:100%; background:white; padding:40px; border:1px solid #efefef;">
+        <div style="display:flex; gap:8px; margin-bottom:24px;">
+            <div style="width:12px; height:12px; border-radius:50%; background:#ff5f56;"></div>
+            <div style="width:12px; height:12px; border-radius:50%; background:#ffbd2e;"></div>
+            <div style="width:12px; height:12px; border-radius:50%; background:#27c93f;"></div>
+        </div>
+        <div style="font-family:Inter,sans-serif;">
+            <div style="width:30px; height:30px; margin-bottom:16px;">📄</div>
+            <h1 style="font-size:32px; font-weight:700; margin-bottom:8px; color:#37352f;">Notion Original</h1>
+            <div style="width:100%; height:8px; background:#f1f1f0; border-radius:4px; margin-bottom:8px;"></div>
+            <div style="width:80%; height:8px; background:#f1f1f0; border-radius:4px; margin-bottom:8px;"></div>
+            <div style="width:90%; height:8px; background:#f1f1f0; border-radius:4px;"></div>
+        </div>
+    </div>`,
+    minimal: `<div style="width:100%; height:100%; background:#f8fafc; padding:40px;">
+        <div style="max-width:100%; margin:0 auto;">
+            <span style="font-size:14px; font-weight:600; color:#3b82f6;">Product Design</span>
+            <h1 style="font-size:48px; font-weight:800; letter-spacing:-0.03em; color:#0f172a; margin:16px 0;">Essential<br>Simplicity.</h1>
+        </div>
+    </div>`,
+    zen: `<div style="width:100%; height:100%; background:#f5f5f0; padding:40px; display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center;">
+            <div style="width:60px; height:60px; background:#e0e0d5; border-radius:50%; margin:0 auto 24px;"></div>
+            <h1 style="font-family:'EB Garamond',serif; font-size:48px; color:#44403c; margin-bottom:12px;">Calm &<br>Focus.</h1>
+        </div>
+    </div>`,
+    paper: `<div style="width:100%; height:100%; background:#fcfbf9; padding:40px; border:1px solid #e5e5e5;">
+        <h1 style="font-family:'Playfair Display',serif; font-size:56px; color:#1c1917; margin-bottom:16px;">The Writer's<br>Draft.</h1>
+        <p style="font-family:'Lora',serif; font-size:24px; color:#57534e; font-style:italic;">Chapter 1.</p>
+    </div>`,
+    brutal: `<div style="width:100%; height:100%; background:#FFDE17; padding:20px; border:4px solid black; display:flex; flex-direction:column; justify-content:center;">
+        <h1 style="font-size:64px; font-weight:900; line-height:0.9; letter-spacing:-2px; color:black;">RAW.<br>POWER<br>NOW.</h1>
+    </div>`,
+    terminal: `<div style="width:100%; height:100%; background:#000; padding:30px; color:#4ade80; font-family:'Space Mono',monospace;">
+        <div style="margin-bottom:20px;">> ./init_theme.sh</div>
+        <h1 style="font-size:40px; font-weight:700;">TERMINAL<br>MODE_<span style="animation:blink 1s infinite">|</span></h1>
+    </div>`,
+    tech: `<div style="width:100%; height:100%; background:#fff; padding:30px; border:1px solid #e2e8f0;">
+        <div style="font-family:'JetBrains Mono',monospace; color:#2563eb; margin-bottom:10px; font-weight:700;">// SPEC.V2</div>
+        <h1 style="font-size:40px; font-weight:800; color:#0f172a; letter-spacing:-1px;">System<br>Architecture</h1>
+        <div style="width:40px; height:4px; background:#2563eb; margin-top:20px;"></div>
+    </div>`,
+    gallery: `<div style="width:100%; height:100%; background:#fff; padding:0; position:relative; overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=400&q=80" style="width:100%; height:100%; object-fit:cover;" />
+        <div style="position:absolute; bottom:0; left:0; width:100%; padding:20px; background:linear-gradient(to top, rgba(255,255,255,0.95), transparent);">
+             <h1 style="font-family:'Outfit',sans-serif; font-size:40px; font-weight:900; color:#0f172a; line-height:1; margin:0;">Visual<br>Arts.</h1>
+        </div>
+    </div>`,
+};
+---
+
+<div class="theme-grid">
+    {
+        THEMES.map((theme) => {
+            const heroHtml = THEME_HEROES[theme as keyof typeof THEME_HEROES];
+            return (
+                <div class="theme-option-card">
+                    <input
+                        type="radio"
+                        name="site_theme"
+                        id={`theme-${theme}`}
+                        value={theme}
+                        checked={
+                            config.site_theme === theme ||
+                            (!config.site_theme && theme === "notion")
+                        }
+                        disabled={!isPro && theme !== "notion"}
+                        class="hidden-radio"
+                    />
+                    {(config.site_theme === theme ||
+                        (!config.site_theme && theme === "notion")) && (
+                        <div class="active-theme-badge">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>ACTIVE</span>
+                        </div>
+                    )}
+
+                    {!isPro && theme !== "notion" && (
+                        <div class="pro-theme-badge">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <rect
+                                    width="18"
+                                    height="11"
+                                    x="3"
+                                    y="11"
+                                    rx="2"
+                                    ry="2"
+                                />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            <span>PRO</span>
+                        </div>
+                    )}
+
+                    <label
+                        for={`theme-${theme}`}
+                        class="theme-visual"
+                        data-theme-preview={theme}
+                    >
+                        <div
+                            class="theme-preview-container"
+                            set:html={
+                                heroHtml ||
+                                `<div style="width:100%;height:100%;background:#eee;"></div>`
+                            }
+                        />
+
+                        <div class="tp-overlay">
+                            <span class="theme-label">
+                                {theme.toUpperCase()}
+                            </span>
+                        </div>
+                    </label>
+                    {theme !== "notion" && (
+                        <button
+                            type="button"
+                            class="btn-mini-preview"
+                            data-theme-key={theme}
+                            style="position: absolute; bottom: 10px; right: 10px; z-index: 10; padding: 4px 8px; font-size: 11px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 4px; opacity: 0; transition: opacity 0.2s;"
+                        >
+                            Preview
+                        </button>
+                    )}
+                </div>
+            );
+        })
+    }
+</div>
+
+<script>
+    declare global {
+        interface Window {
+            openThemePreview: (themeKey: string) => void;
+        }
+    }
+
+    // Handle Mini Preview Buttons
+    document.querySelectorAll(".btn-mini-preview").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Stop it from selecting the radio
+
+            const themeKey = btn.getAttribute("data-theme-key");
+            if (themeKey && window.openThemePreview) {
+                window.openThemePreview(themeKey);
+            } else {
+                console.error("ThemePreviewModal not found or not loaded.");
+            }
+        });
+    });
+
+    document.querySelectorAll(".theme-visual").forEach((trigger) => {
+        trigger.addEventListener("click", (e) => {
+            const themeKey = trigger.getAttribute("data-theme-preview");
+            // Notion theme doesn't need a preview modal
+            if (themeKey && themeKey !== "notion" && window.openThemePreview) {
+                window.openThemePreview(themeKey);
+            }
+        });
+    });
+
+    // Listen for Apply from Modal
+    window.addEventListener("theme-selected", (e: any) => {
+        const theme = e.detail.theme;
+        const radio = document.getElementById(
+            `theme-${theme}`,
+        ) as HTMLInputElement | null;
+        if (radio) {
+            radio.checked = true;
+            // Trigger change event to notify parent (design.astro)
+            radio.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+    });
+</script>
+
+<style>
+    /* Theme Grid */
+    .theme-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+    .theme-option-card {
+        position: relative;
+    }
+    .active-theme-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: hsl(var(--primary));
+        color: white;
+        padding: 4px 10px;
+        border-radius: 100px;
+        font-size: 10px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        z-index: 20;
+        box-shadow: 0 4px 12px hsl(var(--primary) / 0.4);
+        border: 2px solid white;
+        letter-spacing: 0.05em;
+    }
+    .theme-option-card:hover .btn-mini-preview {
+        opacity: 1 !important;
+        cursor: pointer;
+    }
+
+    .hidden-radio {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .theme-visual {
+        display: block;
+        cursor: pointer;
+        border-radius: 16px;
+        border: 2px solid var(--border);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        background: var(--background);
+        position: relative;
+        height: 140px;
+    }
+    .theme-preview-container {
+        width: 400%; /* 4x width for scale(0.25) */
+        height: 400%; /* 4x height */
+        transform: scale(0.25);
+        transform-origin: top left;
+        pointer-events: none; /* Prevent interaction with mini preview */
+    }
+
+    .tp-overlay {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        padding: 1rem;
+        pointer-events: none;
+    }
+    .theme-label {
+        font-size: 0.85rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        z-index: 2;
+    }
+
+    /* Selected State */
+    .hidden-radio:checked + .theme-visual {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 0 20px hsl(var(--primary) / 0.2);
+    }
+    .hidden-radio:checked + .theme-visual .theme-label {
+        color: var(--primary);
+        text-shadow: none;
+    }
+    .hidden-radio:checked + .theme-visual .tp-overlay {
+        background: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.4)
+        );
+    }
+    /* Dark mode adjustment for selected state text */
+    :global(.dark) .hidden-radio:checked + .theme-visual .tp-overlay {
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.4)
+        );
+    }
+
+    /* PRO Gating */
+    .hidden-radio:disabled + .theme-visual {
+        opacity: 0.6;
+        cursor: not-allowed;
+        filter: grayscale(1);
+    }
+    .pro-theme-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #8b5cf6; /* Violet */
+        color: white;
+        padding: 4px 10px;
+        border-radius: 100px;
+        font-size: 10px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        z-index: 20;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        border: 2px solid white;
+        letter-spacing: 0.05em;
+    }
+</style>

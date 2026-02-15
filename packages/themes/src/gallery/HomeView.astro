@@ -1,0 +1,120 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "Gallery";
+const siteDescription = config.site_description || "A visual journey.";
+
+// Pre-load Gallery PostCard
+const PostCardModule = await POST_CARDS.gallery();
+const PostCard = PostCardModule.default;
+---
+
+<div class="gallery-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1 class="gradient-text">{siteName}</h1>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-grid">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>No snapshots found.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .gallery-theme-home {
+        background-color: #000;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    .blog-header {
+        margin: 6rem 0 8rem 0;
+        text-align: center;
+    }
+
+    h1 {
+        font-family: "Outfit", sans-serif;
+        font-size: 5rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.04em;
+    }
+
+    .gradient-text {
+        background: linear-gradient(to right, #fff, #666);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .blog-header p {
+        font-size: 1.5rem;
+        color: #888;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .post-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+        padding-bottom: 10rem;
+    }
+
+    .empty {
+        grid-column: 1 / -1;
+        padding: 10rem;
+        text-align: center;
+        border: 1px solid #222;
+        color: #444;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+        .post-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

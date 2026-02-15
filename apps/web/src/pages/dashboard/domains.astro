@@ -1,0 +1,72 @@
+---
+import { DashboardLayout, DomainSettings, StickyFooter } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+
+const { tenant, runtime } = Astro.locals;
+const db = runtime?.env?.DB;
+
+if (db && tenant) {
+    try {
+        const tenantService = new TenantService(db);
+        // Tenant is already in locals from middleware, but we could refresh if needed.
+    } catch (e) {
+        console.error("Settings Page DB Error:", e);
+    }
+}
+---
+
+<DashboardLayout title="Domains & URL" tenant={tenant || undefined}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8 px-4">
+        <header class="mb-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                Domains & URL
+            </h1>
+            <p class="text-muted-foreground">
+                Manage your site's address and custom domain settings.
+            </p>
+        </header>
+
+        <div class="space-y-12">
+            <DomainSettings tenant={tenant} />
+        </div>
+
+        <StickyFooter id="settings-footer" saveId="save-settings-btn" />
+    </div>
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Save logic
+            const saveBtn = document.getElementById("save-settings-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    subdomain: document.getElementById("subdomain")?.value,
+                    custom_domain:
+                        document.getElementById("custom-domain")?.value,
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast("System settings updated!", "success");
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</DashboardLayout>

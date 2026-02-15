@@ -1,0 +1,165 @@
+---
+
+---
+
+<section class="heist-sync">
+    <div class="container">
+        <div class="grid">
+            <div class="visual">
+                <div class="sync-card">
+                    <img
+                        src="/landing/heist-sync.png"
+                        alt="Heist Sync 2.0"
+                        class="sync-img"
+                    />
+                    <div class="speed-meta">
+                        <span class="ms">14ms</span>
+                        <span class="label">Delta Sync</span>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <h2 class="title">
+                    Introducing "Heist Sync"<br />(Opti-Performance)
+                </h2>
+                <div class="body">
+                    <p>
+                        Don't wait for bloat. Our Heist Optimization 2.0 engine
+                        creates a "digital fingerprint" of your content. We only
+                        fetch what's changed.
+                    </p>
+                    <p>
+                        Syncing your Notion updates takes milliseconds with 90%
+                        less infrastructure load than competitors.
+                    </p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <strong>90%</strong>
+                        <span>Less Load</span>
+                    </div>
+                    <div class="stat-item">
+                        <strong>&lt; 50ms</strong>
+                        <span>Sync Time</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .heist-sync {
+        padding: 8rem 0;
+        background: hsl(var(--foreground));
+        color: hsl(var(--background));
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 2rem;
+        line-height: 1.1;
+    }
+
+    .body p {
+        font-size: 1.25rem;
+        line-height: 1.7;
+        color: hsl(var(--background) / 0.7);
+        margin-bottom: 2rem;
+    }
+
+    .stats {
+        display: flex;
+        gap: 3rem;
+        margin-top: 3rem;
+    }
+
+    .stat-item strong {
+        display: block;
+        font-size: 2.5rem;
+        color: hsl(var(--primary));
+    }
+
+    .stat-item span {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        color: hsl(0 0% 100% / 0.5);
+        font-weight: 700;
+    }
+
+    .sync-card {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid hsl(var(--primary) / 0.2);
+    }
+
+    .sync-img {
+        width: 100%;
+        display: block;
+    }
+
+    .speed-meta {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        background: hsl(0 0% 0% / 0.8);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        border: 1px solid hsl(0 0% 100% / 0.1);
+        backdrop-filter: blur(10px);
+        text-align: center;
+    }
+
+    .speed-meta .ms {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #22c55e;
+    }
+
+    .speed-meta .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 1024px) {
+        .grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        .stats {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .heist-sync {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .heist-sync {
+            padding: 3.5rem 0;
+        }
+        .title {
+            font-size: 2rem;
+        }
+        .stat-item strong {
+            font-size: 2rem;
+        }
+    }
+</style>

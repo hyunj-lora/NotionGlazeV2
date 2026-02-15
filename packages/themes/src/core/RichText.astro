@@ -1,0 +1,74 @@
+---
+interface Props {
+    content: any[];
+}
+
+const { content } = Astro.props;
+---
+
+{
+    content.map((text: any) => {
+        const { annotations, plain_text, href } = text;
+        const color = annotations?.color;
+        const isBackground = color?.includes("_background");
+        const baseColor = color?.replace("_background", "");
+
+        const styles = {
+            fontWeight: annotations?.bold ? "700" : "normal",
+            fontStyle: annotations?.italic ? "italic" : "normal",
+            textDecoration: annotations?.strikethrough
+                ? "line-through"
+                : annotations?.underline
+                  ? "underline"
+                  : "none",
+            color: color !== "default" && !isBackground ? baseColor : "inherit",
+            backgroundColor:
+                color !== "default" && isBackground ? baseColor : "transparent",
+            fontFamily: annotations?.code
+                ? "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+                : "inherit",
+        };
+
+        const content = annotations?.code ? (
+            <code class="notion-inline-code" style={styles}>
+                {plain_text}
+            </code>
+        ) : (
+            <span style={styles}>{plain_text}</span>
+        );
+
+        if (href) {
+            return (
+                <a
+                    href={href}
+                    class="notion-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {content}
+                </a>
+            );
+        }
+
+        return content;
+    })
+}
+
+<style>
+    .notion-inline-code {
+        background: rgba(135, 131, 120, 0.15);
+        color: #eb5757;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 85%;
+    }
+    .notion-link {
+        color: inherit;
+        text-decoration: underline;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+    .notion-link:hover {
+        opacity: 1;
+    }
+</style>

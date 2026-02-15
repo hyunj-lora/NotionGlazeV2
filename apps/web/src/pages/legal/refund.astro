@@ -1,0 +1,138 @@
+---
+export const prerender = true;
+import Layout from "@notionglaze/ui/Layout.astro";
+---
+export const prerender = true;
+
+<Layout title="Refund Policy | NotionGlaze">
+    <main class="legal-container">
+        <h1>Refund Policy</h1>
+        <p class="last-updated">Last Updated: January 24, 2026</p>
+
+        <section>
+            <h2>1. Money-Back Guarantee</h2>
+            <p>
+                We want you to be completely satisfied with NotionGlaze. If you
+                are not satisfied with your purchase, you may request a full
+                refund within <strong>14 days</strong> of your initial purchase date.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Eligibility for Refunds</h2>
+            <ul>
+                <li>
+                    The request is made within 14 days of the initial
+                    subscription start date.
+                </li>
+                <li>
+                    The subscription has not been significantly utilized to
+                    engage in abusive behavior (e.g. spamming).
+                </li>
+                <li>
+                    Refunds are generally not available for monthly renewal
+                    charges if you failed to cancel before the renewal date,
+                    unless required by local law.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. How to Request a Refund</h2>
+            <p>
+                To request a refund, please contact our support team at <a
+                    href="mailto:contact@notionglaze.cc"
+                    >contact@notionglaze.cc</a
+                > with your transaction ID or the email associated with your account.
+                Alternatively, you can utilize the Paddle.com self-service links provided
+                in your purchase confirmation email.
+            </p>
+        </section>
+
+        <section>
+            <h2>4. Processing Time</h2>
+            <p>
+                Once approved, refunds typically take 5-10 business days to
+                appear on your original payment method. This duration depends on
+                your bank or credit card issuer.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Cancellations</h2>
+            <p>
+                You can cancel your subscription at any time from your dashboard
+                billing settings. Upon cancellation, your premium access will
+                continue until the end of the current billing cycle, after which
+                your account will revert to the free/trial state or be paused.
+            </p>
+        </section>
+
+        <section>
+            <h2>6. Merchant of Record</h2>
+            <p>
+                Our order process is conducted by our online reseller
+                Paddle.com. Paddle.com is the Merchant of Record for all our
+                orders. Paddle handles all returns and refund processing
+                directly in accordance with this policy.
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .legal-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        font-family: "Inter", sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .last-updated {
+        color: var(--muted-foreground);
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+
+    p {
+        line-height: 1.7;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--muted-foreground);
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

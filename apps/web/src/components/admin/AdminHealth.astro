@@ -1,0 +1,106 @@
+---
+import type { AdminStats } from "@notionglaze/core";
+
+interface Props {
+    stats: AdminStats;
+}
+
+const { stats } = Astro.props;
+---
+
+<div class="overview-preview">
+    <div class="preview-box">
+        <h3>Platform Health</h3>
+        <div class="health-indicators">
+            <div class="h-item">
+                <span>DB Connectivity</span>
+                <span id="health-db" class="h-status ok">OPERATIONAL</span>
+            </div>
+            <div class="h-item">
+                <span>R2 Storage Bucket</span>
+                <span id="health-r2" class="h-status ok">OPERATIONAL</span>
+            </div>
+            <div class="h-item">
+                <span>Sync Worker Workers</span>
+                <span
+                    id="health-worker"
+                    class={`h-status ${stats.syncFailures > 2 ? "crit" : "ok"}`}
+                    >{stats.syncFailures > 2 ? "DEGRADED" : "OPERATIONAL"}</span
+                >
+            </div>
+        </div>
+    </div>
+    <div class="preview-box">
+        <h3>Quick Command</h3>
+        <div class="quick-actions">
+            <!-- Inline handlers will be managed by global script or simpler mechanism -->
+            <button onclick="runAction('global-sync')" class="btn-op"
+                >🔄 Global Sync (Pro Only)</button
+            >
+            <button onclick="runAction('clear-errors')" class="btn-op"
+                >🧹 Reset Error States</button
+            >
+        </div>
+    </div>
+</div>
+
+<style>
+    .overview-preview {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    .preview-box {
+        background: var(--muted);
+        border: 1px solid var(--border);
+        padding: 2rem;
+        border-radius: 1rem;
+    }
+    .preview-box h3 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .health-indicators {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .h-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+    }
+    .h-status.ok {
+        color: #22c55e;
+        font-weight: 800;
+    }
+    .h-status.crit {
+        color: #ef4444;
+        font-weight: 800;
+    }
+
+    .quick-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .btn-op {
+        background: var(--secondary);
+        border: 1px solid var(--border);
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        text-align: left;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--foreground);
+        transition: 0.2s;
+    }
+    .btn-op:hover {
+        background: var(--primary);
+        color: white;
+    }
+</style>

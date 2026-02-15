@@ -1,0 +1,327 @@
+---
+/**
+ * NavigationEditor.astro
+ * Handles Home Page Strategy and Global Navigation (GNB).
+ */
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+import DashboardSection from "../DashboardSection.astro";
+
+interface Props {
+    config: any;
+    posts: any[];
+}
+
+const { config, posts } = Astro.props;
+---
+
+<div class="space-y-8">
+    <DashboardSection
+        id="sec-homepage"
+        number="01"
+        title="Home Page Strategy"
+        description="Choose between a blog feed or a custom Notion landing page."
+    >
+        <DashboardCard>
+            <div class="grid w-full max-w-sm gap-2">
+                <label
+                    class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block"
+                    >Landing Surface</label
+                >
+                <div class="relative">
+                    <select
+                        id="home-page-id"
+                        class="flex h-11 w-full items-center justify-between rounded-xl border border-input bg-background/50 px-4 py-2 text-sm font-bold shadow-sm ring-offset-background focus:outline-none focus:ring-1 focus:ring-primary appearance-none"
+                    >
+                        <option value="" selected={!config.home_page_id}
+                            >📜 Default Blog Feed</option
+                        >
+                        {
+                            posts.map((post) => (
+                                <option
+                                    value={post.id}
+                                    selected={config.home_page_id === post.id}
+                                >
+                                    📄 {post.title}
+                                </option>
+                            ))
+                        }
+                    </select>
+                    <div
+                        class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground/50"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="m6 9 6 6 6-6"></path></svg
+                        >
+                    </div>
+                </div>
+                <p
+                    class="text-[10px] text-muted-foreground italic font-medium px-1 leading-tight"
+                >
+                    Selecting a page will make it your site's root (/).
+                </p>
+            </div>
+        </DashboardCard>
+    </DashboardSection>
+
+    <DashboardSection
+        id="sec-navigation"
+        number="02"
+        title="Global Navigation (GNB)"
+        description="Define the primary menu appearing at the top of your site."
+    >
+        <DashboardCard>
+            <div id="nav-items-list" class="space-y-4">
+                {
+                    config.navigation &&
+                        config.navigation.map((item: any, idx: number) => (
+                            <div class="nav-item-row p-5 rounded-2xl bg-secondary/10 border border-border group relative">
+                                <div class="grid gap-5 md:grid-cols-12 items-end">
+                                    <div class="md:col-span-4 grid gap-1.5">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+                                            Label
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="nav-label-input flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                                            value={item.label}
+                                            placeholder="Label"
+                                        />
+                                    </div>
+                                    <div class="md:col-span-3 grid gap-1.5">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+                                            Type
+                                        </label>
+                                        <select class="nav-type-select flex h-9 w-full rounded-lg border border-input bg-background px-3 text-xs font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                                            <option
+                                                value="post"
+                                                selected={item.type === "post"}
+                                            >
+                                                Post
+                                            </option>
+                                            <option
+                                                value="url"
+                                                selected={item.type === "url"}
+                                            >
+                                                URL
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-5 grid gap-1.5">
+                                        <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+                                            Target
+                                        </label>
+                                        <div class="nav-value-wrap">
+                                            {item.type === "post" ? (
+                                                <select class="nav-value-input flex h-9 w-full rounded-lg border border-input bg-background px-3 text-xs font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                                                    {posts.map((p) => (
+                                                        <option
+                                                            value={p.id}
+                                                            selected={
+                                                                item.value ===
+                                                                p.id
+                                                            }
+                                                        >
+                                                            {p.title}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="text"
+                                                    class="nav-value-input flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                                                    value={item.value}
+                                                    placeholder="https://..."
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    class="remove-nav-btn absolute -right-2 -top-2 h-6 w-6 rounded-full bg-destructive text-white flex items-center justify-center text-xs font-black shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-x-1 -translate-y-1"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        ))
+                }
+            </div>
+
+            <div class="mt-8">
+                <button
+                    type="button"
+                    id="add-nav-item-btn"
+                    class="w-full h-12 rounded-2xl border-2 border-dashed border-border text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
+                >
+                    + Add Navigation Link
+                </button>
+            </div>
+        </DashboardCard>
+    </DashboardSection>
+
+    <StickyFooter id="nav-editor-footer" saveId="save-nav-editor-btn" />
+</div>
+
+<script is:inline define:vars={{ initialConfig: config, posts }}>
+    (function () {
+        const initNavEditor = () => {
+            const list = document.getElementById("nav-items-list");
+            const addBtn = document.getElementById("add-nav-item-btn");
+
+            // Helper to build post options
+            const getPostOptions = () => {
+                if (!posts || posts.length === 0)
+                    return '<option value="">No posts found</option>';
+                return posts
+                    .map((p) => `<option value="${p.id}">${p.title}</option>`)
+                    .join("");
+            };
+
+            // Re-attach event listener for add button
+            if (addBtn) {
+                // Clone and replace to remove any old event listeners
+                const newAddBtn = addBtn.cloneNode(true);
+                addBtn.parentNode.replaceChild(newAddBtn, addBtn);
+                newAddBtn.addEventListener("click", () => {
+                    const div = document.createElement("div");
+                    div.className =
+                        "nav-item-row p-5 rounded-2xl bg-secondary/10 border border-border group relative";
+                    div.innerHTML = `
+                        <div class="grid gap-5 md:grid-cols-12 items-end">
+                            <div class="md:col-span-4 grid gap-1.5">
+                                <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Label</label>
+                                <input type="text" class="nav-label-input flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary" placeholder="New Link" />
+                            </div>
+                            <div class="md:col-span-3 grid gap-1.5">
+                                <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Type</label>
+                                <select class="nav-type-select flex h-9 w-full rounded-lg border border-input bg-background px-3 text-xs font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                                    <option value="post">Post</option>
+                                    <option value="url" selected>URL</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-5 grid gap-1.5">
+                                <label class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Target</label>
+                                <div class="nav-value-wrap">
+                                    <input type="text" class="nav-value-input flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary" placeholder="https://..." />
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="remove-nav-btn absolute -right-2 -top-2 h-6 w-6 rounded-full bg-destructive text-white flex items-center justify-center text-xs font-black shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-x-1 -translate-y-1">&times;</button>
+                    `;
+                    document.getElementById("nav-items-list").appendChild(div);
+                });
+            }
+
+            // Re-attach event listeners for the list (delegation)
+            if (list) {
+                // Clone and replace to remove any old event listeners
+                const newList = list.cloneNode(true);
+                list.parentNode.replaceChild(newList, list);
+
+                newList.addEventListener("click", (e) => {
+                    if (e.target.closest(".remove-nav-btn")) {
+                        e.target.closest(".nav-item-row").remove();
+                    }
+                });
+
+                newList.addEventListener("change", (e) => {
+                    if (e.target.classList.contains("nav-type-select")) {
+                        const row = e.target.closest(".nav-item-row");
+                        const valWrap = row.querySelector(".nav-value-wrap");
+                        const type = e.target.value;
+                        if (type === "url") {
+                            valWrap.innerHTML = `<input type="text" class="nav-value-input flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-xs font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary" placeholder="https://..." />`;
+                        } else {
+                            valWrap.innerHTML = `<select class="nav-value-input flex h-9 w-full rounded-lg border border-input bg-background px-3 text-xs font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-primary">${getPostOptions()}</select>`;
+                        }
+                    }
+                });
+            }
+
+            // Save Handler
+            const saveBtn = document.getElementById("save-nav-editor-btn");
+            if (saveBtn) {
+                // Clone and replace to remove any old event listeners
+                const newSaveBtn = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+
+                newSaveBtn.addEventListener("click", async () => {
+                    newSaveBtn.classList.add("btn-loading");
+                    newSaveBtn.disabled = true;
+
+                    // Gather nav items
+                    const navItems = [];
+                    document
+                        .querySelectorAll(".nav-item-row")
+                        .forEach((row) => {
+                            const label =
+                                row.querySelector(".nav-label-input")?.value;
+                            const type =
+                                row.querySelector(".nav-type-select")?.value;
+                            const value =
+                                row.querySelector(".nav-value-input")?.value;
+
+                            if (label && value) {
+                                navItems.push({ label, type, value });
+                            }
+                        });
+
+                    const hpId = document.getElementById("home-page-id")?.value;
+
+                    // Fetch latest config to safely merge
+                    try {
+                        const currentConfigRes = await fetch(
+                            "/api/v1/setup/config",
+                        );
+                        let configToMerge = initialConfig;
+                        if (currentConfigRes.ok) {
+                            configToMerge = await currentConfigRes.json();
+                        }
+
+                        const newConfig = {
+                            ...configToMerge,
+                            home_page_id: hpId,
+                            navigation: navItems,
+                        };
+
+                        const res = await fetch("/api/v1/setup/config", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(newConfig),
+                        });
+
+                        if (res.ok) {
+                            if (window.showToast)
+                                window.showToast(
+                                    "Navigation updated!",
+                                    "success",
+                                );
+                            setTimeout(() => window.location.reload(), 500);
+                        } else {
+                            if (window.showToast)
+                                window.showToast("Save failed", "error");
+                        }
+                    } catch (e) {
+                        if (window.showToast)
+                            window.showToast("Error saving", "error");
+                    } finally {
+                        newSaveBtn.disabled = false;
+                        newSaveBtn.classList.remove("btn-loading");
+                    }
+                });
+            }
+        };
+
+        initNavEditor();
+        document.addEventListener("astro:page-load", initNavEditor);
+    })();
+</script>

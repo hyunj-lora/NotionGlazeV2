@@ -1,0 +1,31 @@
+---
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<div class={`notion-button-wrapper ${className || ""}`}>
+    <a href={content.url} class="notion-button-link">
+        <RichText content={content.rich_text} />
+    </a>
+</div>
+
+<style>
+    .notion-button-wrapper {
+        margin: 1.5rem 0;
+    }
+
+    .notion-button-link {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 4px;
+        transition: opacity 0.2s;
+    }
+</style>

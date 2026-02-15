@@ -1,0 +1,229 @@
+---
+import type { AdminTenant as Tenant } from "@notionglaze/core";
+
+interface Props {
+    tenants: Tenant[];
+}
+
+const { tenants } = Astro.props;
+---
+
+<section class="data-section">
+    <h2>Tenant Management</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tenant / Subdomain</th>
+                    <th>Assets</th>
+                    <th>Status</th>
+                    <th>Plan</th>
+                    <th>Last Activity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tenants-table-body">
+                {
+                    tenants.map((t) => (
+                        <tr>
+                            <td>
+                                <div class="tenant-name">
+                                    <strong>{t.subdomain || "no-sub"}</strong>
+                                    <span>{t.id.slice(0, 10)}...</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="asset-count">
+                                    <span>{t.post_count} Posts</span>
+                                    <small>{t.source_count} Sources</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class={`status-badge ${t.sync_status}`}>
+                                    {t.sync_status}
+                                </span>
+                                {t.last_sync_error && (
+                                    <div
+                                        class="error-msg"
+                                        title={t.last_sync_error}
+                                    >
+                                        {t.last_sync_error.slice(0, 40)}...
+                                    </div>
+                                )}
+                            </td>
+                            <td>
+                                <span class={`plan-badge ${t.plan || "trial"}`}>
+                                    {t.plan || "trial"}
+                                </span>
+                            </td>
+                            <td class="date-cell">
+                                {t.last_synced_at
+                                    ? new Date(
+                                          t.last_synced_at,
+                                      ).toLocaleString()
+                                    : "Never"}
+                            </td>
+                            <td class="action-cell">
+                                <button
+                                    class="btn-icon"
+                                    onclick={`runAction('force-sync', '${t.id}')`}
+                                    title="Force Sync"
+                                >
+                                    ⚡
+                                </button>
+                                <button
+                                    class="btn-icon"
+                                    onclick={`runAction('update-plan', '${t.id}', '${t.plan === "pro" ? "trial" : "pro"}')`}
+                                    title="Toggle Plan"
+                                >
+                                    💎
+                                </button>
+                                <button
+                                    class="btn-icon danger"
+                                    onclick={`runAction('delete-tenant', '${t.id}')`}
+                                    title="Delete"
+                                >
+                                    🗑️
+                                </button>
+                            </td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<style>
+    .data-section h2 {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: var(--muted-foreground);
+    }
+
+    .table-container {
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+    th {
+        padding: 1rem;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border);
+    }
+    td {
+        padding: 1rem;
+        font-size: 0.85rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--foreground);
+    }
+
+    .tenant-name {
+        display: flex;
+        flex-direction: column;
+    }
+    .tenant-name strong {
+        font-size: 1rem;
+    }
+    .tenant-name span {
+        font-size: 0.7rem;
+        color: var(--muted-foreground);
+    }
+
+    .asset-count {
+        display: flex;
+        flex-direction: column;
+    }
+    .asset-count span {
+        font-weight: 700;
+        color: var(--primary);
+    }
+    .asset-count small {
+        font-size: 0.7rem;
+        color: var(--muted-foreground);
+    }
+
+    .status-badge {
+        padding: 0.2rem 0.6rem;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+    .status-badge.success {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+    }
+    .status-badge.failed {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+    .status-badge.syncing {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+    .status-badge.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+    .error-msg {
+        font-size: 0.65rem;
+        color: #ef4444;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 0.25rem;
+        cursor: help;
+    }
+
+    .plan-badge {
+        padding: 0.2rem 0.6rem;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+    .plan-badge.pro {
+        background: rgba(var(--primary-rgb), 0.1);
+        color: var(--primary);
+    }
+    .plan-badge.trial {
+        background: rgba(var(--foreground-rgb), 0.05);
+        color: var(--muted-foreground);
+    }
+
+    .action-cell {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .btn-icon {
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 0.4rem;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 0.9rem;
+    }
+    .btn-icon:hover {
+        background: var(--secondary);
+        border-color: var(--primary);
+    }
+    .btn-icon.danger:hover {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+    }
+</style>

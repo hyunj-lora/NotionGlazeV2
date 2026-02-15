@@ -1,0 +1,996 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "0qxV8",
+      "x": 0,
+      "y": 0,
+      "name": "Zero Theme: Light Mode",
+      "width": 800,
+      "fill": "#ffffff",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "oIXBj",
+          "name": "L_H1",
+          "fill": "#0f172a",
+          "content": "Heading 1: The Zero Aesthetic",
+          "fontFamily": "Outfit",
+          "fontSize": 44,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "cq70Y",
+          "name": "L_H2",
+          "fill": "#0f172a",
+          "content": "Heading 2: Structured Hierarchy",
+          "fontFamily": "Outfit",
+          "fontSize": 32,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "YD5vp",
+          "name": "L_H3",
+          "fill": "#0f172a",
+          "content": "Heading 3: Sub-sections & Details",
+          "fontFamily": "Outfit",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "PY1iy",
+          "name": "L_P",
+          "fill": "#334155",
+          "content": "This is a standard paragraph block. Zero theme uses Inter for body text with a comfortable 1.7 line-height to ensure maximum readability for long-form content.",
+          "lineHeight": 1.7,
+          "fontFamily": "Inter",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "k9npl",
+          "name": "L_ListContainer",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": [
+            0,
+            0,
+            0,
+            8
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "14Enp",
+              "name": "L_Ul",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "aaO91",
+                  "fill": "#334155",
+                  "width": 6,
+                  "height": 6
+                },
+                {
+                  "type": "text",
+                  "id": "2iCVj",
+                  "fill": "#334155",
+                  "content": "Bulleted list item with proper indentation",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rG9dP",
+              "name": "L_Ol",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "c1Mp8",
+                  "fill": "#334155",
+                  "content": "1.",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "MDL8T",
+                  "fill": "#334155",
+                  "content": "Numbered list item for sequences",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "nPeW6",
+              "name": "ltodo",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "4fbaY",
+                  "fill": "#3b82f6",
+                  "content": "☑",
+                  "fontFamily": "Inter",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "AfJkU",
+                  "fill": "#94a3b8",
+                  "content": "Completed to-do item",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "i1GPk",
+          "name": "L_Quote",
+          "width": "fill_container",
+          "fill": "#f8fafc",
+          "gap": 16,
+          "padding": [
+            16,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "5BHZn",
+              "fill": "#475569",
+              "content": "“Good design is as little design as possible.\nLess, but better.”",
+              "lineHeight": 1.6,
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "nItq6",
+          "name": "L_Callout",
+          "width": "fill_container",
+          "fill": "#f1f5f9",
+          "cornerRadius": 12,
+          "gap": 16,
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "ejQnd",
+              "content": "💡",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "SSuib",
+              "name": "L_Callout_Content",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wAj6L",
+                  "fill": "#1e293b",
+                  "content": "Callouts stands out with a soft background color and rounded corners (0.75rem).",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "Ljz24",
+                  "fill": "#334155",
+                  "content": "This is a second paragraph inside the callout to demonstrate nested block rendering.",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GzTIm",
+          "name": "L_Toggle",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "hPNYx",
+              "name": "L_ToggleHead",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "qFy3v",
+                  "fill": "#64748b",
+                  "content": "▶",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "5Cb1h",
+                  "fill": "#334155",
+                  "content": "Toggle Block (Click to expand)",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "xtBNh",
+          "name": "L_Code",
+          "width": "fill_container",
+          "fill": "#f8fafc",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "mGF0a",
+              "name": "L_CodeHead",
+              "width": "fill_container",
+              "fill": "#f1f5f9",
+              "padding": [
+                8,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CqZEm",
+                  "fill": "#64748b",
+                  "content": "TypeScript",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal",
+                  "letterSpacing": 0.5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AeEGZ",
+              "name": "L_CodeBody",
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "o3pMo",
+                  "fill": "#334155",
+                  "content": "const theme = 'Zero';\nconsole.log(`Rendering ${theme} theme...`);",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "ABXQE",
+          "name": "L_Divider",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "frame",
+          "id": "V2T4B",
+          "name": "L_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Gyug2",
+              "name": "L_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "crispinto",
+                "link": "https://unsplash.com/@crispinto",
+                "author": "Cristiano Pinto"
+              },
+              "width": "fill_container",
+              "height": 240,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1589010588325-6538c7fffcbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MDkyMTh8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 8
+            },
+            {
+              "type": "text",
+              "id": "JlufA",
+              "fill": "#64748b",
+              "content": "Figure 1: Minimalist workspace setup.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "nD3rX",
+          "name": "L_Bookmark",
+          "width": "fill_container",
+          "height": 100,
+          "fill": "#ffffff",
+          "cornerRadius": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "AIoZT",
+              "name": "L_BmInfo",
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "XoRDR",
+                  "fill": "#0f172a",
+                  "content": "NotionGlaze | Turn Notion into Websites",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "sDXBQ",
+                  "fill": "#64748b",
+                  "content": "The fastest way to clean, fast sites.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "xuFHX",
+                  "fill": "#334155",
+                  "content": "https://notionglaze.cc",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "CCDhT",
+              "name": "L_BmCover",
+              "width": 140,
+              "height": "fill_container",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1769509226763.png",
+                "mode": "fill"
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "q4e0z",
+          "name": "L_Equation",
+          "width": "fill_container",
+          "fill": "#f8fafc",
+          "padding": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "j5mWj",
+              "fill": "#0f172a",
+              "content": "∫₀^∞ e^{-x²} dx = √π / 2",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "4ayip",
+          "name": "L_TableWrapper",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "1xn2O",
+              "name": "L_TR1",
+              "width": "fill_container",
+              "fill": "#f8fafc",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "E6cPj",
+                  "fill": "#334155",
+                  "content": "Feature",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "Cf0G2",
+                  "fill": "#334155",
+                  "content": "Status",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qfHhj",
+              "name": "L_TR2",
+              "width": "fill_container",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YSTub",
+                  "fill": "#334155",
+                  "content": "SEO Optimization",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "sN8PW",
+                  "fill": "#059669",
+                  "content": "Automatic",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "i59vL",
+      "x": 900,
+      "y": 0,
+      "name": "Zero Theme: Dark Mode",
+      "width": 800,
+      "fill": "#0f172a",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "NA6GO",
+          "name": "D_H1",
+          "fill": "#f8fafc",
+          "content": "Heading 1: Dark Mode",
+          "fontFamily": "Outfit",
+          "fontSize": 44,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "PHWVW",
+          "name": "D_H2",
+          "fill": "#f8fafc",
+          "content": "Heading 2: High Contrast",
+          "fontFamily": "Outfit",
+          "fontSize": 32,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "2r7qH",
+          "name": "D_H3",
+          "fill": "#e2e8f0",
+          "content": "Heading 3: Sub-sections",
+          "fontFamily": "Outfit",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "TFNv6",
+          "name": "D_P",
+          "fill": "#cbd5e1",
+          "content": "In dark mode, standard text is rendered in Slate 200 (#e2e8f0) against a Slate 900 background. This reduces eye strain while maintaining legibility.",
+          "lineHeight": 1.7,
+          "fontFamily": "Inter",
+          "fontSize": 17,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "0dwoC",
+          "name": "D_ListContainer",
+          "layout": "vertical",
+          "gap": 8,
+          "padding": [
+            0,
+            0,
+            0,
+            8
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "vOfeD",
+              "name": "D_Ul",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "3G2SL",
+                  "fill": "#cbd5e1",
+                  "width": 6,
+                  "height": 6
+                },
+                {
+                  "type": "text",
+                  "id": "H0ACX",
+                  "fill": "#cbd5e1",
+                  "content": "Bulleted list item (Dark)",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4Bzfc",
+              "name": "D_Ol",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ET0KH",
+                  "fill": "#cbd5e1",
+                  "content": "1.",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "hywiY",
+                  "fill": "#cbd5e1",
+                  "content": "Numbered list item (Dark)",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wDV63",
+              "name": "D_Todo",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "87gPq",
+                  "width": 20,
+                  "height": 20,
+                  "fill": "transparent",
+                  "cornerRadius": 4
+                },
+                {
+                  "type": "text",
+                  "id": "STPs1",
+                  "fill": "#cbd5e1",
+                  "content": "Pending to-do item",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "X9UKM",
+          "name": "D_Quote",
+          "width": "fill_container",
+          "fill": "rgba(255, 255, 255, 0.05)",
+          "gap": 16,
+          "padding": [
+            16,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "3LxsH",
+              "fill": "#e2e8f0",
+              "content": "“Dark mode quotes use a semi-transparent background to subtly distinguish from the main canvas.”",
+              "lineHeight": 1.6,
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "le4Tj",
+          "name": "D_Callout",
+          "width": "fill_container",
+          "fill": "#1e293b",
+          "cornerRadius": 12,
+          "gap": 16,
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "lccVH",
+              "content": "💡",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "cHe6T",
+              "fill": "#f1f5f9",
+              "content": "Callouts in dark mode use a slightly lighter slate (#1e293b) to float above the background.",
+              "fontFamily": "Inter",
+              "fontSize": 17,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Gldmy",
+          "name": "D_Toggle",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "ZGd7m",
+              "name": "D_ToggleHead",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "SGUlj",
+                  "fill": "#94a3b8",
+                  "content": "▶",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "UweuQ",
+                  "fill": "#e2e8f0",
+                  "content": "Toggle Block (Dark)",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Af7vq",
+          "name": "D_Code",
+          "width": "fill_container",
+          "fill": "#020617",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "utmAq",
+              "name": "D_CodeHead",
+              "width": "fill_container",
+              "fill": "#0f172a",
+              "padding": [
+                8,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "be3qY",
+                  "fill": "#94a3b8",
+                  "content": "TypeScript",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal",
+                  "letterSpacing": 0.5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "SkR27",
+              "name": "D_CodeBody",
+              "padding": 20,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "g7LBI",
+                  "fill": "#e2e8f0",
+                  "content": "const mode = 'Dark';\n// Syntax highlighting colors would apply here",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "GHrd8",
+          "name": "D_Divider",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "frame",
+          "id": "oFBEe",
+          "name": "D_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "R3soj",
+              "name": "D_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "bryannatanael",
+                "link": "https://unsplash.com/@bryannatanael",
+                "author": "Bryan Natanael"
+              },
+              "width": "fill_container",
+              "height": 240,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1689691849957-1ce9f9315e91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MDkyMjd8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 8
+            },
+            {
+              "type": "text",
+              "id": "Dgb3U",
+              "fill": "#94a3b8",
+              "content": "Figure 1: Dark mode environment.",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yO6aw",
+          "name": "D_Bookmark",
+          "width": "fill_container",
+          "height": 100,
+          "fill": "#0f172a",
+          "cornerRadius": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "puGVm",
+              "name": "D_BmInfo",
+              "layout": "vertical",
+              "gap": 4,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ojzDP",
+                  "fill": "#f8fafc",
+                  "content": "NotionGlaze | Turn Notion into Websites",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "IVjUm",
+                  "fill": "#94a3b8",
+                  "content": "The fastest way to clean, fast sites.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "MCGgL",
+                  "fill": "#64748b",
+                  "content": "https://notionglaze.cc",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "JRSF1",
+              "name": "D_BmCover",
+              "width": 140,
+              "height": "fill_container",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1769509234550.png",
+                "mode": "fill"
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3N7rr",
+          "name": "D_Equation",
+          "width": "fill_container",
+          "fill": "rgba(255,255,255,0.05)",
+          "padding": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "uEzeV",
+              "fill": "#e2e8f0",
+              "content": "∫₀^∞ e^{-x²} dx = √π / 2",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vhTJV",
+          "name": "D_TableWrapper",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "4iEhE",
+              "name": "D_TR1",
+              "width": "fill_container",
+              "fill": "rgba(255,255,255,0.05)",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "aFDXq",
+                  "fill": "#94a3b8",
+                  "content": "Feature",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "errA8",
+                  "fill": "#94a3b8",
+                  "content": "Status",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VDZLT",
+              "name": "D_TR2",
+              "width": "fill_container",
+              "padding": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CvNhI",
+                  "fill": "#e2e8f0",
+                  "content": "SEO Optimization",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "d3VUw",
+                  "fill": "#4ade80",
+                  "content": "Automatic",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

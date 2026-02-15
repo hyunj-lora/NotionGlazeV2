@@ -1,0 +1,53 @@
+---
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const fileUrl = content.file?.url || content.external?.url;
+const fileName = content.caption?.[0]?.plain_text || "Download File";
+---
+
+<div class={`notion-file-wrapper ${className || ""}`}>
+    <a
+        href={fileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="notion-file-link"
+    >
+        <span class="notion-file-icon">📎</span>
+        <span class="notion-file-name">{fileName}</span>
+    </a>
+</div>
+
+<style>
+    .notion-file-wrapper {
+        margin: 1rem 0;
+    }
+
+    .notion-file-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s;
+    }
+
+    .notion-file-link:hover {
+        background: #f9f9f9;
+    }
+
+    .notion-file-icon {
+        font-size: 1.25rem;
+    }
+
+    .notion-file-name {
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>

@@ -1,0 +1,86 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 6rem;
+        text-align: center;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    .meta {
+        font-size: 0.8rem;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+        font-family: "Inter", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+    }
+    h2 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+        font-weight: 400;
+        font-family: "EB Garamond", serif;
+        font-style: italic;
+        color: var(--foreground);
+    }
+    p {
+        font-size: 1.1rem;
+        color: var(--muted-foreground);
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        font-family: "EB Garamond", serif;
+    }
+    .read-more {
+        font-size: 0.75rem;
+        color: var(--foreground);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.25rem;
+        display: inline-block;
+        transition: border-color 0.2s;
+    }
+    .post-card:hover .read-more {
+        border-color: var(--foreground);
+    }
+</style>

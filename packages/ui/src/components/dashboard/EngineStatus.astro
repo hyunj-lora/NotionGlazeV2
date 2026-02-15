@@ -1,0 +1,132 @@
+---
+import DashboardCard from "./DashboardCard.astro";
+import { getLiveSiteUrl } from "@notionglaze/core";
+
+interface Props {
+    tenant: any;
+    lastSync: string;
+    publishedPosts: number;
+    totalPosts: number;
+}
+
+const { tenant, lastSync, publishedPosts, totalPosts } = Astro.props;
+---
+
+<DashboardCard class="health-card">
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+            <div
+                class={`h-3 w-3 rounded-full ${tenant?.notion_access_token && tenant?.root_page_id ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-muted"}`}
+            >
+            </div>
+            <span class="font-bold"
+                >{
+                    tenant?.notion_access_token && tenant?.root_page_id
+                        ? "Engine Pulse: Online"
+                        : "Mission Required"
+                }</span
+            >
+        </div>
+        <button
+            id="sync-now-btn"
+            class="btn-icon-bg"
+            title="Trigger Manual Sync"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+                ></path><path d="M21 3v5h-5"></path></svg
+            >
+        </button>
+    </div>
+    <div class="space-y-3">
+        <div class="flex justify-between text-xs">
+            <span class="text-muted-foreground">Last Sync</span>
+            <span class="font-medium">{lastSync}</span>
+        </div>
+        <div class="flex justify-between text-xs">
+            <span class="text-muted-foreground">Posts Published</span>
+            <span class="font-medium">{publishedPosts} / {totalPosts}</span>
+        </div>
+    </div>
+    <div class="mt-6 flex flex-col gap-2">
+        <a
+            href={getLiveSiteUrl(tenant)}
+            target="_blank"
+            class="btn-quick-action outline"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                ></path><polyline points="15 3 21 3 21 9"></polyline><line
+                    x1="10"
+                    y1="14"
+                    x2="21"
+                    y2="3"></line></svg
+            >
+            View Live Site
+        </a>
+    </div>
+</DashboardCard>
+
+<style>
+    .btn-icon-bg {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: hsl(var(--secondary));
+        border: 1px solid hsl(var(--border));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-icon-bg:hover {
+        background: hsl(var(--primary));
+        color: white;
+        border-color: hsl(var(--primary));
+    }
+
+    .btn-quick-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-quick-action.outline {
+        border: 1px solid hsl(var(--border));
+        background: transparent;
+        color: hsl(var(--foreground));
+    }
+
+    .btn-quick-action:hover {
+        background: hsl(var(--secondary));
+        transform: translateY(-1px);
+    }
+</style>

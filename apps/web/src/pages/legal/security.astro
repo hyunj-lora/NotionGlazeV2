@@ -1,0 +1,143 @@
+---
+export const prerender = true;
+import Layout from "@notionglaze/ui/Layout.astro";
+---
+
+<Layout title="Security & Trust | NotionGlaze">
+    <main class="legal-container">
+        <h1>Security & Trust</h1>
+        <p class="last-updated">Last Updated: February 9, 2026</p>
+
+        <section>
+            <h2>1. Security Philosophy</h2>
+            <p>
+                At NotionGlaze, security is not an afterthought; it is built into
+                every layer of our architecture. We understand that your Notion
+                workspace contains sensitive and valuable information. Our
+                mission is to provide a high-performance publishing engine
+                without compromising the integrity of your data.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Infrastructure Security</h2>
+            <p>
+                <strong>Cloudflare Edge Network:</strong> NotionGlaze is built on
+                Cloudflare's global edge network. This means your site is protected
+                by enterprise-grade Web Application Firewalls (WAF), DDoS protection, 
+                and SSL/TLS encryption by default.
+            </p>
+            <p>
+                <strong>Serverless Architecture:</strong> By using Cloudflare Workers, 
+                we eliminate the risks associated with traditional persistent servers. 
+                Each request runs in an isolated sandbox, significantly reducing the 
+                attack surface.
+            </p>
+        </section>
+
+        <section>
+            <h2>3. Data Protection</h2>
+            <p>
+                <strong>Encryption at Rest:</strong> Sensitive information, including 
+                your Notion Access Tokens, is encrypted using industry-standard 
+                AES-256-GCM encryption before being stored in our database.
+            </p>
+            <p>
+                <strong>Encryption in Transit:</strong> All communications between 
+                your browser, our servers, and the Notion API are encrypted using 
+                TLS 1.2 or higher.
+            </p>
+            <p>
+                <strong>No Password Storage:</strong> We use OAuth 2.0 for 
+                authentication. NotionGlaze never sees or stores your Notion password.
+            </p>
+        </section>
+
+        <section>
+            <h2>4. Access Control (Least Privilege)</h2>
+            <p>
+                We adhere to the principle of least privilege. NotionGlaze only 
+                requests access to the pages and databases you explicitly share 
+                with our integration. We do not have access to your entire 
+                Notion workspace unless you choose to grant it.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Asset Shield & Privacy</h2>
+            <p>
+                Our "Global Asset Shield" mirrors your Notion images to our 
+                private, secure R2 storage. This prevents broken links and 
+                ensures that your assets are served through our secure CDN, 
+                masking the original Notion AWS URLs from public view.
+            </p>
+        </section>
+
+        <section>
+            <h2>6. Compliance & Audits</h2>
+            <p>
+                We regularly review our codebase for security vulnerabilities. 
+                Our payment processing is handled by Paddle.com, which is PCI DSS 
+                compliant, ensuring your financial data never touches our servers.
+            </p>
+        </section>
+
+        <section>
+            <h2>7. Reporting Vulnerabilities</h2>
+            <p>
+                We welcome reports from security researchers. If you believe 
+                you have found a security vulnerability in NotionGlaze, please 
+                contact us immediately at <a href="mailto:security@notionglaze.cc"
+                    >security@notionglaze.cc</a
+                >.
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .legal-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        font-family: "Inter", sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .last-updated {
+        color: var(--muted-foreground);
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+
+    p {
+        line-height: 1.7;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+    }
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

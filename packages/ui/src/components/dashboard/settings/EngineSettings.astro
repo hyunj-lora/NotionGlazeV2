@@ -1,0 +1,263 @@
+---
+/**
+ * EngineSettings.astro
+ * Handles Notion Content Sources, Connection Status, and Danger Zone.
+ */
+import DashboardSection from "../DashboardSection.astro";
+import DashboardCard from "../DashboardCard.astro";
+
+interface Props {
+    tenant: any;
+    sources: any[];
+    config: any;
+}
+
+const { tenant, sources, config } = Astro.props;
+---
+
+<div class="settings-panel">
+    <DashboardSection
+        id="sec-sources"
+        number="01"
+        title="Notion Content Sources"
+        description="Pull content from multiple databases into a single site."
+    >
+        <DashboardCard>
+            <div id="sources-list" class="space-y-6">
+                {
+                    sources.map((source) => (
+                        <div
+                            class="source-item p-6 rounded-2xl bg-secondary/10 border border-border group relative"
+                            data-id={source.id}
+                        >
+                            <div class="flex items-center gap-2 mb-6 text-xs font-black uppercase tracking-widest text-primary">
+                                <span class="h-6 w-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                                    📡
+                                </span>
+                                {source.name || "Untitled Source"}
+                            </div>
+                            <div class="grid gap-6 md:grid-cols-2">
+                                <div class="grid gap-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                                        Source Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="source-name-input flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                                        value={source.name}
+                                    />
+                                </div>
+                                <div class="grid gap-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                                        Automated Tag
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="source-tag-input flex h-10 w-full rounded-xl border border-input bg-background px-4 py-2 text-sm font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                                        value={source.auto_tag || ""}
+                                        placeholder="e.g. blog-post"
+                                    />
+                                </div>
+                                <div class="md:col-span-2 grid gap-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                                        Database ID
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="source-db-input flex h-10 w-full rounded-xl border border-input bg-background/50 px-4 py-2 text-xs font-mono font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary"
+                                        value={source.notion_db_id}
+                                        readonly
+                                    />
+                                    <p class="text-[9px] text-muted-foreground italic font-medium px-1">
+                                        To update the Database ID, reconnect the
+                                        source.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex items-center justify-between gap-4 border-t border-border/30 pt-4">
+                                <button
+                                    type="button"
+                                    class="source-save-btn h-9 px-6 rounded-lg bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all"
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    type="button"
+                                    class="source-delete-btn h-9 px-4 rounded-lg border border-destructive/30 text-destructive text-[10px] font-black uppercase tracking-widest hover:bg-destructive/5 transition-all"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <div class="mt-8">
+                <button
+                    type="button"
+                    id="add-source-btn"
+                    class="w-full h-12 rounded-2xl border-2 border-dashed border-border text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
+                >
+                    + Connect New Database
+                </button>
+            </div>
+        </DashboardCard>
+    </DashboardSection>
+
+    <DashboardSection
+        id="sec-integration"
+        number="02"
+        title="Integration Engine"
+        description="Secret keys and connectivity status to the Notion cloud."
+    >
+        <DashboardCard>
+            {
+                tenant?.notion_access_token ? (
+                    <div class="flex items-center justify-between p-2">
+                        <div class="flex items-center gap-4">
+                            <div class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                            </div>
+                            <div class="grid gap-1">
+                                <h4 class="text-sm font-black uppercase tracking-tight text-foreground">
+                                    Connected to{" "}
+                                    {config.workspace_name || "Workspace"}
+                                </h4>
+                                <p class="text-[11px] text-muted-foreground font-medium">
+                                    Synching active via Official Integration.
+                                </p>
+                            </div>
+                        </div>
+                        <a
+                            href="/api/v1/gateway/notion/init?mode=connect"
+                            class="h-9 px-6 rounded-lg border border-border bg-background flex items-center justify-center text-[10px] font-black uppercase tracking-widest hover:bg-accent transition-all"
+                        >
+                            Switch
+                        </a>
+                    </div>
+                ) : (
+                    <div class="p-4 text-center">
+                        <a
+                            href="/api/v1/gateway/notion/init?mode=connect"
+                            class="inline-flex h-12 px-10 rounded-2xl bg-primary text-primary-foreground items-center justify-center text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-primary/20"
+                        >
+                            Connect Notion
+                        </a>
+                    </div>
+                )
+            }
+        </DashboardCard>
+
+        <div
+            class="mt-12 p-8 rounded-3xl border border-destructive/20 bg-destructive/5 group transition-all hover:bg-destructive/[0.07]"
+        >
+            <div class="flex items-center gap-3 mb-6">
+                <div
+                    class="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center text-destructive"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m12 14 4-4"></path><path
+                            d="M3.34 19a10 10 0 1 1 17.32 0"></path><path
+                            d="m12 14-4-4"></path><path d="m12 14 5 5"
+                        ></path><path d="m12 14-5 5"></path></svg
+                    >
+                </div>
+                <div>
+                    <h4
+                        class="text-lg font-black uppercase tracking-tighter text-destructive leading-none"
+                    >
+                        Danger Zone
+                    </h4>
+                    <p
+                        class="text-[11px] text-destructive/60 font-bold uppercase tracking-widest mt-1"
+                    >
+                        Irreversible Actions
+                    </p>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-wrap items-center justify-between gap-6 p-6 rounded-2xl bg-background border border-destructive/10"
+            >
+                <div class="grid gap-1 flex-1">
+                    <p
+                        class="text-sm font-black text-foreground uppercase tracking-tight"
+                    >
+                        Disconnect Notion
+                    </p>
+                    <p
+                        class="text-[11px] text-muted-foreground font-medium leading-relaxed"
+                    >
+                        Revoke all access tokens. This stops content
+                        synchronization immediately. Your site data remains but
+                        won't update.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    class="h-11 px-8 rounded-xl bg-destructive text-destructive-foreground text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-destructive/20"
+                    id="disconnect-btn"
+                >
+                    Revoke Access
+                </button>
+            </div>
+        </div>
+    </DashboardSection>
+</div>
+
+<script is:inline>
+    (function () {
+        const notifyChange = () => {
+            document.dispatchEvent(new CustomEvent("settings-change"));
+        };
+
+        const list = document.getElementById("sources-list");
+        const addBtn = document.getElementById("add-source-btn");
+        const disconnectBtn = document.getElementById("disconnect-btn");
+
+        addBtn?.addEventListener("click", () => {
+            // New sources use the O2O auth flow to add a database
+            window.location.href = "/api/v1/gateway/notion/init?mode=connect";
+        });
+
+        list?.addEventListener("click", (e) => {
+            const deleteBtn = e.target.closest(".source-delete-btn");
+            if (deleteBtn) {
+                if (
+                    confirm(
+                        "Delete this content source? This only removes the connection, not your Notion data.",
+                    )
+                ) {
+                    deleteBtn.closest(".source-item").remove();
+                    notifyChange();
+                }
+            }
+        });
+
+        list?.addEventListener("input", notifyChange);
+
+        disconnectBtn?.addEventListener("click", async () => {
+            if (confirm("Are you sure? This stops all synchronization.")) {
+                try {
+                    const res = await fetch("/api/v1/auth/revoke", {
+                        method: "POST",
+                    });
+                    if (res.ok) window.location.href = "/login";
+                } catch (e) {
+                    alert("Disconnection failed.");
+                }
+            }
+        });
+    })();
+</script>

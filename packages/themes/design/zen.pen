@@ -1,0 +1,679 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "PHqgt",
+      "x": 0,
+      "y": 0,
+      "name": "Zen Theme: Light Mode",
+      "width": 800,
+      "fill": "#ffffff",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 80,
+      "children": [
+        {
+          "type": "text",
+          "id": "Szu6y",
+          "fill": "#a1a1aa",
+          "content": "// ZEN",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "medium",
+          "letterSpacing": 2
+        },
+        {
+          "type": "text",
+          "id": "aPr5b",
+          "name": "L_H1",
+          "fill": "#18181b",
+          "content": "The Art of Focus",
+          "fontFamily": "Inter",
+          "fontSize": 40,
+          "fontWeight": "300",
+          "letterSpacing": -1
+        },
+        {
+          "type": "text",
+          "id": "90v91",
+          "name": "L_P",
+          "fill": "#52525b",
+          "content": "Zen is not about emptiness, but about the absence of distraction. Every element serves a purpose, and every space is intentional. This is a quiet place for your thoughts.",
+          "lineHeight": 1.6,
+          "fontFamily": "Inter",
+          "fontSize": 16
+        },
+        {
+          "type": "line",
+          "id": "RHma7",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "text",
+          "id": "huGCp",
+          "name": "L_H2",
+          "fill": "#27272a",
+          "content": "Minimalist Foundations",
+          "fontFamily": "Inter",
+          "fontSize": 24
+        },
+        {
+          "type": "frame",
+          "id": "wUqgs",
+          "name": "L_Quote",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            8,
+            0,
+            8,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "DPbcQ",
+              "fill": "#71717a",
+              "content": "\"Simplicity is the ultimate sophistication.\"",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "q16U7",
+          "name": "L_Callout",
+          "width": "fill_container",
+          "fill": "#fafafa",
+          "cornerRadius": 8,
+          "gap": 16,
+          "padding": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Y9jOO",
+              "fill": "#a1a1aa",
+              "content": "◍",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "l0g8G",
+              "fill": "#71717a",
+              "content": "A gentle reminder to pause and reflect on the content below.",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "edj3U",
+          "name": "L_Lists",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "Uzg8W",
+              "fill": "#52525b",
+              "content": "◦ Breath and awareness",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "iNgbk",
+              "fill": "#52525b",
+              "content": "◦ Intentional movement",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "cr4KU",
+          "name": "L_Todo",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "UMyUw",
+              "width": 18,
+              "height": 18
+            },
+            {
+              "type": "text",
+              "id": "dzTFd",
+              "fill": "#52525b",
+              "content": "Begin the daily practice",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "fsslx",
+          "name": "L_Code",
+          "width": "fill_container",
+          "fill": "#fbfbfb",
+          "cornerRadius": 6,
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "HQIpk",
+              "fill": "#71717a",
+              "content": "function meditate() { return null; }",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rafiA",
+          "name": "L_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "atstF",
+              "name": "L_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "meinayin",
+                "link": "https://unsplash.com/@meinayin",
+                "author": "Meina Yin"
+              },
+              "width": "fill_container",
+              "height": 320,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1760766321332-06b479f55a32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MjA3NzF8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 4
+            },
+            {
+              "type": "text",
+              "id": "IKQQs",
+              "fill": "#a1a1aa",
+              "content": "Fig. 1 — Stillness in motion.",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "5RC7I",
+          "name": "L_Bookmark",
+          "width": "fill_container",
+          "height": 80,
+          "cornerRadius": 8,
+          "padding": [
+            0,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "McSMQ",
+              "fill": "#71717a",
+              "content": "🔗  resource.meditation.org",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lTj7i",
+          "name": "L_TableWrapper",
+          "width": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "iGSkU",
+              "name": "L_TR1",
+              "width": "fill_container",
+              "padding": [
+                12,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "mMK11",
+                  "fill": "#27272a",
+                  "content": "State",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "80iGz",
+                  "fill": "#27272a",
+                  "content": "Duration",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "IGBox",
+          "name": "L_Equation",
+          "width": "fill_container",
+          "padding": 32,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "hPinj",
+              "fill": "#18181b",
+              "content": "1 + 1 = 1",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "300"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "y3L4A",
+          "name": "L_Toggle",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "cCLgJ",
+              "fill": "#a1a1aa",
+              "content": "▿",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "wSiQs",
+              "fill": "#52525b",
+              "content": "Show deeper insights",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "500"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "M270E",
+      "x": 900,
+      "y": 0,
+      "name": "Zen Theme: Dark Mode",
+      "width": 800,
+      "fill": "#121212",
+      "layout": "vertical",
+      "gap": 32,
+      "padding": 80,
+      "children": [
+        {
+          "type": "text",
+          "id": "QHoI6",
+          "fill": "#52525b",
+          "content": "// ZEN",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "medium",
+          "letterSpacing": 2
+        },
+        {
+          "type": "text",
+          "id": "nRSMr",
+          "name": "D_H1",
+          "fill": "#f4f4f5",
+          "content": "The Art of Focus",
+          "fontFamily": "Inter",
+          "fontSize": 40,
+          "fontWeight": "300",
+          "letterSpacing": -1
+        },
+        {
+          "type": "text",
+          "id": "6wOZn",
+          "name": "D_P",
+          "fill": "#a1a1aa",
+          "content": "Zen is not about emptiness, but about the absence of distraction. Every element serves a purpose, and every space is intentional.",
+          "lineHeight": 1.6,
+          "fontFamily": "Inter",
+          "fontSize": 16
+        },
+        {
+          "type": "line",
+          "id": "ZwdEV",
+          "width": "fill_container",
+          "height": 0
+        },
+        {
+          "type": "text",
+          "id": "QwNSK",
+          "name": "D_H2",
+          "fill": "#e4e4e7",
+          "content": "Minimalist Foundations",
+          "fontFamily": "Inter",
+          "fontSize": 24
+        },
+        {
+          "type": "frame",
+          "id": "1ED4B",
+          "name": "D_Quote",
+          "width": "fill_container",
+          "layout": "vertical",
+          "padding": [
+            8,
+            0,
+            8,
+            24
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "Jz8nR",
+              "fill": "#71717a",
+              "content": "\"Simplicity is the ultimate sophistication.\"",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bXUQy",
+          "name": "D_Callout",
+          "width": "fill_container",
+          "fill": "#18181b",
+          "cornerRadius": 8,
+          "gap": 16,
+          "padding": 20,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "42oPt",
+              "fill": "#52525b",
+              "content": "◍",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "qDYQc",
+              "fill": "#a1a1aa",
+              "content": "A gentle reminder to pause and reflect.",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "LyAMq",
+          "name": "D_Lists",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "cUapW",
+              "fill": "#a1a1aa",
+              "content": "◦ Breath and awareness",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "GwEJg",
+              "fill": "#a1a1aa",
+              "content": "◦ Intentional movement",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ewjhi",
+          "name": "D_Todo",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "6zYLe",
+              "width": 18,
+              "height": 18
+            },
+            {
+              "type": "text",
+              "id": "s6Qgr",
+              "fill": "#a1a1aa",
+              "content": "Begin the daily practice",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "2r19l",
+          "name": "D_Code",
+          "width": "fill_container",
+          "fill": "#0a0a0a",
+          "cornerRadius": 6,
+          "layout": "vertical",
+          "padding": 20,
+          "children": [
+            {
+              "type": "text",
+              "id": "pqvTq",
+              "fill": "#52525b",
+              "content": "function meditate() { return null; }",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3C2Yu",
+          "name": "D_Figure",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "4tyfL",
+              "name": "D_ImgFrame",
+              "metadata": {
+                "type": "unsplash",
+                "username": "francesco_ungaro",
+                "link": "https://unsplash.com/@francesco_ungaro",
+                "author": "Francesco Ungaro"
+              },
+              "width": "fill_container",
+              "height": 320,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1760881676070-34b95e68c38e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MjA3NzF8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 4
+            },
+            {
+              "type": "text",
+              "id": "v569E",
+              "fill": "#52525b",
+              "content": "Fig. 1 — Stillness in motion.",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal",
+              "fontStyle": "italic"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "20mT6",
+          "name": "D_Bookmark",
+          "width": "fill_container",
+          "height": 80,
+          "cornerRadius": 8,
+          "padding": [
+            0,
+            20
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "6cbqu",
+              "fill": "#71717a",
+              "content": "🔗  resource.meditation.org",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ayPGm",
+          "name": "D_TableWrapper",
+          "width": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "t7FGj",
+              "name": "D_TR1",
+              "width": "fill_container",
+              "padding": [
+                12,
+                0
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pyNtl",
+                  "fill": "#e4e4e7",
+                  "content": "State",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "cPJEZ",
+                  "fill": "#e4e4e7",
+                  "content": "Duration",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7r5wZ",
+          "name": "D_Equation",
+          "width": "fill_container",
+          "padding": 32,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "qqVAR",
+              "fill": "#f4f4f5",
+              "content": "1 + 1 = 1",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "300"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "iiMZm",
+          "name": "D_Toggle",
+          "gap": 12,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "LNoMA",
+              "fill": "#52525b",
+              "content": "▿",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "YUfnS",
+              "fill": "#a1a1aa",
+              "content": "Show deeper insights",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "500"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

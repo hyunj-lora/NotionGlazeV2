@@ -1,0 +1,211 @@
+---
+export const prerender = true;
+import Layout from "@notionglaze/ui/Layout.astro";
+---
+
+<Layout title="Privacy Policy | NotionGlaze">
+    <main class="legal-container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last Updated: January 24, 2026</p>
+
+        <section>
+            <h2>1. Introduction</h2>
+            <p>
+                NotionGlaze ("we", "us", "our") respects your privacy. This
+                Privacy Policy explains how we collect, use, and protect your
+                personal information when you use our service. By using
+                NotionGlaze, you consent to the data practices described in this
+                policy.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Information We Collect</h2>
+            <p>
+                We collect the minimum amount of information necessary to
+                provide the Service:
+            </p>
+            <ul>
+                <li>
+                    <strong>Account Information:</strong> We collect your Notion User
+                    ID, name, and email provided via OAuth 2.0. We do not store Notion
+                    passwords.
+                </li>
+                <li>
+                    <strong>Content Data:</strong> We access, process, and cache the
+                    content of the specific Notion pages and databases you explicitly
+                    share with NotionGlaze.
+                </li>
+                <li>
+                    <strong>Usage Data:</strong> We collect anonymous telemetry about
+                    dashboard usage to improve our product performance and UI.
+                </li>
+                <li>
+                    <strong>Payment Information:</strong> Handled entirely by Paddle.com.
+                    We only store subscription status, plan type, and transaction
+                    IDs.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. How We Use Information</h2>
+            <p>We use your information strictly to:</p>
+            <ul>
+                <li>
+                    Generate and host your high-performance website from Notion.
+                </li>
+                <li>Manage your account and subscription billing.</li>
+                <li>Provide customer support and security alerts.</li>
+                <li>
+                    Comply with legal obligations and prevent platform abuse.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Data Storage and Security</h2>
+            <p>
+                <strong>Encryption:</strong> Your Notion Access Token is encrypted
+                at rest using **AES-256-GCM** encryption. All data transmission is
+                secured via **TLS 1.2+**.
+            </p>
+            <p>
+                <strong>Infrastructure:</strong> We utilize Cloudflare's global edge
+                infrastructure. Data is stored in Cloudflare D1 (SQL) and images are
+                cached in Cloudflare R2.
+            </p>
+            <p>
+                <strong>Data Retention:</strong> We retain your data only while your
+                account is active. If you delete your account, all associated tokens
+                and cached content are permanently purged within 30 days.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Third-Party Services (Subprocessors)</h2>
+            <p>We use the following trusted third-party services:</p>
+            <ul>
+                <li>
+                    <strong>Cloudflare:</strong> Hosting, database, and infrastructure
+                    provider.
+                </li>
+                <li>
+                    <strong>Paddle:</strong> Merchant of Record and payment gateway.
+                </li>
+                <li>
+                    <strong>Notion:</strong> We access the Notion API to retrieve
+                    your content.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>6. Your Rights (GDPR/CCPA)</h2>
+            <p>
+                Depending on your location, you may have the following rights:
+            </p>
+            <ul>
+                <li>
+                    <strong>Access & Portability:</strong> Request a copy of the data
+                    we hold.
+                </li>
+                <li>
+                    <strong>Correction:</strong> Update inaccurate information in
+                    your profile.
+                </li>
+                <li>
+                    <strong>Deletion (Right to be Forgotten):</strong> Request permanent
+                    removal of your data.
+                </li>
+                <li>
+                    <strong>Revocation:</strong> Disconnect our access to your Notion
+                    workspace at any time.
+                </li>
+            </ul>
+            <p>
+                To exercise these rights, please contact us at
+                <a href="mailto:privacy@notionglaze.cc"
+                    >privacy@notionglaze.cc</a
+                >.
+            </p>
+        </section>
+
+        <section>
+            <h2>7. Merchant of Record</h2>
+            <p>
+                Our order process is conducted by our online reseller
+                Paddle.com. Paddle.com is the Merchant of Record for all our
+                orders. Paddle provides all customer service inquiries and
+                handles returns.
+            </p>
+        </section>
+
+        <section>
+            <h2>8. Contact Us</h2>
+            <p>
+                If you have questions about this Privacy Policy, please contact
+                us at <a href="mailto:contact@notionglaze.cc"
+                    >contact@notionglaze.cc</a
+                >.
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .legal-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        font-family: "Inter", sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .last-updated {
+        color: var(--muted-foreground);
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+
+    p {
+        line-height: 1.7;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--muted-foreground);
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

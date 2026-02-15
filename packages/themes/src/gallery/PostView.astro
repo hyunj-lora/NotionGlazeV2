@@ -1,0 +1,130 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="gallery-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <div class="meta">
+                {date && <time>{date}</time>}
+                {tags.map((tag: string) => <span class="tag">#{tag}</span>)}
+            </div>
+            <h1>{post.title}</h1>
+            {post.summary && <p class="summary">{post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <a href="/blog" class="back-link">Return to Gallery</a>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .gallery-theme-post {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 10rem 0 8rem 0;
+        text-align: left;
+    }
+
+    .meta {
+        font-family: "Space Mono", monospace;
+        font-size: 0.9rem;
+        color: #666;
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .tag {
+        color: #888;
+    }
+
+    h1 {
+        font-family: "Outfit", sans-serif;
+        font-size: 5rem;
+        font-weight: 900;
+        line-height: 1;
+        margin-bottom: 2rem;
+        letter-spacing: -0.05em;
+    }
+
+    .summary {
+        font-size: 1.5rem;
+        color: #888;
+        max-width: 700px;
+        line-height: 1.6;
+        font-weight: 500;
+    }
+
+    .content {
+        padding-bottom: 10rem;
+    }
+
+    .page-footer {
+        padding-bottom: 10rem;
+        text-align: center;
+    }
+
+    .back-link {
+        font-family: "Space Mono", monospace;
+        color: #666;
+        text-decoration: none;
+        border: 1px solid #333;
+        padding: 0.75rem 2rem;
+        transition: all 0.2s;
+    }
+
+    .back-link:hover {
+        color: #fff;
+        border-color: #fff;
+        background: #111;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+        .page-header {
+            margin: 6rem 0 4rem 0;
+        }
+    }
+</style>

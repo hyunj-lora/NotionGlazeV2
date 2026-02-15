@@ -1,0 +1,143 @@
+---
+const faqs = [
+    {
+        q: "Do I need to know how to code?",
+        a: "Absolutely not. If you can type in Notion, you can use NotionGlaze. We handle all the engineering, infrastructure, and performance optimization invisibly.",
+    },
+    {
+        q: "What happens if I cancel?",
+        a: "You keep your data. It's all in your Notion. We never hold your content hostage. If you cancel, your site will simply stop being rendered through our engine, but your Notion pages remain exactly as they are.",
+    },
+    {
+        q: "How does the Free Trial work?",
+        a: "You get full access to the Professional features for 14 days. No credit card required to start. We'll remind you before the trial ends so you can decide if you want to upgrade.",
+    },
+];
+---
+
+<section class="faq">
+    <div class="container">
+        <h2 class="title text-center">Frequently Asked Questions</h2>
+        <div class="faq-list">
+            {
+                faqs.map((faq, i) => (
+                    <div class="faq-item">
+                        <button class="faq-trigger" id={`faq-${i}`}>
+                            <span>{faq.q}</span>
+                            <span class="plus">+</span>
+                        </button>
+                        <div class="faq-content">
+                            <p>{faq.a}</p>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .faq {
+        padding: 8rem 0;
+        background: hsl(var(--background));
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 5rem;
+    }
+
+    .faq-list {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .faq-trigger {
+        width: 100%;
+        padding: 2rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: left;
+        cursor: pointer;
+        color: hsl(var(--foreground));
+    }
+
+    .faq-trigger .plus {
+        font-size: 2rem;
+        color: hsl(var(--primary));
+        transition: transform 0.3s;
+    }
+
+    .faq-item.active .plus {
+        transform: rotate(45deg);
+    }
+
+    .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+            max-height 0.3s ease,
+            padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-content {
+        max-height: 500px;
+        padding-bottom: 2rem;
+    }
+
+    .faq-content p {
+        font-size: 1.125rem;
+        line-height: 1.7;
+        color: hsl(var(--muted-foreground));
+    }
+
+    @media (max-width: 768px) {
+        .faq {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .faq {
+            padding: 3.5rem 0;
+        }
+        .faq-trigger {
+            font-size: 1.125rem;
+            padding: 1.5rem 0;
+        }
+    }
+</style>
+
+<script>
+    document.querySelectorAll(".faq-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+            const item = trigger.closest(".faq-item");
+            if (!item) return;
+
+            const isActive = item.classList.contains("active");
+
+            // Close others
+            document
+                .querySelectorAll(".faq-item")
+                .forEach((i) => i.classList.remove("active"));
+
+            if (!isActive) {
+                item.classList.add("active");
+            }
+        });
+    });
+</script>

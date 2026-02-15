@@ -1,0 +1,375 @@
+{
+  "version": "2.6",
+  "children": [
+    {
+      "type": "frame",
+      "id": "nAbPI",
+      "x": 0,
+      "y": 0,
+      "name": "Brutal Theme: Light Mode",
+      "width": 800,
+      "fill": "#FFDE17",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "nuRvS",
+          "fill": "#000000",
+          "content": "// SYSTEM.LOG: BRUTAL_ACTIVE",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "oVr9a",
+          "name": "L_H1",
+          "fill": "#000000",
+          "content": "RAW.POWER",
+          "fontFamily": "Inter",
+          "fontSize": 64,
+          "fontWeight": "900",
+          "letterSpacing": -2
+        },
+        {
+          "type": "text",
+          "id": "Hy6Ab",
+          "name": "L_H2",
+          "fill": "#000000",
+          "content": "HIGH_SATURATION_MODE",
+          "fontFamily": "Inter",
+          "fontSize": 32,
+          "fontWeight": "900"
+        },
+        {
+          "type": "text",
+          "id": "X7Hy7",
+          "name": "L_P",
+          "fill": "#000000",
+          "content": "We have moved beyond the neutral. Brutalism is about dominance. Bold colors against a saturated canvas create an unmistakable identity.",
+          "lineHeight": 1.5,
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "800"
+        },
+        {
+          "type": "frame",
+          "id": "21p97",
+          "name": "L_Quote",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "padding": 32,
+          "children": [
+            {
+              "type": "text",
+              "id": "hPX3p",
+              "fill": "#000000",
+              "content": "\"NEUTRALITY IS A WEAKNESS.\"",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "900"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "4r7Bn",
+          "name": "L_Callout",
+          "width": "fill_container",
+          "fill": "#00FF00",
+          "gap": 16,
+          "padding": 24,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "qMrEn",
+              "content": "📢",
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "jYvFX",
+              "fill": "#000000",
+              "content": "SYSTEM UPDATE: COLOR SUTURATION INCREASED TO 200%.",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "840"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Mvi3G",
+          "name": "L_Lists",
+          "layout": "vertical",
+          "gap": 16,
+          "children": [
+            {
+              "type": "text",
+              "id": "6X7rC",
+              "fill": "#000000",
+              "content": "■ PROTOCOL_CYAN",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "900"
+            },
+            {
+              "type": "text",
+              "id": "kf3x1",
+              "fill": "#000000",
+              "content": "■ PROTOCOL_MAGENTA",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "900"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vGm5Y",
+          "name": "L_Todo",
+          "gap": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "yeU4x",
+              "fill": "#00FFFF",
+              "width": 32,
+              "height": 32
+            },
+            {
+              "type": "text",
+              "id": "1bhJI",
+              "fill": "#000000",
+              "content": "OVERRIDE_DEFAULT_STYLES",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "900"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "KfAP5",
+          "name": "L_Code",
+          "width": "fill_container",
+          "fill": "#000000",
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "rbAFC",
+              "fill": "#00FF00",
+              "content": "import { Chaos } from 'brutal';",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "4L0Fi",
+          "name": "L_Figure",
+          "width": "fill_container",
+          "fill": "#FF00FF",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 4,
+          "children": [
+            {
+              "type": "frame",
+              "id": "86cBg",
+              "name": "L_ImgFrame",
+              "width": "fill_container",
+              "height": 360,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1769520331776.png",
+                "mode": "fill"
+              }
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "PWF7B",
+          "name": "L_Divider",
+          "width": "fill_container",
+          "height": 0
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "uJZBF",
+      "x": 900,
+      "y": 0,
+      "name": "Brutal Theme: Dark Mode",
+      "width": 800,
+      "fill": "#2E1065",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 60,
+      "children": [
+        {
+          "type": "text",
+          "id": "Eb19K",
+          "fill": "#FFDE17",
+          "content": "// SYSTEM.LOG: DARK_BRUTAL_ACTIVE",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "MPgN2",
+          "name": "D_H1",
+          "fill": "#FFFFFF",
+          "content": "VOID.CORE",
+          "fontFamily": "Inter",
+          "fontSize": 64,
+          "fontWeight": "900",
+          "letterSpacing": -2
+        },
+        {
+          "type": "frame",
+          "id": "CXoXc",
+          "name": "D_Quote",
+          "width": "fill_container",
+          "fill": "#000000",
+          "layout": "vertical",
+          "padding": 32,
+          "children": [
+            {
+              "type": "text",
+              "id": "hB7dH",
+              "fill": "#FFFFFF",
+              "content": "\"EMBRACE THE SATURATION.\"",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "900"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ox5V6",
+          "name": "D_Callout",
+          "width": "fill_container",
+          "fill": "#FF00FF",
+          "gap": 16,
+          "padding": 24,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "yhU3w",
+              "content": "⚡",
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "y6qs1",
+              "fill": "#FFFFFF",
+              "content": "CRITICAL: ENERGY LEVELS AT PEAK SATURATION.",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "840"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OVkR3",
+          "name": "D_Todo",
+          "gap": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "c3iQu",
+              "fill": "#00FF00",
+              "width": 32,
+              "height": 32
+            },
+            {
+              "type": "text",
+              "id": "HZk3x",
+              "fill": "#FFFFFF",
+              "content": "EXECUTE_DARK_PROTOCOL",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "900"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "QdE2Y",
+          "name": "D_Code",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "padding": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "J4qpt",
+              "fill": "#000000",
+              "content": "protocol.engage('DARK_BRUTAL');",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "B26SP",
+          "name": "D_Figure",
+          "width": "fill_container",
+          "fill": "#00FFFF",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 4,
+          "children": [
+            {
+              "type": "frame",
+              "id": "BoAxp",
+              "name": "D_ImgFrame",
+              "width": "fill_container",
+              "height": 360,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./images/generated-1769520339146.png",
+                "mode": "fill"
+              }
+            }
+          ]
+        },
+        {
+          "type": "line",
+          "id": "CHQdd",
+          "name": "D_Divider",
+          "width": "fill_container",
+          "height": 0
+        }
+      ]
+    }
+  ]
+}

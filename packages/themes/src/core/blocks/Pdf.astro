@@ -1,0 +1,53 @@
+---
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const pdfUrl = content.file?.url || content.external?.url;
+const pdfName = content.caption?.[0]?.plain_text || "View PDF";
+---
+
+<div class={`notion-pdf-wrapper ${className || ""}`}>
+    <a
+        href={pdfUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="notion-pdf-link"
+    >
+        <span class="notion-pdf-icon">📄</span>
+        <span class="notion-pdf-name">{pdfName}</span>
+    </a>
+</div>
+
+<style>
+    .notion-pdf-wrapper {
+        margin: 1rem 0;
+    }
+
+    .notion-pdf-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.2s;
+    }
+
+    .notion-pdf-link:hover {
+        background: #f9f9f9;
+    }
+
+    .notion-pdf-icon {
+        font-size: 1.25rem;
+    }
+
+    .notion-pdf-name {
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>

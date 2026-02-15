@@ -1,0 +1,154 @@
+---
+import DashboardLayout from "@notionglaze/ui/DashboardLayout.astro";
+import { TenantService } from "@notionglaze/core";
+import EngineSettings from "../../components/dashboard/settings/EngineSettings.astro";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+let sources: any[] = [];
+let error: string | null = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+
+        if (tenant) {
+            const { results: sResults } = await db
+                .prepare("SELECT * FROM tenant_sources WHERE tenant_id = ?")
+                .bind(tenant.id)
+                .all();
+            sources = sResults || [];
+        }
+    } catch (e) {
+        console.error("Sources Page DB Error:", e);
+        error = e instanceof Error ? e.message : "Database error";
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="Publishing Sources" tenant={tenant}>
+    <div class="settings-container max-w-4xl mx-auto pb-24">
+        <header class="mb-12">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                Content Sources
+            </h1>
+            <p class="text-muted-foreground">
+                Manage your Notion databases and sync status.
+            </p>
+        </header>
+
+        <EngineSettings tenant={tenant} sources={sources} config={config} />
+
+        {/* Floating Save Button */}
+        <div
+            class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] settings-footer-sticky"
+            id="sources-footer"
+        >
+            <div
+                class="flex items-center gap-8 py-3 px-6 rounded-2xl border bg-background/80 backdrop-blur-md shadow-2xl sticky-inner"
+            >
+                <div class="flex items-center gap-2">
+                    <div class="h-2 w-2 rounded-full bg-primary animate-pulse">
+                    </div>
+                    <p class="text-sm font-semibold tracking-tight">
+                        Unsaved changes detected
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="px-6 h-10 rounded-lg text-sm font-medium border bg-background hover:bg-accent"
+                        onclick="window.location.reload()">Reset</button
+                    >
+                    <button
+                        class="px-8 h-10 rounded-lg text-sm font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                        id="save-sources-btn">Commit Changes</button
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            const footer = document.getElementById("sources-footer");
+            const showSave = () => footer?.classList.add("show");
+
+            // Listen for changes
+            document.addEventListener("input", (e) => {
+                if (e.target.matches("input, select, textarea")) showSave();
+            });
+            document.addEventListener("settings-change", showSave);
+
+            // Save logic
+            const saveBtn = document.getElementById("save-sources-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    sources: Array.from(
+                        document.querySelectorAll(".source-item"),
+                    ).map((item) => ({
+                        id: item.dataset.id,
+                        name: item.querySelector(".source-name-input")?.value,
+                        auto_tag:
+                            item.querySelector(".source-tag-input")?.value,
+                    })),
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast("Content sources updated!", "success");
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</DashboardLayout>
+
+<style>
+    .settings-footer-sticky {
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 1rem);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .settings-footer-sticky.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+    }
+
+    /* Override the shared section grid for this standalone page */
+    :global(.settings-section) {
+        display: grid;
+        grid-template-cols: 1fr !important;
+        gap: 2rem !important;
+        margin-bottom: 4rem !important;
+    }
+    :global(.settings-card) {
+        background: var(--background);
+        border: 1px solid var(--border);
+        border-radius: 24px !important;
+        padding: 2rem !important;
+    }
+</style>

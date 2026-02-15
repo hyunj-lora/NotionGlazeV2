@@ -1,0 +1,187 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="terminal-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <div class="meta">
+                <span class="label">[DATE]:</span>
+                {date || "UNKNOWN"}
+                <br />
+                <span class="label">[TAGS]:</span>
+                {tags.join(", ") || "NONE"}
+            </div>
+            <h1 class="post-title">> {post.title}</h1>
+            {post.summary && <div class="summary-line">// {post.summary}</div>}
+            <div class="hud-divider"></div>
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+
+        <div class="page-footer">
+            <div class="hud-divider"></div>
+            <div class="command-line">
+                <span class="prompt">$</span>
+                <a href="/blog" class="back-link">cd ..</a>
+                <span class="cursor">_</span>
+            </div>
+        </div>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+    :root {
+        --terminal-bg: #fdf6e3;
+        --terminal-fg: #586e75;
+        --terminal-border: #93a1a1;
+        --terminal-accent: #b58900;
+        --terminal-dim: #93a1a1;
+        --terminal-code-bg: #eee8d5;
+        --terminal-font: "Space Mono", monospace;
+    }
+
+    :global(.dark) {
+        --terminal-bg: #0c0c0c;
+        --terminal-fg: #00ff00;
+        --terminal-border: #00ff00;
+        --terminal-accent: #00cc00;
+        --terminal-dim: #004400;
+        --terminal-code-bg: #001100;
+    }
+
+    .terminal-theme-post {
+        background-color: var(--terminal-bg);
+        color: var(--terminal-fg);
+        font-family: var(--terminal-font);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 8rem 0 4rem 0;
+    }
+
+    .meta {
+        font-size: 0.9rem;
+        color: var(--terminal-dim);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .label {
+        color: var(--terminal-accent);
+    }
+
+    .post-title {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 2rem;
+        color: var(--terminal-fg);
+    }
+
+    .summary-line {
+        color: var(--terminal-dim);
+        font-style: italic;
+        margin-bottom: 2rem;
+    }
+
+    .hud-divider {
+        height: 2px;
+        background: repeating-linear-gradient(
+            90deg,
+            var(--terminal-border),
+            var(--terminal-border) 10px,
+            transparent 10px,
+            transparent 20px
+        );
+        opacity: 0.3;
+        margin: 2rem 0;
+    }
+
+    .content {
+        padding-bottom: 8rem;
+    }
+
+    .page-footer {
+        padding-bottom: 12rem;
+    }
+
+    .command-line {
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .prompt {
+        color: var(--terminal-accent);
+    }
+
+    .back-link {
+        color: var(--terminal-fg);
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .cursor {
+        width: 10px;
+        height: 1.2rem;
+        background: var(--terminal-accent);
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .post-title {
+            font-size: 1.75rem;
+        }
+    }
+</style>

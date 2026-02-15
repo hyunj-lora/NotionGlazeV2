@@ -1,0 +1,68 @@
+---
+import { DashboardLayout, PlanBadge, PricingCard } from "@notionglaze/ui";
+
+const { tenant, userId, runtime } = Astro.locals;
+
+const PADDLE_CLIENT_TOKEN = runtime?.env?.PADDLE_CLIENT_TOKEN || "";
+const envValue = runtime?.env?.PADDLE_ENVIRONMENT;
+const PADDLE_ENVIRONMENT = envValue === "production" ? "production" : "sandbox";
+const PADDLE_PRO_MONTHLY_PRICE_ID =
+    runtime?.env?.PADDLE_PRO_MONTHLY_PRICE_ID || "";
+const PADDLE_PRO_ANNUALLY_PRICE_ID =
+    runtime?.env?.PADDLE_PRO_ANNUALLY_PRICE_ID || "";
+---
+
+<DashboardLayout title="Billing" tenant={tenant || undefined}>
+    <div class="max-w-3xl mx-auto flex flex-col gap-8">
+        <PlanBadge tenant={tenant || null} />
+
+        {
+            tenant?.plan !== "pro" && (
+                <PricingCard
+                    monthlyPriceId={PADDLE_PRO_MONTHLY_PRICE_ID}
+                    annuallyPriceId={PADDLE_PRO_ANNUALLY_PRICE_ID}
+                    tenantId={userId || ""}
+                />
+            )
+        }
+
+        <div class="border-t border-border mt-12 pt-12 text-center pb-12">
+            <h3 class="text-lg font-black tracking-tight mb-2">
+                Need help with your subscription?
+            </h3>
+            <p class="text-sm text-muted-foreground font-medium mb-6">
+                Contact our support team for any billing-related inquiries or
+                enterprise custom plans.
+            </p>
+            <a
+                href="mailto:contact@notionglaze.cc"
+                class="text-sm font-bold text-primary hover:opacity-80 transition-opacity"
+            >
+                Contact Support →
+            </a>
+        </div>
+    </div>
+
+    <!-- Paddle.js Setup -->
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js" is:inline></script>
+    <script>
+        import { initBilling } from "../../scripts/billing";
+
+        const scriptTag = document.querySelector("script[data-config]");
+        const config = scriptTag
+            ? JSON.parse(scriptTag.getAttribute("data-config") || "{}")
+            : {};
+
+        initBilling(config);
+    </script>
+
+    <!-- Pass server vars to client script safely -->
+    <script
+        is:inline
+        id="billing-config"
+        data-config={JSON.stringify({
+            token: PADDLE_CLIENT_TOKEN,
+            environment: PADDLE_ENVIRONMENT,
+            tenantId: userId,
+        })}></script>
+</DashboardLayout>

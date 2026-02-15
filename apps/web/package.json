@@ -1,0 +1,45 @@
+{
+  "name": "@notionglaze/web",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "deploy": "export CLOUDFLARE_ACCOUNT_ID=ba5e8b86f33e63c791da65ef587bdc98 && npm run db:migrate:prod && astro build && wrangler pages deploy dist --project-name=notion-glaze-landing --no-bundle",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "vitest run",
+    "db:migrate:local": "wrangler d1 migrations apply notion-glaze-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply notion-glaze-db --remote"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.12",
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/tailwind": "^6.0.2",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@notionglaze/core": "*",
+    "@notionglaze/themes": "*",
+    "@notionglaze/ui": "*",
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "@upstash/redis": "^1.36.2",
+    "astro": "^5.17.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.34.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "satori": "^0.19.1",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18",
+    "uuid": "^13.0.0",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0",
+    "@vitest/ui": "^4.0.18",
+    "vitest": "^4.0.18"
+  }
+}

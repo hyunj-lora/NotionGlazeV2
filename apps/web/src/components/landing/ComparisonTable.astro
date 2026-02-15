@@ -1,0 +1,130 @@
+---
+const features = [
+    {
+        name: "Image Hosting",
+        glaze: "Permanent Vault (Never Breaks)",
+        others: "Temporary Links (Breaks often)",
+    },
+    {
+        name: "Speed",
+        glaze: "Edge Network (0.1s)",
+        others: "Client-side Rendering (Slow)",
+    },
+    {
+        name: "Databases",
+        glaze: "Multi-Source Fusion",
+        others: "Single DB Only",
+    },
+    { name: "SEO", glaze: "AI-Powered", others: "Manual / None" },
+    {
+        name: "Sync Logic",
+        glaze: "Incremental (Heist Sync)",
+        others: "Full Re-fetch (Slow)",
+    },
+];
+---
+
+<section class="comparison">
+    <div class="container">
+        <h2 class="title text-center">Why we are different.</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th class="highlight">NotionGlaze</th>
+                        <th>Generic Builder X</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        features.map((f) => (
+                            <tr>
+                                <td>{f.name}</td>
+                                <td class="high-cell">{f.glaze}</td>
+                                <td>{f.others}</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<style>
+    .comparison {
+        padding: 8rem 0;
+        background: hsl(var(--background));
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 5rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        border-radius: 30px;
+        border: 1px solid hsl(var(--border));
+        background: var(--surface-1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    th,
+    td {
+        padding: 2rem;
+        border-bottom: 1px solid hsl(var(--border));
+    }
+
+    th {
+        font-size: 1.125rem;
+        font-weight: 700;
+        background: var(--surface-2);
+    }
+
+    th.highlight {
+        color: hsl(var(--primary));
+        background: hsl(var(--primary) / 0.05);
+    }
+
+    td.high-cell {
+        font-weight: 700;
+        color: hsl(var(--foreground));
+        background: hsl(var(--primary) / 0.02);
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+        .comparison {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .comparison {
+            padding: 3.5rem 0;
+        }
+        .table-container {
+            border-radius: 16px;
+        }
+        th,
+        td {
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+    }
+</style>

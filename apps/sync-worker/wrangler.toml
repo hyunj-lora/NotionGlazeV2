@@ -1,0 +1,26 @@
+name = "notion-glaze-sync-worker"
+account_id = "ba5e8b86f33e63c791da65ef587bdc98"
+main = "src/index.ts"
+compatibility_date = "2025-02-15"
+compatibility_flags = [ "nodejs_compat" ]
+# migrations_dir = "../web/migrations"
+
+[dev]
+port = 8790
+
+[triggers]
+crons = ["*/5 * * * *"] # Every 5 minutes
+
+[[d1_databases]]
+binding = "DB"
+database_name = "notion-glaze-db"
+database_id = "0f179af5-16fa-4627-8ad6-ecdf8d50707d"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "notionglaze-assets"
+
+[ai]
+binding = "AI"
+
+

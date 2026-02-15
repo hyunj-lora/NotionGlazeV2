@@ -1,0 +1,60 @@
+---
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["dashboard-card", className]}>
+    <slot />
+</div>
+
+<style>
+    .dashboard-card {
+        background: hsl(var(--card) / 0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid hsl(var(--border) / 0.5);
+        border-radius: 24px;
+        padding: 2rem;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            hsl(var(--primary) / 0.3),
+            transparent
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    @media (min-width: 768px) {
+        .dashboard-card {
+            padding: 2.5rem;
+        }
+    }
+
+    .dashboard-card:hover {
+        border-color: hsl(var(--primary) / 0.2);
+        box-shadow:
+            0 10px 40px -15px rgba(0, 0, 0, 0.1),
+            0 0 20px -5px hsl(var(--primary) / 0.05);
+        transform: translateY(-2px);
+    }
+
+    .dashboard-card:hover::before {
+        opacity: 1;
+    }
+</style>

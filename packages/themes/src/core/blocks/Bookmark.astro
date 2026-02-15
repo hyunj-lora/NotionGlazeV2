@@ -1,0 +1,104 @@
+---
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<a
+    href={content.url}
+    class={`notion-bookmark ${className || ""}`}
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    <div class="notion-bookmark-info">
+        <div class="notion-bookmark-title">
+            {content.title || content.url}
+        </div>
+        <div class="notion-bookmark-desc">
+            {content.description}
+        </div>
+        <div class="notion-bookmark-link">
+            {content.url}
+        </div>
+    </div>
+    {
+        content.cover && (
+            <div class="notion-bookmark-cover">
+                <img src={content.cover} alt="" />
+            </div>
+        )
+    }
+</a>
+
+<style>
+    .notion-bookmark {
+        display: flex;
+        text-decoration: none;
+        border: 1px solid;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 2rem 0;
+        color: inherit;
+    }
+
+    .notion-bookmark-info {
+        flex: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
+        overflow: hidden;
+    }
+
+    .notion-bookmark-title {
+        font-weight: 600;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .notion-bookmark-desc {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .notion-bookmark-link {
+        font-size: 0.75rem;
+        opacity: 0.6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .notion-bookmark-cover {
+        width: 120px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .notion-bookmark-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    @media (max-width: 640px) {
+        .notion-bookmark-cover {
+            display: none;
+        }
+    }
+</style>

@@ -1,0 +1,82 @@
+---
+interface Props {
+    id: string;
+    saveId: string;
+    message?: string;
+    actionText?: string;
+}
+
+const {
+    id,
+    saveId,
+    message = "Unsaved changes detected",
+    actionText = "Commit Changes",
+} = Astro.props;
+---
+
+<div
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] settings-footer-sticky"
+    id={id}
+>
+    <div
+        class="flex items-center gap-8 py-3 px-6 rounded-2xl border bg-background/80 backdrop-blur-md shadow-2xl sticky-inner"
+    >
+        <div class="flex items-center gap-2">
+            <div class="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+            <p class="text-sm font-semibold tracking-tight">
+                {message}
+            </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <button
+                class="px-6 h-10 rounded-lg text-sm font-medium border bg-background hover:bg-accent transition-colors"
+                onclick="window.location.reload()">Reset</button
+            >
+            <button
+                class="px-8 h-10 rounded-lg text-sm font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                id={saveId}>{actionText}</button
+            >
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    // Global helper for showing toast/footer can be defined here or in layout
+    document.addEventListener("DOMContentLoaded", () => {
+        const footers = document.querySelectorAll(".settings-footer-sticky");
+
+        const show = (targetId) => {
+            const footer = document.getElementById(targetId);
+            if (footer) footer.classList.add("show");
+        };
+
+        // Auto-detect changes if footers are present
+        if (footers.length > 0) {
+            document.addEventListener("input", (e) => {
+                if (e.target.matches("input, select, textarea")) {
+                    footers.forEach((f) => f.classList.add("show"));
+                }
+            });
+            document.addEventListener("settings-change", () => {
+                footers.forEach((f) => f.classList.add("show"));
+            });
+        }
+    });
+</script>
+
+<style>
+    .settings-footer-sticky {
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 1rem);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .settings-footer-sticky.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+    }
+    .sticky-inner {
+        border-color: hsl(var(--border) / 0.5);
+    }
+</style>

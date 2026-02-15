@@ -1,0 +1,97 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import Renderer from "./Renderer.astro";
+import type { SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    post: any;
+    blocks: any[];
+    idToSlugMap: Record<string, string>;
+    tags: string[];
+}
+
+const { config, post, blocks, idToSlugMap, tags } = Astro.props;
+
+const date = post.published_at
+    ? new Date(post.published_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      })
+    : null;
+---
+
+<div class="notion-theme-post">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="page-header">
+            <h1>{post.title}</h1>
+            <div class="meta">
+                {date && <time>{date}</time>}
+                {tags.length > 0 && <span class="sep">·</span>}
+                {tags.map((tag: string) => <span class="tag">#{tag}</span>)}
+            </div>
+            {post.summary && <p class="summary">{post.summary}</p>}
+        </header>
+
+        <article class="content">
+            <Renderer blocks={blocks} idToSlugMap={idToSlugMap} />
+        </article>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .notion-theme-post {
+        --foreground: #37352f;
+        --background: #ffffff;
+        --border: rgba(55, 53, 47, 0.16);
+        --muted-foreground: rgba(55, 53, 47, 0.65);
+    }
+
+    :global(.dark) .notion-theme-post {
+        --foreground: rgba(255, 255, 255, 0.9);
+        --background: #191919;
+        --border: rgba(255, 255, 255, 0.14);
+        --muted-foreground: rgba(255, 255, 255, 0.5);
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .page-header {
+        margin: 4rem 0 2rem 0;
+    }
+
+    .meta {
+        font-size: 0.9rem;
+        color: var(--muted-foreground);
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .summary {
+        font-size: 1.2rem;
+        color: var(--muted-foreground);
+        margin-bottom: 2rem;
+    }
+
+    .content {
+        padding-bottom: 6rem;
+    }
+</style>

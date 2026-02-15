@@ -1,0 +1,81 @@
+---
+import { DashboardLayout } from "@notionglaze/ui";
+import { StudioLayout } from "../../components/studio/StudioLayout";
+import "../../styles/globals.css";
+
+const { tenant } = Astro.locals;
+
+// Mock initial blocks for demonstration
+const initialBlocks = [
+    {
+        id: "b1",
+        type: "heading_1",
+        heading_1: {
+            rich_text: [{ plain_text: "The Future of Notion-to-SaaS" }],
+        },
+    },
+    {
+        id: "b2",
+        type: "paragraph",
+        paragraph: {
+            rich_text: [
+                {
+                    plain_text:
+                        "Dragging blocks here will trigger an asynchronous remapping job on the backend worker. This keeps the UI buttery smooth.",
+                },
+            ],
+        },
+    },
+    {
+        id: "b3",
+        type: "paragraph",
+        paragraph: {
+            rich_text: [
+                {
+                    plain_text:
+                        "Try moving these blocks around! They will batch multiple moves into a single network request.",
+                },
+            ],
+        },
+    },
+    {
+        id: "b4",
+        type: "callout",
+        callout: {
+            icon: { emoji: "🚀" },
+            rich_text: [
+                {
+                    plain_text:
+                        "Expert-Level Implementation: V-N Identity Mapping and Transactional Sagos.",
+                },
+            ],
+        },
+    },
+];
+---
+
+<DashboardLayout title="Studio Editor" tenant={tenant || undefined}>
+    <div
+        class="studio-embed h-[calc(100vh-160px)] -m-8 border border-border rounded-2xl overflow-hidden bg-background"
+    >
+        <StudioLayout client:load initialBlocks={initialBlocks} />
+    </div>
+</DashboardLayout>
+
+<style is:global>
+    /* Studio specific overrides to make it feel immersive even inside dashboard */
+    .studio-embed {
+        box-shadow:
+            0 0 0 1px hsl(var(--border)),
+            0 20px 50px -20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Custom Scrollbars */
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: hsl(var(--border));
+        border-radius: 10px;
+    }
+</style>

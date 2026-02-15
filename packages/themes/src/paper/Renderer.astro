@@ -1,0 +1,151 @@
+---
+import NotionRenderer from "../core/NotionRenderer.astro";
+import Database from "../components/Database.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+}
+
+const { blocks, idToSlugMap } = Astro.props;
+
+const components = {
+    DatabaseLink: Database,
+};
+---
+
+<div class="paper-theme">
+    <NotionRenderer
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        components={components}
+    />
+</div>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
+
+    .paper-theme {
+        max-width: 720px;
+        margin: 0 auto;
+        line-height: 1.8;
+        font-size: 1.0625rem;
+        color: #44403c;
+        font-family: "Lora", serif;
+        padding-bottom: 8rem;
+    }
+
+    :global(.dark) .paper-theme {
+        color: #a8a29e;
+    }
+
+    /* Shared Component Overrides */
+
+    /* Bookmark */
+    .paper-theme :global(.notion-bookmark) {
+        margin: 3rem 0 !important;
+        background: #ffffff !important;
+        border: 1px solid #e7e5e4 !important;
+        border-radius: 4px !important;
+        display: flex !important;
+        text-decoration: none !important;
+        transition: border-color 0.2s !important;
+    }
+    :global(.dark) .paper-theme :global(.notion-bookmark) {
+        background: #292524 !important;
+        border-color: #44403c !important;
+    }
+    .paper-theme :global(.notion-bookmark:hover) {
+        border-color: #a8a29e !important;
+    }
+
+    /* Divider */
+    .paper-theme :global(.notion-divider) {
+        border: 0 !important;
+        border-top: 1px solid #d6d3d1 !important;
+        width: 150px !important;
+        margin: 6rem auto !important;
+        background: transparent !important;
+    }
+    :global(.dark) .paper-theme :global(.notion-divider) {
+        border-color: #44403c !important;
+    }
+
+    /* Quote */
+    .paper-theme :global(.notion-quote) {
+        border-left: 3px solid #d6d3d1 !important;
+        font-style: italic;
+        padding-left: 2rem !important;
+    }
+    :global(.dark) .paper-theme :global(.notion-quote) {
+        border-color: #44403c !important;
+    }
+
+    /* Callout */
+    .paper-theme :global(.notion-callout) {
+        background: #fafaf9 !important;
+        border: 1px solid #e7e5e4 !important;
+        border-radius: 4px !important;
+    }
+    :global(.dark) .paper-theme :global(.notion-callout) {
+        background: #292524 !important;
+        border-color: #44403c !important;
+    }
+
+    /* Code */
+    .paper-theme :global(.notion-code) {
+        border: 1px solid #e7e5e4 !important;
+        border-radius: 4px !important;
+    }
+    :global(.dark) .paper-theme :global(.notion-code) {
+        border-color: #44403c !important;
+    }
+
+    .paper-theme :global(p) {
+        margin-bottom: 1.75rem;
+    }
+
+    .paper-theme :global(h1),
+    .paper-theme :global(h2),
+    .paper-theme :global(h3) {
+        color: #1c1917;
+        margin-top: 4.5rem;
+        margin-bottom: 2rem;
+        line-height: 1.3;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    :global(.dark) .paper-theme :global(h1),
+    :global(.dark) .paper-theme :global(h2),
+    :global(.dark) .paper-theme :global(h3) {
+        color: #f5f5f4;
+    }
+
+    .paper-theme :global(h1) {
+        font-size: 3rem;
+        letter-spacing: -0.03em;
+        margin-bottom: 4rem;
+        text-align: center;
+    }
+
+    .paper-theme :global(h2) {
+        font-size: 1.75rem;
+        margin-top: 5rem;
+    }
+
+    .paper-theme :global(h3) {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .paper-theme :global(ul),
+    .paper-theme :global(ol) {
+        margin-bottom: 2.5rem;
+        padding-left: 1.5rem;
+    }
+
+    .paper-theme :global(li) {
+        margin-bottom: 1rem;
+    }
+</style>

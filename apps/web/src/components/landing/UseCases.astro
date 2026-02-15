@@ -1,0 +1,120 @@
+---
+const cases = [
+    {
+        title: "The Portfolio",
+        desc: "Designers who can't afford broken images in front of clients.",
+        icon: "🎨",
+    },
+    {
+        title: "The Startup Blog",
+        desc: "Founders who need top-tier SEO but love Notion's writing speed.",
+        icon: "🚀",
+    },
+    {
+        title: "The Knowledge Base",
+        desc: "Teams needing a fast, searchable wiki that doesn't feel like Notion.",
+        icon: "🧠",
+    },
+    {
+        title: "The Newsletter",
+        desc: "Writers who want a permanent, high-performance archive of their issues.",
+        icon: "📨",
+    },
+];
+---
+
+<section class="use-cases">
+    <div class="container">
+        <div class="header">
+            <h2 class="title">Who is NotionGlaze for?</h2>
+        </div>
+        <div class="grid">
+            {
+                cases.map((c) => (
+                    <div class="case-card">
+                        <div class="icon">{c.icon}</div>
+                        <h3>{c.title}</h3>
+                        <p>{c.desc}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .use-cases {
+        padding: 8rem 0;
+        background: hsl(var(--background));
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 5rem;
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .case-card {
+        padding: 3rem;
+        background: var(--surface-1);
+        border-radius: 24px;
+        border: 1px solid hsl(var(--border));
+        transition: all 0.3s ease;
+    }
+
+    .case-card:hover {
+        transform: translateY(-8px);
+        background: var(--surface-2);
+        border-color: hsl(var(--primary));
+    }
+
+    .case-card .icon {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .case-card h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .case-card p {
+        color: hsl(var(--muted-foreground));
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .use-cases {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+        }
+        .header {
+            margin-bottom: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .use-cases {
+            padding: 3.5rem 0;
+        }
+        .grid {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+        .case-card {
+            padding: 2rem;
+        }
+    }
+</style>

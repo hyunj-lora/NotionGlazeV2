@@ -1,0 +1,87 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import PostCard from "./PostCard.astro";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+}
+
+const { config, posts } = Astro.props;
+
+const siteName = config.site_name || "NotionGlaze Blog";
+const siteDescription =
+    config.site_description ||
+    "Thoughts, essays, and technical captures sync'd from Notion.";
+
+// PostCard is imported directly above
+---
+
+<div class="notion-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1>{siteName}</h1>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .notion-theme-home {
+        --foreground: #37352f;
+        --background: #ffffff;
+        --muted-foreground: rgba(55, 53, 47, 0.65);
+    }
+
+    :global(.dark) .notion-theme-home {
+        --foreground: rgba(255, 255, 255, 0.9);
+        --background: #191919;
+        --muted-foreground: rgba(255, 255, 255, 0.5);
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .blog-header {
+        margin: 4rem 0;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .blog-header p {
+        font-size: 1.1rem;
+        color: var(--muted-foreground);
+    }
+
+    .post-list {
+        margin-top: 2rem;
+    }
+</style>

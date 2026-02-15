@@ -1,0 +1,250 @@
+---
+import { THEME_CONFIGS, type ThemeName } from "@notionglaze/themes";
+import { hexToHsl } from "./lib/utils";
+
+interface Props {
+	title: string;
+	description?: string;
+	ogImage?: string;
+	siteConfig?: any;
+	siteTheme?: ThemeName;
+	isDashboard?: boolean;
+	canonical?: string;
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description = "The ultimate high-performance blog engine for Notion creators. Permanent assets and instant global delivery.",
+	ogImage,
+	siteConfig: propsSiteConfig,
+	siteTheme: propsSiteTheme,
+	isDashboard = false,
+	canonical,
+	noindex = false,
+} = Astro.props;
+
+const siteConfig = propsSiteConfig || (Astro.locals as any).siteConfig || {};
+const analyticsId = (Astro.locals as any).runtime?.env?.ANALYTICS_ID;
+const userAnalyticsId = siteConfig.user_analytics_id;
+
+const activeThemeName = (propsSiteTheme || siteConfig.site_theme || "zero") as ThemeName;
+const themeConfig = THEME_CONFIGS[activeThemeName] || THEME_CONFIGS.zero;
+
+// Brand Color Processing:
+// 1. Dashboard always uses branding indigo (#6366f1)
+// 2. User site uses custom brand_color if set
+// 3. User site uses theme's primary color as fallback
+const DASHBOARD_INDIGO = "#6366f1";
+const brandColor = isDashboard 
+	? DASHBOARD_INDIGO 
+	: (siteConfig.brand_color || themeConfig.colors.primary || DASHBOARD_INDIGO);
+
+const customCss = siteConfig.custom_css || "";
+const favicon = siteConfig.favicon_url || "/logo.png";
+
+const primaryHsl = hexToHsl(brandColor);
+
+// Typography Engine
+const siteFont = siteConfig.site_font || "standard";
+const FONT_PRESETS: Record<string, { heading: string, body: string }> = {
+	standard: { heading: '"Outfit", sans-serif', body: '"Inter", sans-serif' },
+	classic: { heading: '"Playfair Display", serif', body: '"EB Garamond", serif' },
+	modern: { heading: '"Pretendard", sans-serif', body: '"Pretendard", sans-serif' },
+	minimal: { heading: '"Plus Jakarta Sans", sans-serif', body: '"Lexend", sans-serif' },
+	tech: { heading: '"Space Mono", monospace', body: '"Inter", sans-serif' }
+};
+
+const activeFonts = FONT_PRESETS[siteFont] || FONT_PRESETS.standard;
+const borderRadius = siteConfig.border_radius || "0.75rem";
+const contentWidth = siteConfig.content_width || "1200px";
+
+// Theme-specific CSS Variables (normalized HSL parts)
+const themeVars = {
+	bgLight: hexToHsl(themeConfig.colors.background.light),
+	bgDark: hexToHsl(themeConfig.colors.background.dark),
+	textLight: hexToHsl(themeConfig.colors.text.light),
+	textDark: hexToHsl(themeConfig.colors.text.dark),
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" href={favicon} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<script is:inline define:vars={{ siteAppearance: siteConfig.site_appearance || 'system' }}>
+			(function() {
+				const isDashboard = window.location.pathname.startsWith('/dashboard');
+				const storageTheme = localStorage.getItem('theme');
+				const doc = document.documentElement;
+				
+				const applyTheme = (t) => {
+					if (t === 'system') {
+						const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+						doc.setAttribute('data-theme', isDark ? 'dark' : 'light');
+					} else {
+						doc.setAttribute('data-theme', t);
+					}
+				};
+
+				// Dashboard always prioritizes specific user toggle, else system
+				if (isDashboard) {
+					applyTheme(storageTheme || 'system');
+				} else {
+					// Blog prioritizes site configuration appearance
+					applyTheme(siteAppearance);
+				}
+				
+				window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+					const currentTheme = isDashboard ? (localStorage.getItem('theme') || 'system') : siteAppearance;
+					if (currentTheme === 'system') {
+						applyTheme('system');
+					}
+				});
+			})();
+		</script>
+
+		{
+			analyticsId && (
+				<script
+					defer
+					src="https://static.cloudflareinsights.com/beacon.min.js"
+					data-cf-beacon={`{"token": "${analyticsId}"}`}
+				/>
+			)
+		}
+
+		{
+			userAnalyticsId && (
+				<!-- User-provided Google Analytics -->
+				<script async src={`https://www.googletagmanager.com/gtag/js?id=${userAnalyticsId}`}></script>
+				<script is:inline define:vars={{ userAnalyticsId }}>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', userAnalyticsId);
+				</script>
+			)
+		}
+
+		{siteConfig.custom_head_scripts && <Fragment set:html={siteConfig.custom_head_scripts} />}
+
+		<style define:vars={{ primaryHsl, headingFont: activeFonts.heading, bodyFont: activeFonts.body, borderRadius, contentWidth, ...themeVars }}>
+			:root {
+				--primary: var(--primaryHsl);
+				--accent: var(--primaryHsl);
+				--heading-font: var(--headingFont);
+				--body-font: var(--bodyFont);
+				--border-radius: var(--borderRadius);
+				--content-width: var(--contentWidth);
+
+				/* Theme Globals */
+				--background: var(--bgLight);
+				--foreground: var(--textLight);
+			}
+
+			:root[data-theme="dark"] {
+				--background: var(--bgDark);
+				--foreground: var(--textDark);
+			}
+
+			body {
+				font-family: var(--body-font);
+				background-color: hsl(var(--background));
+				color: hsl(var(--foreground));
+				margin: 0;
+			}
+
+			h1, h2, h3, h4, h5, h6 {
+				font-family: var(--heading-font);
+			}
+
+			/* Announcement Bar */
+			.glaze-announcement {
+				background: hsl(var(--primary));
+				color: hsl(var(--primary-foreground));
+				padding: 0.6rem;
+				text-align: center;
+				font-size: 0.85rem;
+				font-weight: 700;
+				display: block;
+				text-decoration: none;
+				transition: opacity 0.2s;
+			}
+			.glaze-announcement:hover {
+				opacity: 0.9;
+			}
+
+			/* Floating CTA */
+			.glaze-floating-cta {
+				position: fixed;
+				bottom: 2rem;
+				right: 2rem;
+				background: hsl(var(--primary));
+				color: hsl(var(--primary-foreground));
+				padding: 0.8rem 1.5rem;
+				border-radius: 2rem;
+				font-weight: 700;
+				font-size: 0.9rem;
+				text-decoration: none;
+				box-shadow: 0 4px 20px hsl(var(--primary) / 0.4);
+				z-index: 1000;
+				transition: transform 0.2s, box-shadow 0.2s;
+			}
+			.glaze-floating-cta:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 8px 30px hsl(var(--primary) / 0.6);
+			}
+		</style>
+
+		{customCss && <style is:inline>{customCss}</style>}
+
+		<!-- SEO Tags -->
+		{noindex && <meta name="robots" content="noindex, follow" />}
+		{canonical && <link rel="canonical" href={canonical} />}
+
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content={ogImage || `${Astro.url.origin}/og-card.png`} />
+		
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage || `${Astro.url.origin}/og-card.png`} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@500;700;900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lexend:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+	</head>
+	<body class={`notion-glaze-theme-${activeThemeName}`}>
+		{siteConfig.announcement_text && (
+			<a href={siteConfig.announcement_link || "#"} class="glaze-announcement">
+				{siteConfig.announcement_text}
+			</a>
+		)}
+		<slot />
+		{siteConfig.cta_text && (
+			<a href={siteConfig.cta_link || "#"} class="glaze-floating-cta">
+				{siteConfig.cta_text}
+			</a>
+		)}
+	</body>
+</html>
+
+<style is:global>
+	h1,
+	h2,
+	h3 {
+		color: inherit;
+	}
+</style>

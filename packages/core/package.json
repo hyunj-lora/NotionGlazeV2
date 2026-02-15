@@ -1,0 +1,23 @@
+{
+    "name": "@notionglaze/core",
+    "version": "0.0.1",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@notionhq/client": "^2.2.15",
+        "bullmq": "^5.69.2",
+        "crypto-js": "^4.2.0",
+        "ioredis": "^5.9.3"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20260214.0",
+        "typescript": "^5.0.0",
+        "vitest": "^4.0.18"
+    }
+}

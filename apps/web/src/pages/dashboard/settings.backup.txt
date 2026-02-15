@@ -1,0 +1,1054 @@
+---
+import DashboardLayout from "@notionglaze/ui/DashboardLayout.astro";
+import { THEMES } from "@notionglaze/themes";
+
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId || "test-user";
+
+let tenant: any = null;
+let error: string | null = null;
+let sources: any[] = [];
+let posts: any[] = [];
+
+if (db) {
+    try {
+        tenant = await db
+            .prepare("SELECT * FROM tenants WHERE id = ?")
+            .bind(tenantId)
+            .first();
+            
+        const { results: sResults } = await db.prepare('SELECT * FROM tenant_sources WHERE tenant_id = ?').bind(tenantId).all();
+        sources = sResults || [];
+
+        const { results: pResults } = await db.prepare('SELECT id, title, slug FROM posts WHERE tenant_id = ? ORDER BY title ASC').bind(tenantId).all();
+        posts = pResults || [];
+    } catch (e) {
+        console.error("Settings DB Error:", e);
+        error = e instanceof Error ? e.message : "Database error";
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+
+const siteUrl = tenant?.custom_domain 
+    ? `https://${tenant.custom_domain}` 
+    : `https://${tenant?.subdomain || 'your-site'}.notionglaze.cc`;
+---
+
+<DashboardLayout title="Settings" tenant={tenant}>
+    <div class="settings-container">
+        <div class="settings-grid">
+            <!-- Horizontal Pill Navigation -->
+            <nav class="settings-nav">
+                <button class="nav-pill active" data-group="essence">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span>Essence</span>
+                </button>
+                <button class="nav-pill" data-group="studio">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                    <span>Studio</span>
+                </button>
+                <button class="nav-pill" data-group="architecture">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    <span>Architecture</span>
+                </button>
+                <button class="nav-pill" data-group="engine">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path></svg>
+                    <span>Engine</span>
+                </button>
+                <button class="nav-pill" data-group="marketing">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12l-4-4v8l4-4z"></path><path d="M2 11l10-9 10 9v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V11z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Growth</span>
+                </button>
+                <button class="nav-pill" data-group="lab">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.3 11c.5-1.5.4-3.5-.9-4.8a5 5 0 0 0-6.7-.1M18 14h-8a3 3 0 0 0-3 3v2M12 14v5"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                    <span>Advanced</span>
+                </button>
+            </nav>
+
+            <!-- Main Panels -->
+            <div class="settings-content-wrapper">
+                
+                <!-- PANEL: ESSENCE -->
+                <div class="settings-panel active" id="panel-essence">
+                    <section class="settings-section" id="sec-identity">
+                        <div class="section-info">
+                            <h3>Digital Identity</h3>
+                            <p>Define the core soul and description of your digital workspace.</p>
+                        </div>
+                        <div class="settings-card">
+                            <div class="form-group">
+                                <label>Blog Name</label>
+                                <input type="text" id="site-name" value={config.site_name || "NotionGlaze Blog"} />
+                            </div>
+                            <div class="form-group">
+                                <label>Manifesto (Description)</label>
+                                <textarea id="site-description" rows="3">{config.site_description || ""}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Favicon (Icon)</label>
+                                <div class="favicon-uproader-wrap">
+                                    <div class="favicon-preview-box">
+                                        <img id="favicon-preview-img" src={config.favicon_url || "/favicon.ico"} alt="Favicon" />
+                                    </div>
+                                    <div class="favicon-actions">
+                                        <input type="text" id="favicon-url" value={config.favicon_url || ""} placeholder="https://..." />
+                                        <div class="file-upload-trigger">
+                                            <span>Or upload file</span>
+                                            <input type="file" id="favicon-file-input" accept="image/*" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-domains">
+                        <div class="section-info">
+                            <h3>Network & Hosting</h3>
+                            <p>Configure how the world accesses your content.</p>
+                        </div>
+                        <div class="settings-card">
+                            <div class="form-group">
+                                <label>Subdomain</label>
+                                <div class="input-with-action">
+                                    <input type="text" id="subdomain" value={tenant?.subdomain || ""} />
+                                    <span class="input-suffix">.notionglaze.cc</span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 2rem;">
+                                <div class="label-with-badge">
+                                    <label>Custom Domain</label>
+                                    <span class="badge pro-badge">PRO</span>
+                                </div>
+                                <input type="text" id="custom-domain" value={tenant?.custom_domain || ""} placeholder="blog.yourdomain.com" disabled={tenant?.plan !== 'pro'} />
+                                {tenant?.plan !== 'pro' && <p class="help-text warning">Upgrade to Pro to enable custom domains.</p>}
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- PANEL: STUDIO -->
+                <div class="settings-panel" id="panel-studio">
+                    <section class="settings-section" id="sec-themes">
+                        <div class="section-info">
+                            <h3>Visual Core (Themes)</h3>
+                            <p>Choose the aesthetic foundation for your blog.</p>
+                        </div>
+                        <div class="settings-card premium-card">
+                            <div class="theme-grid">
+                                {THEMES.map((theme) => (
+                                    <div class="theme-option-card">
+                                        <input type="radio" name="site_theme" id={`theme-${theme}`} value={theme} checked={config.site_theme === theme || (!config.site_theme && theme === "zero")} class="hidden-radio" />
+                                        <label for={`theme-${theme}`} class="theme-visual" data-theme-preview={theme}>
+                                            <div class={`theme-preview tp-${theme}`}>
+                                                <div class="tp-overlay">
+                                                    <span class="theme-label">{theme.toUpperCase()}</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <!-- Theme Preview Modal (Overlay) -->
+                        <div id="theme-preview-modal" class="modal-overlay">
+                            <div class="modal-content">
+                                <button class="modal-close">&times;</button>
+                                <div class="modal-header">
+                                    <h2 id="modal-theme-title">Theme Preview</h2>
+                                    <p>Visual layout and spacing preview.</p>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="theme-preview-frame" class="preview-frame">
+                                        <!-- Dynamic Preview Content -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="save-btn primary modal-apply-btn">Use This Theme</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-typography">
+                        <div class="section-info">
+                            <h3>Typography & Layout</h3>
+                            <p>Calibrate reading comfort and spatial density.</p>
+                        </div>
+                        <div class="settings-card">
+                             <div class="form-group">
+                                <label>Typography Engine</label>
+                                <div class="font-options">
+                                    {[
+                                        { id: "standard", family: "'Outfit', sans-serif" },
+                                        { id: "classic", family: "'EB Garamond', serif" },
+                                        { id: "modern", family: "'Pretendard', sans-serif" },
+                                        { id: "minimal", family: "'Plus Jakarta Sans', sans-serif" },
+                                        { id: "tech", family: "'Space Mono', monospace" },
+                                    ].map((font) => (
+                                        <label class="font-option">
+                                            <input type="radio" name="site-font" value={font.id} checked={(!config.site_font && font.id === "standard") || config.site_font === font.id} />
+                                            <div class="font-preview" style={`font-family: ${font.family};`}>Aa</div>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                             <div class="grid-2-cols" style="margin-top: 2rem;">
+                                <div class="form-group">
+                                    <label>Corner Radius (Drag to adjust)</label>
+                                    <div class="range-with-value">
+                                        <input type="range" id="border-radius-slider" min="0" max="40" value={parseInt(config.border_radius) || 12} class="premium-range" />
+                                        <span id="radius-value-display">{config.border_radius || "12px"}</span>
+                                        <input type="hidden" id="border-radius" value={config.border_radius || "12px"} />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Container Width (Selection)</label>
+                                    <div class="width-presets">
+                                        {["800px", "1000px", "1200px", "1400px", "100%"].map(w => (
+                                            <button type="button" class={`width-preset-btn ${config.content_width === w || (!config.content_width && w==='1200px') ? 'active' : ''}`} data-width={w}>{w}</button>
+                                        ))}
+                                        <input type="hidden" id="content-width" value={config.content_width || "1200px"} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Real-time UI Preview Card -->
+                            <div class="live-ui-preview">
+                                <div class="preview-label">Live Polish Preview</div>
+                                <div class="preview-canvas">
+                                    <div class="preview-box" id="ui-preview-box">
+                                        <div class="preview-header"></div>
+                                        <div class="preview-body">
+                                            <div class="preview-line"></div>
+                                            <div class="preview-line mid"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-appearance">
+                        <div class="section-info">
+                            <h3>Ambient Appearance</h3>
+                            <p>Control the light and dark aspects of your UI.</p>
+                        </div>
+                        <div class="settings-card">
+                             <div class="appearance-options">
+                                {["system", "light", "dark"].map((mode) => (
+                                    <label class={`appearance-pill ${(!config.site_appearance && mode === "system") || config.site_appearance === mode ? 'active' : ''}`}>
+                                        <input type="radio" name="site-appearance" value={mode} checked={(!config.site_appearance && mode === "system") || config.site_appearance === mode} />
+                                        <span>{mode.toUpperCase()}</span>
+                                    </label>
+                                ))}
+                            </div>
+                             <div class="form-group" style="margin-top: 2rem;">
+                                <label>Brand Hue (Accent Color)</label>
+                                <div class="brand-color-box">
+                                     <div class="color-preview" id="brand-color-preview" style={`background: ${config.brand_color || "#6366f1"};`}></div>
+                                    <input type="text" id="brand-color-text" value={config.brand_color || "#6366f1"} />
+                                    <input type="color" id="brand-color" value={config.brand_color || "#6366f1"} class="hidden-color-picker" />
+                                    <button class="btn-picker-trigger" id="picker-trigger">Pick Color</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- PANEL: ARCHITECTURE -->
+                <div class="settings-panel" id="panel-architecture">
+                    <section class="settings-section" id="sec-homepage">
+                        <div class="section-info">
+                            <h3>Home Page Strategy</h3>
+                            <p>Choose between a blog feed or a custom Notion landing page.</p>
+                        </div>
+                        <div class="settings-card">
+                             <div class="form-group">
+                                <label>Selected Landing Page</label>
+                                <select id="home-page-id">
+                                    <option value="" selected={!config.home_page_id}>📜 Default Blog Feed</option>
+                                    {posts.map(post => (
+                                        <option value={post.id} selected={config.home_page_id === post.id}>📄 {post.title}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-navigation">
+                        <div class="section-info">
+                            <h3>Global Navigation (GNB)</h3>
+                            <p>Define the primary menu appearing at the top of your site.</p>
+                        </div>
+                        <div class="settings-card">
+                              <div class="nav-manager">
+                                <div id="nav-items-list" class="nav-items-list">
+                                    {config.navigation && config.navigation.map((item: any) => (
+                                        <div class="nav-item-row premium-row">
+                                            <input type="text" class="nav-label-input premium-input" value={item.label} placeholder="Label" />
+                                            <select class="nav-type-select premium-select">
+                                                <option value="post" selected={item.type === 'post'}>Post</option>
+                                                <option value="url" selected={item.type === 'url'}>URL</option>
+                                            </select>
+                                            <div class="nav-value-wrap">
+                                                {item.type === 'post' ? (
+                                                    <select class="nav-value-input premium-select">
+                                                        {posts.map(p => (<option value={p.id} selected={item.value === p.id}>{p.title}</option>))}
+                                                    </select>
+                                                ) : (
+                                                    <input type="text" class="nav-value-input premium-input" value={item.value} placeholder="https://..." />
+                                                )}
+                                            </div>
+                                            <button type="button" class="remove-nav-btn premium-remove">&times;</button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button type="button" id="add-nav-item-btn" class="add-nav-btn">+ Add Navigation Link</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- PANEL: ENGINE -->
+                <div class="settings-panel" id="panel-engine">
+                    <section class="settings-section" id="sec-sources">
+                        <div class="section-info">
+                            <h3>Notion Content Sources</h3>
+                            <p>Pull content from multiple databases into a single site.</p>
+                        </div>
+                        <div class="settings-card">
+                            <div id="sources-list" class="sources-list">
+                                {sources.map(source => (
+                                    <div class="source-item premium-source-card" data-id={source.id}>
+                                        <div class="source-header-meta">
+                                            <span class="source-icon">📡</span>
+                                            <strong>{source.name || "Untitled Source"}</strong>
+                                        </div>
+                                        <div class="source-form-body">
+                                            <div class="form-group"><label>Source Name</label><input type="text" class="source-name-input premium-input" value={source.name} /></div>
+                                            <div class="form-group"><label>Database ID</label><input type="text" class="source-db-input premium-input" value={source.notion_db_id} /></div>
+                                            <div class="form-group"><label>Automated Tag</label><input type="text" class="source-tag-input premium-input" value={source.auto_tag || ''} /></div>
+                                        </div>
+                                        <div class="source-footer">
+                                            <button class="save-btn primary source-save-btn">Update</button>
+                                            <button class="source-delete-btn premium-remove-btn">Delete Source</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <button id="add-source-btn" class="add-nav-btn">+ Connect New Database</button>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-connection">
+                        <div class="section-info">
+                            <h3>Integration Engine</h3>
+                            <p>Secret keys and connectivity status to the Notion cloud.</p>
+                        </div>
+                        <div class="settings-card">
+                             {tenant?.notion_access_token ? (
+                                <div class="connection-status-card">
+                                    <div class="status-header"><span class="status-dot pulse" /> <strong>Connected to {config.workspace_name || "Workspace"}</strong></div>
+                                    <div class="connection-actions">
+                                        <a href="/api/v1/gateway/notion/init" class="save-btn secondary">Switch Workspace</a>
+                                    </div>
+                                </div>
+                             ) : (
+                                <a href="/api/v1/gateway/notion/init" class="save-btn primary">Connect Notion</a>
+                             )}
+                        </div>
+
+                        <div class="danger-zone">
+                            <div class="danger-header">
+                                <h4>Danger Zone</h4>
+                                <p>Irreversible actions that affect your site's connectivity.</p>
+                            </div>
+                            <div class="danger-box">
+                                <div class="danger-item">
+                                    <div class="item-meta">
+                                        <strong>Disconnect Notion</strong>
+                                        <span>Revoke all access tokens and stop synchronization immediately.</span>
+                                    </div>
+                                    <button class="btn-danger-outline" id="disconnect-btn">Revoke Access</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- PANEL: MARKETING -->
+                <div class="settings-panel" id="panel-marketing">
+                    <section class="settings-section" id="sec-social">
+                        <div class="section-info">
+                            <h3>Social Footprint</h3>
+                            <p>Link your other platforms for universal reach. Enter full URLs or handles.</p>
+                        </div>
+                        <div class="settings-card">
+                            <div id="social-links-list" class="social-links-list">
+                                {config.social_links && Object.entries(config.social_links).map(([platform, url]) => (
+                                    <div class="social-link-item" data-platform={platform}>
+                                        <div class="platform-meta">
+                                            <span class={`platform-icon pi-${platform}`}> {platform.charAt(0).toUpperCase()} </span>
+                                            <span class="platform-name">{platform}</span>
+                                        </div>
+                                        <span class="url-text">{url}</span>
+                                        <button class="remove-social-btn">&times;</button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="social-input-group premium-social-adder">
+                                <select id="social-platform-select" class="premium-select">
+                                    <option value="twitter">X (Twitter)</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="github">GitHub</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="youtube">YouTube</option>
+                                    <option value="threads">Threads</option>
+                                    <option value="facebook">Facebook</option>
+                                    <option value="other">Other (Custom URL)</option>
+                                </select>
+                                <input type="text" id="social-url-input" class="premium-input" placeholder="URL or handle..." />
+                                <button id="add-social-btn" class="add-btn-mini">Add</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-analytics">
+                        <div class="section-info">
+                            <h3>Analytics Engine</h3>
+                            <p>Measure visitor behavior and performance.</p>
+                        </div>
+                        <div class="settings-card">
+                             <div class="form-group"><label>Google Analytics (GA4) ID</label><input type="text" id="user-analytics-id" value={config.user_analytics_id || ""} placeholder="G-XXXXXXXXXX" /></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- PANEL: LAB -->
+                <div class="settings-panel" id="panel-lab">
+                    <section class="settings-section" id="sec-seo">
+                        <div class="section-info">
+                            <h3>SEO Infrastructure</h3>
+                            <p>Machine-readable endpoints for search engine spiders.</p>
+                        </div>
+                        <div class="settings-card feeds-card">
+                            <div class="feed-item">
+                                <label>RSS Feed</label>
+                                <div class="copy-input-wrap">
+                                    <input type="text" value={`${siteUrl}/rss.xml`} readonly />
+                                    <button class="btn-copy-feed" data-copy={`${siteUrl}/rss.xml`}>Copy Link</button>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <label>Sitemap.xml</label>
+                                <div class="copy-input-wrap">
+                                    <input type="text" value={`${siteUrl}/sitemap.xml`} readonly />
+                                    <button class="btn-copy-feed" data-copy={`${siteUrl}/sitemap.xml`}>Copy Link</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="settings-section" id="sec-code">
+                        <div class="section-info">
+                            <h3>Custom DNA Injection</h3>
+                            <p>Hardcode styles and logic directly into your blog's head.</p>
+                        </div>
+                        <div class="settings-card">
+                            <div class="form-group">
+                                <label>Custom CSS</label>
+                                <p class="small-desc">Target site elements using custom selectors. Reflected in the <code>&lt;head&gt;</code> of your live site.</p>
+                                <textarea id="custom-css" rows="5" placeholder=".my-class { color: red; }">{config.custom_css || ""}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Head Scripts</label>
+                                <p class="small-desc">Inject scripts for tracking or custom functionality.</p>
+                                <textarea id="custom-head-scripts" rows="5" placeholder="<script>...</script>">{config.custom_head_scripts || ""}</textarea>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-footer-sticky">
+            <div class="sticky-inner">
+                <p class="sticky-hint">Unsaved changes detected</p>
+                <div class="sticky-actions">
+                    <button class="save-btn secondary" onclick="window.location.reload()">Reset</button>
+                    <button class="save-btn primary" id="save-settings-btn">Commit Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI Interaction Scripts -->
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            // --- 1. Navigation Shell ---
+            const pills = document.querySelectorAll(".nav-pill");
+            const panels = document.querySelectorAll(".settings-panel");
+            pills.forEach(p => p.addEventListener("click", () => {
+                const group = p.getAttribute("data-group");
+                pills.forEach(x => x.classList.toggle("active", x === p));
+                panels.forEach(x => x.classList.toggle("active", x.id === `panel-${group}`));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }));
+
+            // --- 2. Change Tracking ---
+            const footer = document.querySelector(".settings-footer-sticky");
+            const showSave = () => footer?.classList.add("show");
+            document.querySelectorAll("input, select, textarea").forEach(i => {
+                i.addEventListener("change", showSave);
+                i.addEventListener("input", showSave);
+            });
+
+            // --- 3. Favicon Upload ---
+            const favInput = document.getElementById('favicon-file-input');
+            const favPreview = document.getElementById('favicon-preview-img');
+            const favUrlVal = document.getElementById('favicon-url');
+            favInput?.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if(!file) return;
+                const fd = new FormData(); fd.append('file', file);
+                try {
+                   favPreview.style.opacity = '0.3';
+                   const res = await fetch('/api/v1/setup/upload', { method: 'POST', body: fd });
+                   const data = await res.json();
+                   if(data.url) { favUrlVal.value = data.url; favPreview.src = data.url; showSave(); }
+                } catch(err) { alert('Upload failed'); }
+                finally { favPreview.style.opacity = '1'; }
+            });
+
+            // --- 4. Live Polish Preview ---
+            const radiusSlider = document.getElementById('border-radius-slider');
+            const radiusHidden = document.getElementById('border-radius');
+            const radiusDisplay = document.getElementById('radius-value-display');
+            const widthBtns = document.querySelectorAll('.width-preset-btn');
+            const widthHidden = document.getElementById('content-width');
+            const previewBox = document.getElementById('ui-preview-box');
+
+            function syncPreview() {
+                if(!previewBox) return;
+                previewBox.style.borderRadius = radiusHidden.value;
+                previewBox.style.width = widthHidden.value === '100%' ? '100%' : '180px';
+            }
+
+            radiusSlider?.addEventListener('input', (e) => {
+                const val = e.target.value + 'px';
+                radiusDisplay.textContent = val;
+                radiusHidden.value = val;
+                syncPreview(); showSave();
+            });
+
+            widthBtns.forEach(b => b.addEventListener('click', () => {
+                const w = b.getAttribute('data-width');
+                widthHidden.value = w;
+                widthBtns.forEach(x => x.classList.toggle('active', x === b));
+                syncPreview(); showSave();
+            }));
+
+            // --- 5. Theme Preview Modal ---
+            const themeTriggers = document.querySelectorAll('.theme-visual');
+            const modal = document.getElementById('theme-preview-modal');
+            const modalTitle = document.getElementById('modal-theme-title');
+            const modalFrame = document.getElementById('theme-preview-frame');
+            let selectedTheme = '';
+
+            const THEME_PREVIEWS = {
+                zero: `
+                    <div style="padding: 60px; background: #ffffff; color: #111; font-family: 'Inter', sans-serif;">
+                        <div style="font-size: 14px; font-weight: 800; color: #6366f1; letter-spacing: 0.1em; margin-bottom: 24px;">ZERO // MINIMAL</div>
+                        <h2 style="font-size: 48px; font-weight: 800; margin: 0 0 32px 0; letter-spacing: -0.02em;">Heading One</h2>
+                        <p style="font-size: 18px; color: #444; line-height: 1.7; margin-bottom: 40px; max-width: 600px;">Zero focuses on pure legibility and ample whitespace. No distractions, just your content floating in a sea of calm.</p>
+                        
+                        <div style="margin-bottom: 40px; padding: 32px; background: #fafafa; border-radius: 12px; border: 1px solid #eee;">
+                            <h3 style="font-size: 20px; font-weight: 700; margin: 0 0 16px 0;">Sub-section Analysis</h3>
+                            <div style="border-left: 3px solid #111; padding-left: 24px; margin: 24px 0;">
+                                <p style="font-size: 20px; font-style: italic; color: #555; margin: 0;">“Digital gardening is the act of cultivating your own corner of the internet with intention.”</p>
+                            </div>
+                        </div>
+
+                        <div style="border: 1px solid #eee; border-radius: 8px; overflow: hidden;">
+                            <div style="display: flex; background: #f9f9f9; padding: 12px 24px; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 700; color: #666;">
+                                <div style="width: 200px;">FEATURE</div>
+                                <div>STATUS</div>
+                            </div>
+                            <div style="display: flex; padding: 16px 24px; border-bottom: 1px solid #f5f5f5; font-size: 14px;">
+                                <div style="width: 200px;">Scroll Physics</div>
+                                <div style="color: #6366f1; font-weight: 600;">Active</div>
+                            </div>
+                             <div style="display: flex; padding: 16px 24px; font-size: 14px;">
+                                <div style="width: 200px;">Legibility</div>
+                                <div style="color: #10b981; font-weight: 600;">Optimized</div>
+                            </div>
+                        </div>
+                    </div>`,
+                minimal: `
+                    <div style="padding: 60px; background: #fafafa; color: #1a1a1a; font-family: 'Inter', sans-serif;">
+                        <div style="font-size: 14px; font-weight: 800; color: #6366f1; letter-spacing: 0.1em; margin-bottom: 24px;">MINIMAL // BALANCED</div>
+                        <h2 style="font-size: 40px; font-weight: 700; margin: 0 0 24px 0; color: #1a1a1a;">Balanced Data Structure</h2>
+                         <p style="font-size: 18px; color: #555; line-height: 1.6; margin-bottom: 40px;">A slightly softer take on minimalism. Minimal combines subtle grays and balanced spacing for long-form reading.</p>
+                        
+                        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                             <div style="display: flex; background: #f8fafc; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.05em;">
+                                <div style="width: 150px;">METRIC</div>
+                                <div>VALUE</div>
+                            </div>
+                            <div style="display: flex; padding: 16px 24px; border-bottom: 1px solid #f1f5f9;">
+                                <div style="width: 150px; color: #1e293b; font-weight: 500;">Retention</div>
+                                <div style="color: #6366f1; font-weight: 600;">94.2%</div>
+                            </div>
+                             <div style="display: flex; padding: 16px 24px;">
+                                <div style="width: 150px; color: #1e293b; font-weight: 500;">Bounce Rate</div>
+                                <div style="color: #10b981; font-weight: 600;">12.5%</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 40px; height: 300px; background: #f1f5f9; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
+                            Image Visual
+                        </div>
+                    </div>`,
+                zen: `
+                    <div style="padding: 80px 60px; background: #f5f5f0; color: #444; font-family: 'Inter', sans-serif; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: #e0e0d5; border-radius: 50%; margin: 0 auto 32px;"></div>
+                        <div style="font-size: 14px; font-weight: 800; color: #8b8b7e; letter-spacing: 0.15em; margin-bottom: 24px;">ZEN // PEACEFUL</div>
+                        <h2 style="font-size: 56px; font-weight: 300; margin: 0 0 24px 0; color: #333;">The Sound of Water</h2>
+                        <div style="width: 80px; height: 1px; background: #dcdcd0; margin: 32px auto;"></div>
+                        <p style="font-size: 18px; color: #666; line-height: 1.8; margin-bottom: 48px; max-width: 500px; margin-left: auto; margin-right: auto;">Zen uses warm tones and wide tracking to slow down the reader experience. Nature does not hurry, yet everything is accomplished.</p>
+                        
+                         <p style="font-size: 20px; font-style: italic; color: #8b8b7e; margin-bottom: 48px;">"A moment of clarity in a world of noise."</p>
+
+                         <div style="margin: 0 auto; width: 100%; height: 300px; background: #e6e6e1; border-radius: 2px;"></div>
+                    </div>`,
+                glass: `
+                    <div style="padding: 60px; background: #0c0d11; color: #fff; font-family: 'Inter', sans-serif; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -20%; right: -20%; width: 60%; height: 60%; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%); filter: blur(60px);"></div>
+                         <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 300px; background: linear-gradient(to top, #0c0d11, transparent);"></div>
+
+                        <div style="position: relative; z-index: 2;">
+                            <div style="font-size: 14px; font-weight: 700; color: #818cf8; letter-spacing: 0.1em; margin-bottom: 20px;">LUMINOUS HEADER</div>
+                            <h2 style="font-size: 48px; font-weight: 800; margin: 0 0 32px 0; text-shadow: 0 0 30px rgba(99,102,241,0.3);">Glaze Effect</h2>
+                            
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; backdrop-filter: blur(10px); margin-bottom: 32px;">
+                                <p style="font-size: 18px; color: rgba(255,255,255,0.8); line-height: 1.6; font-style: italic; margin: 0;">"Transparency is the key to deep immersion in digital spaces."</p>
+                            </div>
+
+                             <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 32px;">
+                                <div style="color: #6366f1; font-weight: 600; font-size: 15px; margin-bottom: 12px;">▼ Click to expand neural data</div>
+                                <div style="padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.1);">
+                                    <div style="font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 4px;">Data stream 01: Optimized</div>
+                                    <div style="font-size: 14px; color: rgba(255,255,255,0.5);">Data stream 02: Latency low</div>
+                                </div>
+                            </div>
+                            
+                            <div style="padding: 24px; background: #000000; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 13px; color: #a5b4fc; border: 1px solid #1e1b4b;">
+                                &lt;GlazeEffect intensity={0.8} /&gt;
+                            </div>
+                        </div>
+                    </div>`,
+                paper: `
+                    <div style="padding: 60px; background: #fdfbf7; color: #1a1a1a; font-family: 'EB Garamond', serif;">
+                        <div style="font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 800; color: #1a1a1a; letter-spacing: 0.1em; margin-bottom: 32px; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px;">VOL. 01 — EDITION 24</div>
+                        
+                        <h2 style="font-size: 48px; font-weight: 900; margin: 0 0 16px 0; line-height: 1.1; font-family: 'Inter', sans-serif;">CHAPTER II: THE TEXTURE</h2>
+                        <p style="font-size: 20px; color: #333; line-height: 1.5; margin-bottom: 40px; font-style: italic;">Where digital meets the tactile sensation of the broadsheet.</p>
+                        
+                        <div style="display: flex; gap: 40px;">
+                            <div style="flex: 1;">
+                                <p style="font-size: 18px; line-height: 1.7; margin: 0 0 24px 0;">The power of print survives in the digital medium through intentional spacing and serif-driven hierarchy.</p>
+                                <div style="border-left: 2px solid #1a1a1a; padding-left: 20px; margin: 24px 0;">
+                                     <p style="font-size: 22px; font-style: italic; margin: 0;">"Literature is the most agreeable way of ignoring life."</p>
+                                </div>
+                            </div>
+                             <div style="flex: 1;">
+                                <p style="font-size: 18px; line-height: 1.7; margin: 0;">Classic newspapers mastered the art of information density. We apply those same rules to your Notion content to create a sense of authority and permanence.</p>
+                            </div>
+                        </div>
+                    </div>`,
+                brutal: `
+                    <div style="padding: 50px; background: #FFDE03; color: #000; font-family: 'Inter', sans-serif; border: 4px solid #000;">
+                        <div style="background: #fff; border: 4px solid #000; display: inline-block; padding: 8px 16px; font-weight: 900; box-shadow: 4px 4px 0 #000; margin-bottom: 32px;">NEO-BRUTAL</div>
+                        
+                        <h2 style="font-size: 56px; font-weight: 900; margin: 0 0 24px 0; line-height: 0.9;">STAY LOUD.</h2>
+                        
+                        <div style="background: #fff; border: 4px solid #000; box-shadow: 8px 8px 0 #000; padding: 32px; margin-bottom: 40px;">
+                            <h3 style="font-size: 24px; font-weight: 900; margin: 0 0 16px 0;">RAW DATA BLOCK</h3>
+                            <p style="font-size: 18px; font-weight: 700; line-height: 1.5;">Brutalism is about honesty and raw materials. In UI, this translates to bold borders.</p>
+                        </div>
+                        
+                        <div style="background: #000; color: #fff; padding: 12px; margin-bottom: 32px;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #fff; padding-bottom: 8px; margin-bottom: 12px; font-weight: 900;">
+                                <span>INPUT</span><span>OUTPUT</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-family: 'Space Mono', monospace;">
+                                <span>git push</span><span style="color: #4ade80;">SUCCESS</span>
+                            </div>
+                        </div>
+                        
+                         <div style="background: #ffffff; border: 4px solid #000; padding: 16px; text-align: center; font-weight: 900; font-size: 20px; box-shadow: 6px 6px 0 #000; cursor: pointer;">
+                            BOLD BUTTON
+                        </div>
+                    </div>`,
+                terminal: `
+                    <div style="padding: 50px; background: #000; color: #4ade80; font-family: 'Space Mono', monospace;">
+                        <div style="opacity: 0.7; margin-bottom: 32px;">[SYS] THEME_LOADED: TERMINAL_V2</div>
+                        
+                        <h2 style="font-size: 32px; margin: 0 0 24px 0; color: #4ade80;">> git commit -m 'Init'</h2>
+                        
+                        <div style="border: 1px dashed rgba(74, 222, 128, 0.4); padding: 24px; margin-bottom: 32px;">
+                            <p style="margin: 0 0 16px 0;">// File System View</p>
+                            <div style="opacity: 0.8;">
+                                <div>├── posts/</div>
+                                <div>│   ├── hello_world.md</div>
+                                <div>│   └── logic.js</div>
+                                <div>└── assets/</div>
+                            </div>
+                        </div>
+
+                         <div style="border: 1px solid #4ade80; margin-bottom: 32px;">
+                            <div style="background: rgba(74, 222, 128, 0.1); padding: 8px 16px; border-bottom: 1px solid #4ade80;">
+                                <span style="margin-right: 40px;">ID</span><span>LOG_LEVEL</span>
+                            </div>
+                             <div style="padding: 8px 16px;">
+                                <span style="margin-right: 40px; opacity: 0.7;">0x1</span><span style="color: #fff;">INFO</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #1a1a1a; padding: 16px; border-left: 4px solid #4ade80; color: #fff;">
+                            curl -X POST https://api.notionglaze.cc
+                        </div>
+                    </div>`,
+                tech: `
+                    <div style="padding: 50px; background: #05070a; color: #fff; font-family: 'Inter', sans-serif;">
+                        <div style="display: flex; gap: 12px; margin-bottom: 32px;">
+                            <div style="padding: 4px 12px; border: 1px solid #10b981; color: #10b981; font-size: 11px; font-weight: 700; border-radius: 20px; background: rgba(16, 185, 129, 0.1);">● ONLINE</div>
+                            <div style="padding: 4px 12px; border: 1px solid #6366f1; color: #6366f1; font-size: 11px; font-weight: 700; border-radius: 20px; background: rgba(99, 102, 241, 0.1);">● SYNCED</div>
+                        </div>
+                        
+                        <h2 style="font-size: 40px; font-weight: 800; margin: 0 0 24px 0; letter-spacing: -0.03em;">03 // DATA PIPELINE</h2>
+                        
+                         <div style="background: rgba(99,102,241,0.05); border-left: 2px solid #6366f1; padding: 24px; margin-bottom: 32px;">
+                             <p style="font-size: 18px; color: #94a3b8; font-style: italic; margin: 0;">"Architecture is the reaching out for liberty."</p>
+                        </div>
+                        
+                        <div style="border: 1px solid #1e293b; background: #0f172a; border-radius: 8px; overflow: hidden; margin-bottom: 32px;">
+                            <div style="padding: 12px 20px; background: #1e293b; font-size: 12px; font-weight: 700; color: #fff;">BLUEPRINT.JSON</div>
+                            <div style="padding: 24px; font-family: 'Space Mono', monospace; font-size: 13px; color: #a5b4fc;">
+                                systemctl enable notionglaze.service
+                            </div>
+                        </div>
+                         <div style="height: 200px; border: 1px solid #1e293b; border-radius: 8px; background: #0c0e14; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 12px;">HUD ELEMENT PLACEHOLDER</div>
+                    </div>`,
+                gallery: `
+                    <div style="background: #111; color: #fff; font-family: 'Inter', sans-serif;">
+                         <div style="height: 350px; background: #222; display: flex; align-items: center; justify-content: center; color: #444;">Main Feature Image</div>
+                         
+                         <div style="padding: 48px;">
+                            <div style="font-size: 14px; color: #6366f1; font-weight: 700; margin-bottom: 16px;">VISUAL ANTHOLOGY</div>
+                            <h2 style="font-size: 40px; font-weight: 300; margin: 0 0 32px 0;">The Curated View</h2>
+                             <p style="font-size: 20px; color: #999; line-height: 1.6; margin-bottom: 48px; text-align: center; font-style: italic;">"Photography is the only language that can be understood anywhere in the world."</p>
+                            
+                            <div style="display: flex; gap: 24px;">
+                                <div style="flex: 1; height: 200px; background: #222; border-radius: 8px;"></div>
+                                <div style="flex: 1; height: 200px; background: #222; border-radius: 8px;"></div>
+                            </div>
+                        </div>
+                    </div>`
+            };
+
+            themeTriggers.forEach(t => t.addEventListener('click', (e) => {
+                e.preventDefault();
+                selectedTheme = t.getAttribute('data-theme-preview');
+                modalTitle.textContent = `Theme: ${selectedTheme.toUpperCase()}`;
+                
+                // Inject the specific theme preview or fallback
+                if(THEME_PREVIEWS[selectedTheme]) {
+                    modalFrame.innerHTML = THEME_PREVIEWS[selectedTheme];
+                } else {
+                    modalFrame.innerHTML = `<div style="padding:40px; text-align:center;">Preview loading...</div>`;
+                }
+                
+                modal.classList.add('show');
+            }));
+            
+            modal?.querySelector('.modal-close')?.addEventListener('click', () => modal.classList.remove('show'));
+            
+            // Close on overlay click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('show');
+            });
+
+            modal?.querySelector('.modal-apply-btn')?.addEventListener('click', () => {
+                const radio = document.getElementById(`theme-${selectedTheme}`);
+                if(radio) radio.checked = true;
+                modal.classList.remove('show');
+                showSave();
+            });
+
+            // --- 6. Appearance & Color ---
+            document.querySelectorAll('.appearance-pill').forEach(p => p.addEventListener('click', () => {
+                const val = p.querySelector('input').value;
+                document.querySelectorAll('.appearance-pill').forEach(x => x.classList.toggle('active', x === p));
+                p.querySelector('input').checked = true;
+                const isDark = val === 'dark' || (val === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                showSave();
+            }));
+
+            const colorPick = document.getElementById('brand-color');
+            const colorText = document.getElementById('brand-color-text');
+            const colorPrev = document.getElementById('brand-color-preview');
+            document.getElementById('picker-trigger')?.addEventListener('click', () => colorPick.click());
+            colorPick?.addEventListener('input', (e) => {
+                const v = e.target.value;
+                colorText.value = v; colorPrev.style.backgroundColor = v;
+                document.documentElement.style.setProperty('--primary', v);
+                showSave();
+            });
+
+            // --- 7. List Management (Nav, Sources, Social) ---
+            const setupList = (addBtnId, listId, templateFn) => {
+                document.getElementById(addBtnId)?.addEventListener('click', () => {
+                   const div = document.createElement('div');
+                   div.innerHTML = templateFn();
+                   document.getElementById(listId).appendChild(div.firstElementChild);
+                   showSave();
+                });
+            };
+
+            setupList('add-nav-item-btn', 'nav-items-list', () => `
+                <div class="nav-item-row premium-row">
+                    <input type="text" class="nav-label-input premium-input" placeholder="Label" />
+                    <select class="nav-type-select premium-select"><option value="post">Post</option><option value="url">URL</option></select>
+                    <div class="nav-value-wrap"><input type="text" class="nav-value-input premium-input" placeholder="URL or Post ID" /></div>
+                    <button type="button" class="remove-nav-btn premium-remove">&times;</button>
+                </div>
+            `);
+
+            setupList('add-source-btn', 'sources-list', () => `
+                <div class="source-item premium-source-card">
+                    <div class="source-header-meta">📡 <strong>New Database Source</strong></div>
+                    <div class="source-form-body">
+                        <div class="form-group"><label>Name</label><input type="text" class="source-name-input premium-input" /></div>
+                        <div class="form-group"><label>DB ID</label><input type="text" class="source-db-input premium-input" /></div>
+                        <div class="form-group"><label>Tag</label><input type="text" class="source-tag-input premium-input" /></div>
+                    </div>
+                    <div class="source-footer"><button class="save-btn primary source-save-btn">Connect</button></div>
+                </div>
+            `);
+
+            document.getElementById('add-social-btn')?.addEventListener('click', () => {
+                const plat = document.getElementById('social-platform-select').value;
+                const urlInput = document.getElementById('social-url-input');
+                let url = urlInput.value.trim(); if(!url) return;
+                const bases = { twitter: 'https://x.com/', github: 'https://github.com/', instagram: 'https://instagram.com/' };
+                if(bases[plat] && !url.startsWith('http')) url = bases[plat] + url.replace('@', '');
+                const div = document.createElement('div');
+                div.className = 'social-link-item';
+                div.setAttribute('data-platform', plat);
+                div.innerHTML = `<div class="platform-meta"><span class="platform-name">${plat}</span></div><span class="url-text">${url}</span><button class="remove-social-btn">&times;</button>`;
+                document.getElementById('social-links-list').appendChild(div);
+                urlInput.value = ''; showSave();
+            });
+
+            document.addEventListener('click', (e) => {
+                if(e.target.matches('.premium-remove, .remove-social-btn')) { e.target.closest('div').remove(); showSave(); }
+            });
+
+            // --- 8. Final Save ---
+            const saveBtn = document.getElementById('save-settings-btn');
+            saveBtn?.addEventListener('click', async () => {
+                saveBtn.textContent = 'Saving...';
+                saveBtn.disabled = true;
+                const payload = {
+                    site_name: document.getElementById('site-name').value,
+                    site_description: document.getElementById('site-description').value,
+                    favicon_url: favUrlVal.value,
+                    brand_color: colorText.value,
+                    site_theme: document.querySelector('input[name="site_theme"]:checked')?.value,
+                    site_appearance: document.querySelector('input[name="site-appearance"]:checked')?.value,
+                    site_font: document.querySelector('input[name="site-font"]:checked')?.value,
+                    border_radius: radiusHidden.value,
+                    content_width: widthHidden.value,
+                    subdomain: document.getElementById('subdomain').value,
+                    custom_domain: document.getElementById('custom-domain')?.value,
+                    home_page_id: document.getElementById('home-page-id').value,
+                    navigation: Array.from(document.querySelectorAll('.nav-item-row')).map(r => ({
+                        label: r.querySelector('.nav-label-input').value,
+                        type: r.querySelector('.nav-type-select').value,
+                        value: r.querySelector('.nav-value-input').value
+                    })),
+                    social_links: Object.fromEntries(Array.from(document.querySelectorAll('.social-link-item')).map(i => [i.getAttribute('data-platform'), i.querySelector('.url-text').textContent])),
+                    user_analytics_id: document.getElementById('user-analytics-id').value,
+                    custom_css: document.getElementById('custom-css').value,
+                    custom_head_scripts: document.getElementById('custom-head-scripts').value,
+                };
+                try {
+                    const res = await fetch("/api/v1/setup/config", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                    if(res.ok) window.location.reload();
+                    else alert('Save failed');
+                } finally { saveBtn.textContent = 'Commit Changes'; saveBtn.disabled = false; }
+            });
+
+            document.getElementById('disconnect-btn')?.addEventListener('click', async() => { if(confirm('Disconnect?')) { await fetch('/api/v1/setup/disconnect', {method:'POST'}); window.location.reload(); } });
+            syncPreview();
+        });
+    </script>
+</DashboardLayout>
+
+<style>
+    /* Design Tokens */
+    :root { --p-radius: 14px; --p-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); }
+    
+    .settings-container { max-width: 1000px; margin: 0 auto; padding: 0 4rem 15rem; }
+    
+    /* Navigation Pills */
+    .settings-nav { display: flex; gap: 0.8rem; padding: 1.5rem 0; margin-bottom: 3rem; background: var(--background); position: sticky; top: 68px; z-index: 1000; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+    .nav-pill { display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1.4rem; border-radius: 100px; background: var(--secondary); border: 1px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+    .nav-pill.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.3); }
+
+    /* Panels & Sections */
+    .settings-panel { display: none; }
+    .settings-panel.active { display: block; animation: slideUp 0.4s ease; }
+    .settings-section { margin-bottom: 4rem; }
+    .section-info { margin-bottom: 1.5rem; }
+    .section-info h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    .section-info p { color: var(--muted-foreground); font-size: 0.95rem; }
+    
+    /* Premium Cards & Inputs */
+    .settings-card { background: white; border-radius: 24px; padding: 3rem; border: 1px solid var(--border); box-shadow: var(--p-shadow); }
+    .form-group { margin-bottom: 2rem; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--foreground); }
+    
+    input[type="text"], input[type="email"], select, textarea { 
+        width: 100%; padding: 0.9rem 1.25rem; border-radius: 14px; border: 1px solid var(--border); 
+        background: #fcfcfc; font-size: 0.95rem; transition: 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1); outline: none; }
+
+    .premium-card { 
+        background: var(--card-bg, #161616) !important; 
+        border: 1px solid var(--border) !important; 
+        color: var(--foreground) !important; 
+        box-shadow: var(--p-shadow);
+    }
+    .premium-card label { color: var(--muted-foreground) !important; }
+    .premium-card input, .premium-card select, .premium-card textarea { 
+        background: var(--background) !important; 
+        border-color: var(--border) !important; 
+        color: var(--foreground) !important; 
+    }
+
+    /* Support for Light/Dark mode differentiation in .premium-card specifically */
+    :root[data-theme="light"] .premium-card {
+        --card-bg: #f8fafc;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    :root[data-theme="dark"] .premium-card {
+        --card-bg: #161616;
+    }
+
+    /* Theme Grid */
+    .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; }
+    .theme-option-card { position: relative; }
+    .hidden-radio { position: absolute; opacity: 0; pointer-events: none; }
+    .theme-visual { 
+        display: block; 
+        cursor: pointer; 
+        border-radius: 16px; 
+        border: 2px solid var(--border); 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        overflow: hidden; 
+        background: var(--background); 
+    }
+    .theme-preview { height: 140px; position: relative; display: flex; align-items: flex-end; padding: 1rem; }
+    .tp-overlay { background: linear-gradient(to top, rgba(0,0,0,0.6), transparent); position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 1rem; }
+    .theme-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.05em; color: var(--muted-foreground); transition: color 0.3s; }
+
+    .hidden-radio:checked + .theme-visual { border-color: var(--primary); box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.2); }
+    .hidden-radio:checked + .theme-visual .theme-label { color: var(--primary); }
+    .hidden-radio:checked + .theme-visual .tp-overlay { background: linear-gradient(to top, rgba(var(--primary-rgb), 0.1), transparent); }
+
+    .premium-input, .premium-select { background: white !important; border-width: 1.5px !important; }
+
+    /* Live Preview */
+    .preview-canvas { background: #f1f5f9; border-radius: 20px; padding: 4rem; display: flex; justify-content: center; overflow: hidden; }
+    .preview-box { background: white; border: 1px solid var(--border); transition: 0.3s; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; min-width: 200px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+    .preview-header { height: 16px; width: 60px; background: var(--primary); border-radius: 4px; }
+    .preview-line { height: 10px; width: 100%; background: #e2e8f0; border-radius: 4px; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.8); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-overlay.show { display: flex; }
+    .modal-content { 
+        background: white; 
+        width: 900px; 
+        max-width: 90vw; 
+        height: 80vh; 
+        border-radius: 24px; 
+        position: relative; 
+        animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+        display: flex; 
+        flex-direction: column; 
+        overflow: hidden; 
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .modal-header { padding: 2rem 3rem; border-bottom: 1px solid var(--border); background: var(--background); display: flex; flex-direction: column; gap: 0.5rem; }
+    .modal-header h2 { font-size: 1.8rem; font-weight: 800; margin: 0; }
+    .modal-header p { margin: 0; color: var(--muted-foreground); }
+    
+    .modal-body { flex: 1; overflow-y: auto; background: #e2e8f0; padding: 0; }
+    .preview-frame { min-height: 100%; width: 100%; margin: 0 auto; background: white; }
+
+    .modal-footer { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--background); display: flex; justify-content: flex-end; }
+    .modal-close { position: absolute; top: 1.5rem; right: 2rem; font-size: 2rem; background: none; border: none; cursor: pointer; color: var(--muted-foreground); z-index: 10; }
+    .mock-nav, .mock-hero, .mock-post { background: #f1f5f9; border-radius: 10px; margin-bottom: 1.5rem; }
+    .mock-nav { height: 30px; } .mock-hero { height: 120px; background: var(--primary); opacity: 0.1; } .mock-post { height: 50px; }
+
+    /* Favicon */
+    .favicon-uproader-wrap { display: flex; gap: 2rem; align-items: center; }
+    .favicon-preview-box { width: 90px; height: 90px; background: var(--secondary); border: 2px dashed var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .favicon-preview-box img { width: 44px; height: 44px; object-fit: contain; transition: 0.3s; }
+
+    /* Appearance Pills */
+    .appearance-options { display: flex; gap: 1rem; }
+    .appearance-pill { flex: 1; padding: 1.5rem; border: 2px solid var(--border); border-radius: 20px; text-align: center; cursor: pointer; font-weight: 800; font-size: 0.85rem; transition: 0.3s; }
+    .appearance-pill.active { border-color: var(--primary); color: var(--primary); background: rgba(var(--primary-rgb), 0.05); transform: translateY(-3px); }
+    .appearance-pill input { display: none; }
+
+    /* Sticky Save Bar */
+    .settings-footer-sticky { position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(120px); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5000; }
+    .settings-footer-sticky.show { transform: translateX(-50%) translateY(0); }
+    .sticky-inner { background: #0f172a; padding: 1rem 2.5rem; border-radius: 100px; display: flex; align-items: center; gap: 3rem; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
+    .sticky-hint { color: #94a3b8; font-weight: 600; font-size: 0.9rem; }
+    .save-btn { padding: 0.8rem 1.8rem; border-radius: 50px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: 0.2s; }
+    .save-btn.primary { background: var(--primary); color: white; }
+    .save-btn.secondary { background: rgba(255,255,255,0.1); color: white; }
+
+    /* Additional Premium Rows */
+    .premium-row, .premium-source-card { background: #f8fafc; border: 1px solid var(--border); padding: 1.5rem; border-radius: 18px; margin-bottom: 1rem; }
+    .source-header-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem; font-size: 1.1rem; }
+    .source-form-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem; }
+    .source-footer { border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: flex-end; }
+    .premium-remove { color: #ef4444; font-size: 1.8rem; background: none; border: none; cursor: pointer; }
+    
+    /* Integration Engine Status */
+    .connection-status-card { display: flex; justify-content: space-between; align-items: center; border-radius: 14px; }
+    .status-header { display: flex; align-items: center; gap: 0.75rem; font-size: 1rem; }
+    .status-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; }
+    .status-dot.pulse { animation: statusPulse 2s infinite; }
+    @keyframes statusPulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+    
+    .width-preset-btn { padding: 0.6rem 1.2rem; border-radius: 10px; border: 1px solid var(--border); background: white; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+    .width-preset-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .range-with-value { display: flex; items-center; gap: 1rem; }
+    .premium-range { flex: 1; accent-color: var(--primary); }
+
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes modalPop { from { opacity: 0; transform: scale(0.9) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+</style>

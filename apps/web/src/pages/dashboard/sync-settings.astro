@@ -1,0 +1,336 @@
+---
+import DashboardLayout from "@notionglaze/ui/DashboardLayout.astro";
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+    } catch (e) {
+        console.error("Sync Settings Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="Sync Settings" tenant={tenant}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8">
+        <header class="mb-12">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                Sync Configuration
+            </h1>
+            <p class="text-muted-foreground">
+                Configure how and when your Notion content syncs to your blog.
+            </p>
+        </header>
+
+        <div class="space-y-8">
+            <!-- Manual Sync Section -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold mb-1">Manual Sync</h3>
+                            <p class="text-sm text-muted-foreground">
+                                Trigger a sync immediately
+                            </p>
+                        </div>
+                        <button
+                            id="manual-sync-btn"
+                            class="px-6 py-2 rounded-lg bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity"
+                        >
+                            Sync Now
+                        </button>
+                    </div>
+                    {
+                        tenant?.last_sync_at && (
+                            <div class="text-xs text-muted-foreground">
+                                Last synced:{" "}
+                                {new Date(tenant.last_sync_at).toLocaleString()}
+                            </div>
+                        )
+                    }
+                </div>
+            </DashboardCard>
+
+            <!-- Auto Sync Schedule -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">
+                            Automatic Sync Schedule
+                        </h3>
+                        <p class="text-sm text-muted-foreground">
+                            Configure automatic sync intervals
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="enable-auto-sync"
+                                checked={config.auto_sync_enabled !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Enable automatic sync</span
+                            >
+                        </label>
+                        <div class="ml-7 space-y-2">
+                            <label class="block">
+                                <span class="text-sm font-medium mb-1 block"
+                                    >Sync Interval</span
+                                >
+                                <select
+                                    id="sync-interval"
+                                    class="w-full px-3 py-2 rounded-lg border border-border bg-background"
+                                    disabled={config.auto_sync_enabled ===
+                                        false}
+                                >
+                                    <option value="15">Every 15 minutes</option>
+                                    <option value="30" selected
+                                        >Every 30 minutes</option
+                                    >
+                                    <option value="60">Every hour</option>
+                                    <option value="180">Every 3 hours</option>
+                                    <option value="360">Every 6 hours</option>
+                                    <option value="720">Every 12 hours</option>
+                                    <option value="1440">Daily</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Sync Behavior -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">Sync Behavior</h3>
+                        <p class="text-sm text-muted-foreground">
+                            Control how content is synchronized
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="sync-published-only"
+                                checked={config.sync_published_only !== false}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Only sync published posts</span
+                            >
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="preserve-local-edits"
+                                checked={config.preserve_local_edits === true}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Preserve local edits (prevent overwrite)</span
+                            >
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="delete-removed-posts"
+                                checked={config.delete_removed_posts === true}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <span class="font-medium"
+                                >Delete posts removed from Notion</span
+                            >
+                        </label>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- AI Sidekick Section -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3
+                                class="text-lg font-bold mb-1 flex items-center gap-2"
+                            >
+                                AI Sidekick
+                                {
+                                    tenant?.plan === "pro" && (
+                                        <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wide">
+                                            PRO
+                                        </span>
+                                    )
+                                }
+                            </h3>
+                            <p class="text-sm text-muted-foreground">
+                                Supercharge your content with AI intelligence.
+                            </p>
+                        </div>
+                        {
+                            tenant?.plan !== "pro" && (
+                                <a
+                                    href="/pricing"
+                                    class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-xs font-bold uppercase tracking-wide hover:opacity-90 transition-opacity"
+                                >
+                                    Upgrade to Pro
+                                </a>
+                            )
+                        }
+                    </div>
+
+                    <div
+                        class={`space-y-3 ${tenant?.plan !== "pro" ? "opacity-50 pointer-events-none grayscale select-none" : ""}`}
+                    >
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="ai-tagging-enabled"
+                                checked={config.ai_tagging_enabled === true}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <div>
+                                <span class="font-medium block"
+                                    >Smart Auto-Tagging</span
+                                >
+                                <span class="text-xs text-muted-foreground"
+                                    >Automatically suggest tags based on content
+                                    analysis</span
+                                >
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input
+                                type="checkbox"
+                                id="ai-seo-enabled"
+                                checked={config.ai_seo_enabled === true}
+                                class="w-4 h-4 rounded border-border"
+                            />
+                            <div>
+                                <span class="font-medium block"
+                                    >SEO & Summary Gen</span
+                                >
+                                <span class="text-xs text-muted-foreground"
+                                    >Generate SEO descriptions and summaries on
+                                    sync</span
+                                >
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </DashboardCard>
+
+            <!-- Sync History -->
+            <DashboardCard>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold mb-1">Sync History</h3>
+                        <p class="text-sm text-muted-foreground">
+                            Recent sync activity
+                        </p>
+                    </div>
+                    <div class="text-sm text-muted-foreground">
+                        Sync history feature coming soon...
+                    </div>
+                </div>
+            </DashboardCard>
+        </div>
+
+        <StickyFooter
+            id="sync-settings-footer"
+            saveId="save-sync-settings-btn"
+        />
+    </div>
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Manual sync button
+            const manualSyncBtn = document.getElementById("manual-sync-btn");
+            manualSyncBtn?.addEventListener("click", async () => {
+                manualSyncBtn.disabled = true;
+                manualSyncBtn.textContent = "Syncing...";
+
+                try {
+                    const res = await fetch("/api/v1/sync", { method: "POST" });
+                    if (res.ok) {
+                        window.showToast("Sync started!", "success");
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        window.showToast("Sync failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    manualSyncBtn.disabled = false;
+                    manualSyncBtn.textContent = "Sync Now";
+                }
+            });
+
+            // Save settings
+            const saveBtn = document.getElementById("save-sync-settings-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    auto_sync_enabled:
+                        document.getElementById("enable-auto-sync")?.checked,
+                    sync_interval: parseInt(
+                        document.getElementById("sync-interval")?.value,
+                    ),
+                    sync_published_only: document.getElementById(
+                        "sync-published-only",
+                    )?.checked,
+                    preserve_local_edits: document.getElementById(
+                        "preserve-local-edits",
+                    )?.checked,
+                    delete_removed_posts: document.getElementById(
+                        "delete-removed-posts",
+                    )?.checked,
+                    ai_tagging_enabled:
+                        document.getElementById("ai-tagging-enabled")?.checked,
+                    ai_seo_enabled:
+                        document.getElementById("ai-seo-enabled")?.checked,
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast("Sync settings updated!", "success");
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+
+            // Enable/disable interval select based on checkbox
+            const enableCheckbox = document.getElementById("enable-auto-sync");
+            const intervalSelect = document.getElementById("sync-interval");
+            enableCheckbox?.addEventListener("change", (e) => {
+                intervalSelect.disabled = !e.target.checked;
+            });
+        });
+    </script>
+</DashboardLayout>

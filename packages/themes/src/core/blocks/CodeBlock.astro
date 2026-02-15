@@ -1,0 +1,75 @@
+---
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    children?: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const language = (content.language || "text").toLowerCase().replace(" ", "");
+---
+
+{/* Prism Theme: Using a lightweight theme as base, then overriding */}
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+    rel="stylesheet"
+/>
+
+<div class={`notion-code ${className || ""}`}>
+    <div class="notion-code-header">
+        <span class="notion-code-lang">{content.language || "Text"}</span>
+    </div>
+    <pre><code class={`language-${language}`}>{content.rich_text.map((t: any) => t.plain_text).join("")}</code></pre>
+</div>
+
+{/* Load Prism Core */}
+<script
+    is:inline
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+></script>
+{/* Load Autoloader for languages */}
+<script
+    is:inline
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"
+></script>
+
+<style>
+    .notion-code {
+        margin: 2rem 0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .notion-code-header {
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: flex-end;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+    }
+
+    .notion-code-lang {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+    }
+
+    pre {
+        margin: 0 !important;
+        padding: 1.25rem !important;
+        overflow-x: auto;
+        font-family:
+            "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono",
+            "Courier New", monospace !important;
+        font-size: 0.9rem !important;
+        line-height: 1.6 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        width: 100%;
+    }
+</style>

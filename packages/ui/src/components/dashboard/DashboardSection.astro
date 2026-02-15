@@ -1,0 +1,59 @@
+---
+interface Props {
+    id?: string;
+    number: string;
+    title: string;
+    description?: string;
+}
+
+const { id, number, title, description } = Astro.props;
+---
+
+<div class="space-y-8 dashboard-section-wrapper" id={id}>
+    <div class="flex items-center gap-4 group-header">
+        <h2
+            class="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-primary"
+        >
+            {number}. {title}
+        </h2>
+        <div class="h-px flex-1 bg-border/50"></div>
+    </div>
+    {
+        description && (
+            <p class="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
+                {description}
+            </p>
+        )
+    }
+    <div class="section-content">
+        <slot />
+    </div>
+</div>
+
+<style>
+    .dashboard-section-wrapper {
+        animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .group-header h2 {
+        background: linear-gradient(
+            135deg,
+            hsl(var(--primary)) 0%,
+            hsl(var(--accent)) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

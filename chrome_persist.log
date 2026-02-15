@@ -1,0 +1,101 @@
+nohup: ignoring input
+[19749:19766:0203/122510.186287:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[19749:19766:0203/122510.194987:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19766:0203/122510.195118:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[19749:19766:0203/122510.195166:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[19749:19766:0203/122510.203051:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19766:0203/122510.237309:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/f25dbc0f-7ce7-4a4e-b192-480e5454691a
+[19749:19749:0203/122510.380666:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122510.380788:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122510.381134:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19749:0203/122510.387888:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122510.407067:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[19749:19749:0203/122510.407100:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122510.407144:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[19749:19749:0203/122510.419166:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: unknown error type: 
+[19749:19766:0203/122521.457578:ERROR:google_apis/gcm/engine/registration_request.cc:290] Registration response error message: DEPRECATED_ENDPOINT
+[19749:19766:0203/122548.171413:ERROR:google_apis/gcm/engine/registration_request.cc:290] Registration response error message: DEPRECATED_ENDPOINT
+[19749:19766:0203/122648.224397:ERROR:google_apis/gcm/engine/registration_request.cc:290] Registration response error message: DEPRECATED_ENDPOINT
+[19749:19766:0203/122704.388592:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122704.496834:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122704.497089:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122704.504145:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122704.504505:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122704.512528:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122704.512786:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122704.521521:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+[19749:19766:0203/122704.521690:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+[19749:19749:0203/122704.536631:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+Warning: vkCreateInstance: Found no drivers!
+Warning: vkCreateInstance failed with VK_ERROR_INCOMPATIBLE_DRIVER
+    at CheckVkSuccessImpl (../../third_party/dawn/src/dawn/native/vulkan/VulkanError.cpp:106)
+
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 72 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 64 to 16 to fit dynamic offset allocation limit.
+Warning: vkCreateInstance: Found no drivers!
+Warning: vkCreateInstance failed with VK_ERROR_INCOMPATIBLE_DRIVER
+    at CheckVkSuccessImpl (../../third_party/dawn/src/dawn/native/vulkan/VulkanError.cpp:106)
+
+[19749:19766:0203/122826.597378:ERROR:google_apis/gcm/engine/registration_request.cc:290] Registration response error message: DEPRECATED_ENDPOINT
+[19749:19766:0203/123127.293051:ERROR:google_apis/gcm/engine/registration_request.cc:290] Registration response error message: QUOTA_EXCEEDED
+[19749:19766:0203/205245.893118:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:483] ConnectionHandler failed with net error: -2
+[19749:19749:0203/205245.902992:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205245.906659:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205245.944711:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.020342:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.027403:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.029648:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.032210:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.070918:ERROR:content/common/zygote/zygote_communication_linux.cc:293] Failed to send GetTerminationStatus message to zygote
+[19749:19749:0203/205246.156404:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.205106:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.206646:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.207777:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.208748:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.209799:ERROR:content/browser/gpu/gpu_process_host.cc:990] GPU process launch failed: error_code=1002
+[19749:19749:0203/205246.209820:FATAL:content/browser/gpu/gpu_data_manager_impl_private.cc:416] GPU process isn't usable. Goodbye.
+Received signal 6
+#0 0x55d0dca7e1ea (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x47001e9)
+#1 0x55d0e29863a4 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0xa6083a3)
+#2 0x7f2cbc306520 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4251f)
+#3 0x55d0e263555a (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0xa2b7559)
+#4 0x55d0db116616 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x2d98615)
+#5 0x55d0dba3378f (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x36b578e)
+#6 0x55d0e297d945 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0xa5ff944)
+#7 0x55d0e293e6fd (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0xa5c06fc)
+#8 0x55d0e293e65d (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0xa5c065c)
+#9 0x55d0de231c8e (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5eb3c8d)
+#10 0x55d0dd570e09 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x51f2e08)
+#11 0x55d0e0a2ca37 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x86aea36)
+#12 0x55d0de49035b (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x611235a)
+#13 0x55d0e0a2ca4e (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x86aea4d)
+#14 0x55d0e0a2b00b (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x86ad00a)
+#15 0x55d0e0a318b7 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x86b38b6)
+#16 0x55d0e0a31e37 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x86b3e36)
+#17 0x55d0e0897d9a (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x8519d99)
+#18 0x55d0de089233 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5d0b232)
+#19 0x55d0de089043 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5d0b042)
+#20 0x55d0de088f16 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5d0af15)
+#21 0x55d0db3eef8e (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x3070f8d)
+#22 0x55d0dc2395b9 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x3ebb5b8)
+#23 0x7f2cbd0c7cbb (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.4+0x55cba)
+#24 0x000000000000 <unknown>
+#25 0x55d0dba2ea75 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x36b0a74)
+#26 0x55d0dba2e1c1 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x36b01c0)
+#27 0x55d0dde46022 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5ac8021)
+#28 0x55d0de738af3 (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x63baaf2)
+#29 0x55d0dc399edc (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x401bedb)
+#30 0x55d0de73615e (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x63b815d)
+#31 0x55d0dc39a19f (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x401c19e)
+#32 0x55d0dd78eace (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x5410acd)
+#33 0x55d0dd78f56f (/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome+0x541156e)
+#34 0x7f2cbc2edd90 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x29d8f)
+  r8: 00007ffd73d4b7c0  r9: 0000000000000001 r10: 0000000000000008 r11: 0000000000000246
+ r12: 0000000000000006 r13: 0000000000000016 r14: 0000000000000082 r15: 00007ffd73d4bea8
+  di: 0000000000004d25  si: 0000000000004d25  bp: 0000000000004d25  bx: 00007f2cbb1ae680
+  dx: 0000000000000006  ax: 0000000000000000  cx: 00007f2cbc35a9fc  sp: 00007ffd73d4b6f0
+  ip: 00007f2cbc35a9fc efl: 0000000000000246 cgf: 0000000000000033 erf: 0000000000000000
+ trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000
+[end of stack trace]

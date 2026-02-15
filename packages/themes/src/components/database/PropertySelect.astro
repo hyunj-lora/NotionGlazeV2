@@ -1,0 +1,66 @@
+---
+interface Props {
+    value: { name: string; color: string } | null;
+}
+
+const { value } = Astro.props;
+---
+
+{
+    value ? (
+        <span class={`notion-badge notion-${value.color}`}>{value.name}</span>
+    ) : null
+}
+
+<style>
+    .notion-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 6px;
+        line-height: 20px;
+        border-radius: 3px;
+        font-size: 14px;
+        white-space: nowrap;
+        margin-right: 4px;
+    }
+    .notion-default {
+        color: #37352f;
+        background: rgba(227, 226, 224, 0.5);
+    }
+    .notion-gray {
+        color: #5a5a5a;
+        background: rgba(227, 226, 224, 0.5);
+    }
+    .notion-brown {
+        color: #442a1d;
+        background: rgba(238, 224, 218, 0.5);
+    }
+    .notion-orange {
+        color: #d9730d;
+        background: rgba(250, 222, 201, 0.5);
+    }
+    .notion-yellow {
+        color: #dfab01;
+        background: rgba(253, 236, 200, 0.5);
+    }
+    .notion-green {
+        color: #0f7b6c;
+        background: rgba(219, 237, 219, 0.5);
+    }
+    .notion-blue {
+        color: #0b6e99;
+        background: rgba(211, 229, 239, 0.5);
+    }
+    .notion-purple {
+        color: #6940a5;
+        background: rgba(232, 222, 238, 0.5);
+    }
+    .notion-pink {
+        color: #ad1a72;
+        background: rgba(245, 224, 233, 0.5);
+    }
+    .notion-red {
+        color: #e03e3e;
+        background: rgba(255, 226, 221, 0.5);
+    }
+</style>

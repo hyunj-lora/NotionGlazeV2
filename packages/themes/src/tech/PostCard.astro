@@ -1,0 +1,115 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 2.5rem;
+        transition: all 0.2s ease;
+        padding: 2rem;
+        background: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .post-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--primary);
+        opacity: 0.3;
+        transition: opacity 0.2s;
+    }
+    .post-card:hover::before {
+        opacity: 1;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    .meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+        font-family: ui-monospace, SFMono-Regular, monospace;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .tags {
+        color: var(--primary);
+        opacity: 0.8;
+    }
+    h2 {
+        font-size: 1.75rem;
+        line-height: 1.25;
+        margin-bottom: 0.75rem;
+        font-weight: 800;
+        color: var(--foreground);
+    }
+    h2::before {
+        content: "fn ";
+        color: var(--primary); /* Use primary for keywords in tech theme */
+        font-family: monospace;
+        font-weight: normal;
+        font-size: 1.125rem;
+        opacity: 0.7;
+    }
+    p {
+        font-size: 1rem;
+        color: var(--muted-foreground);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+    }
+    .read-more {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 0.8rem;
+        font-family: monospace;
+        text-transform: uppercase;
+    }
+    .post-card:hover {
+        border-color: var(--primary);
+        background: var(--secondary);
+        transform: translateX(4px);
+    }
+</style>

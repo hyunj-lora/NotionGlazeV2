@@ -1,0 +1,84 @@
+---
+interface Props {
+    posts: any[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="activity-list">
+    {
+        posts.map((post: any) => (
+            <div class="activity-item group">
+                <div class="flex flex-col">
+                    <span class="font-bold group-hover:text-primary transition-colors">
+                        {post.title}
+                    </span>
+                    <span class="text-[10px] text-muted-foreground italic">
+                        /{post.slug}
+                    </span>
+                </div>
+                <div class={`status-pill ${post.status.toLowerCase()}`}>
+                    {post.status}
+                </div>
+            </div>
+        ))
+    }
+    {
+        posts.length === 0 && (
+            <div class="py-12 text-center text-muted-foreground text-sm font-medium">
+                No posts synced yet. Start by connecting your Notion!
+            </div>
+        )
+    }
+</div>
+
+<style>
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid hsl(var(--border));
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        background: hsl(var(--background));
+        border-bottom: 1px solid hsl(var(--border));
+        transition: background 0.2s;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-item:hover {
+        background: hsl(var(--secondary) / 0.3);
+    }
+
+    .status-pill {
+        padding: 0.25rem 0.6rem;
+        border-radius: 2rem;
+        font-size: 0.65rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 1px solid transparent;
+    }
+
+    .status-pill.published {
+        background: #dcfce7;
+        color: #166534;
+        border-color: #bbf7d0;
+    }
+
+    .status-pill.draft {
+        background: #fef3c7;
+        color: #92400e;
+        border-color: #fde68a;
+    }
+</style>

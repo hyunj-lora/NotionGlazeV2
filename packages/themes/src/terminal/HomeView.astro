@@ -1,0 +1,185 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "Terminal";
+const siteDescription = config.site_description || "Executing thoughts...";
+
+// Pre-load Terminal PostCard
+const PostCardModule = await POST_CARDS.terminal();
+const PostCard = PostCardModule.default;
+---
+
+<div class="terminal-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="title">glaze@terminal: ~</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="line">
+                        <span class="prompt">$</span> cat about.txt
+                    </div>
+                    <div class="line output">{siteName}</div>
+                    <div class="line output">{siteDescription}</div>
+                    <div class="line">
+                        <span class="prompt">$</span> ls ./posts
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>// [ERROR] NO POSTS FOUND IN DIRECTORY.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+    :root {
+        --terminal-bg: #fdf6e3;
+        --terminal-fg: #586e75;
+        --terminal-border: #93a1a1;
+        --terminal-accent: #b58900;
+        --terminal-dim: #93a1a1;
+        --terminal-code-bg: #eee8d5;
+        --terminal-font: "Space Mono", monospace;
+    }
+
+    :global(.dark) {
+        --terminal-bg: #0c0c0c;
+        --terminal-fg: #00ff00;
+        --terminal-border: #00ff00;
+        --terminal-accent: #00cc00;
+        --terminal-dim: #004400;
+        --terminal-code-bg: #001100;
+    }
+
+    .terminal-theme-home {
+        background-color: var(--terminal-bg);
+        color: var(--terminal-fg);
+        min-height: 100vh;
+        font-family: var(--terminal-font);
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    .blog-header {
+        margin: 6rem 0 8rem 0;
+    }
+
+    .terminal-window {
+        background: var(--terminal-code-bg);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--terminal-border);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-header {
+        background: var(--terminal-border);
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    .red {
+        background: #ff5f56;
+    }
+    .yellow {
+        background: #ffbd2e;
+    }
+    .green {
+        background: #27c93f;
+    }
+
+    .terminal-header .title {
+        color: var(--terminal-bg);
+        font-size: 0.8rem;
+        margin-left: 1rem;
+    }
+
+    .terminal-body {
+        padding: 1.5rem;
+    }
+
+    .line {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .prompt {
+        color: var(--terminal-accent);
+    }
+    .output {
+        color: var(--terminal-fg);
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding-bottom: 10rem;
+        margin-top: 4rem;
+    }
+
+    .empty {
+        padding: 4rem;
+        border: 1px dashed var(--terminal-dim);
+        color: var(--terminal-dim);
+    }
+
+    @media (max-width: 640px) {
+        .line {
+            font-size: 0.9rem;
+        }
+    }
+</style>

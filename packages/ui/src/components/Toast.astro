@@ -1,0 +1,106 @@
+---
+/**
+ * Toast.astro
+ * Handles global notifications via custom events.
+ * Trigger with: window.showToast('Message', 'success' | 'error' | 'info')
+ */
+---
+
+<div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+<script is:inline>
+    (function () {
+        const container = document.getElementById("toast-container");
+
+        window.showToast = (message, type = "success", duration = 4000) => {
+            const toast = document.createElement("div");
+            toast.className = `toast toast-${type}`;
+
+            const icon =
+                type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
+
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <span class="toast-icon">${icon}</span>
+                    <span class="toast-message">${message}</span>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // Animation entry
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+            });
+
+            // Auto-dismiss
+            setTimeout(() => {
+                toast.classList.remove("show");
+                toast.addEventListener("transitionend", () => {
+                    toast.remove();
+                });
+            }, duration);
+        };
+    })();
+</script>
+
+<style>
+    .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        pointer-events: none;
+    }
+
+    .toast {
+        pointer-events: auto;
+        min-width: 280px;
+        max-width: 400px;
+        background: hsl(var(--background));
+        border: 1px solid hsl(var(--border));
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.2);
+        transform: translateX(120%);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .toast-icon {
+        font-size: 1rem;
+    }
+
+    .toast-message {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: hsl(var(--foreground));
+        letter-spacing: -0.01em;
+    }
+
+    .toast-success {
+        border-left: 4px solid #22c55e;
+    }
+
+    .toast-error {
+        border-left: 4px solid #ef4444;
+    }
+
+    .toast-info {
+        border-left: 4px solid #3b82f6;
+    }
+</style>

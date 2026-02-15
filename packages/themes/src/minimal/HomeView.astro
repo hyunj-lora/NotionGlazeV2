@@ -1,0 +1,115 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "NotionGlaze Blog";
+const siteDescription = config.site_description || "Less is more.";
+
+// Pre-load Minimal PostCard
+const PostCardModule = await POST_CARDS.minimal();
+const PostCard = PostCardModule.default;
+---
+
+<div class="minimal-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1>{siteName}</h1>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>Tabula rasa. Start writing.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .minimal-theme-home {
+        background-color: #ffffff;
+        color: #111111;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    .blog-header {
+        margin: 10rem 0 8rem 0;
+        text-align: left;
+    }
+
+    h1 {
+        font-family: "Outfit", sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: -0.03em;
+        color: #000;
+    }
+
+    .blog-header p {
+        font-size: 1.25rem;
+        color: #666;
+        max-width: 500px;
+        line-height: 1.5;
+        font-weight: 400;
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding-bottom: 10rem;
+    }
+
+    .empty {
+        padding: 4rem 0;
+        text-align: left;
+        color: #999;
+        font-style: italic;
+    }
+
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+        .blog-header {
+            margin: 6rem 0 4rem 0;
+        }
+    }
+</style>

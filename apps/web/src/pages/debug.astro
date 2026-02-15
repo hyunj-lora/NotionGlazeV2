@@ -1,0 +1,659 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import { CloudflareService, DomainService } from "@notionglaze/core";
+
+const runtime = (Astro.locals as any).runtime;
+const locals = Astro.locals as any;
+const headers = Object.fromEntries(Astro.request.headers.entries());
+const url = new URL(Astro.request.url);
+
+const proxiedHost = Astro.request.headers.get("X-NotionGlaze-Host");
+const internalHost = url.hostname;
+const resolvedHost = (proxiedHost || internalHost).toLowerCase();
+
+const blogTenantId = locals.blogTenantId;
+const userId = locals.userId;
+const siteConfig = locals.siteConfig;
+
+// Domain Diagnostic Check
+let domainStatus: any = null;
+if (runtime?.env && !locals.isSystemDomain && resolvedHost !== "localhost") {
+    try {
+        const dm = new DomainService(runtime.env);
+        domainStatus = await dm.getUnifiedStatus(resolvedHost);
+    } catch (e) {
+        console.error("Debug Domain Error:", e);
+        domainStatus = { error: "Failed to run domain diagnostics" };
+    }
+}
+const cfStatus = domainStatus?.cfStatus;
+
+// OAuth Environment Check
+const oauthStatus = [
+    {
+        label: "Notion Client ID",
+        status: runtime?.env?.NOTION_CLIENT_ID ? "ok" : "warn",
+    },
+    {
+        label: "Notion Client Secret",
+        status: runtime?.env?.NOTION_CLIENT_SECRET ? "ok" : "warn",
+    },
+    {
+        label: "Notion Redirect URI",
+        status: runtime?.env?.NOTION_REDIRECT_URI ? "ok" : "info",
+    },
+    {
+        label: "Encryption Secret",
+        status: runtime?.env?.ENCRYPTION_SECRET ? "ok" : "warn",
+    },
+    {
+        label: "Cloudflare API Token",
+        status: runtime?.env?.CLOUDFLARE_API_TOKEN ? "ok" : "warn",
+    },
+    {
+        label: "Cloudflare Zone ID",
+        status: runtime?.env?.CLOUDFLARE_ZONE_ID ? "ok" : "warn",
+    },
+];
+
+// Session Handling
+const cookies = Astro.request.headers.get("cookie") || "";
+const sessionIdRaw = cookies
+    .split(";")
+    .find((c) => c.trim().startsWith("session_id="))
+    ?.split("=")[1];
+const maskedSessionId = sessionIdRaw
+    ? `${sessionIdRaw.substring(0, 8)}...${sessionIdRaw.substring(sessionIdRaw.length - 4)}`
+    : "None";
+
+// Diagnostic Summary
+const diagnostics = [
+    { label: "Request URL", value: url.toString() },
+    {
+        label: "Host Resolution",
+        value: locals.hostResolutionMethod || "Direct",
+        status: "ok",
+    },
+    { label: "Resolved Site Host", value: resolvedHost, status: "info" },
+    {
+        label: "Domain Type",
+        value: locals.isSystemDomain ? "System (App/Main)" : "Tenant (Blog)",
+        status: locals.isSystemDomain ? "ok" : "info",
+    },
+    {
+        label: "Resolved Tenant ID",
+        value: blogTenantId || "Not Resolved",
+        status: blogTenantId ? "ok" : locals.isSystemDomain ? "info" : "warn",
+    },
+    {
+        label: "Auth Status",
+        value: userId ? `Authenticated (${userId})` : "Anonymous / No Session",
+        status: userId ? "ok" : "info",
+    },
+];
+
+const routingDiagnostics = [
+    {
+        label: "Dashboard Domain",
+        value: locals.isDashboardDomain ? "Yes" : "No",
+    },
+    { label: "Internal Rewrite", value: locals.internalRewrite || "None" },
+    { label: "Tenant Plan", value: locals.tenantPlan || "N/A" },
+];
+
+const importantHeaders = [
+    "x-notionglaze-host",
+    "cf-ray",
+    "cf-connecting-ip",
+    "cf-ipcountry",
+    "cf-visitor",
+    "user-agent",
+    "cookie",
+    "host",
+    "x-forwarded-proto",
+];
+---
+
+<Layout title="Network Diagnostics | NotionGlaze Debug">
+    <div class="debug-container">
+        <header class="debug-header">
+            <div class="badge">System Diagnostic</div>
+            <h1>System Status & Diagnostics</h1>
+            <p class="description">
+                Live inspection of edge headers, routing resolution, and
+                authentication state.
+            </p>
+        </header>
+
+        <section class="debug-section">
+            <h2>Core Diagnostics</h2>
+            <div class="grid-stats">
+                {
+                    diagnostics.map((d) => (
+                        <div class={`stat-card ${d.status}`}>
+                            <span class="label-text">{d.label}</span>
+                            <div class="value">{d.value}</div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        {
+            cfStatus && (
+                <section class="debug-section">
+                    <h2>Clinical Domain Analysis</h2>
+                    <div class="grid-stats">
+                        <div
+                            class={`stat-card ${domainStatus.isHealthy ? "ok" : "warn"}`}
+                        >
+                            <span class="label-text">Traffic Health Probe</span>
+                            <div class="value">
+                                {domainStatus.isHealthy ? "Healthy (Reached Edge)" : "Unreachable (Timeout)"}
+                            </div>
+                        </div>
+                        <div
+                            class={`stat-card ${domainStatus.state === "ACTIVE" ? "ok" : "warn"}`}
+                        >
+                            <span class="label-text">Unified Verification State</span>
+                            <div class="value">
+                                {domainStatus.state}
+                            </div>
+                        </div>
+                        <div
+                            class={`stat-card ${cfStatus.hostname_status === "active" ? "ok" : "warn"}`}
+                        >
+                            <span class="label-text">Cloudflare Hostname</span>
+                            <div class="value">
+                                {cfStatus.hostname_status || "Pending"}
+                            </div>
+                        </div>
+                        <div
+                            class={`stat-card ${cfStatus.ssl_status === "active" ? "ok" : "warn"}`}
+                        >
+                            <span class="label-text">Cloudflare SSL</span>
+                            <div class="value">
+                                {cfStatus.ssl_status || "Pending"}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DNS Comparison Table -->
+                    <div class="code-block" style="margin-top: 1.5rem;">
+                         <p style="color: var(--primary); font-size: 0.8rem; margin-bottom: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;">
+                            DNS side-by-side Comparison
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Record</th>
+                                    <th>Required Value</th>
+                                    <th>Current Value (Found)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {domainStatus.records.map((r: any) => (
+                                    <tr>
+                                        <td><code>{r.type} {r.host}</code></td>
+                                        <td class="key"><code>{r.required_value}</code></td>
+                                        <td class="val"><code>{r.current_value || 'missing'}</code></td>
+                                        <td>
+                                            <span class={`badge ${r.status === 'ACTIVE' ? 'success' : 'warning'}`} style="font-size: 0.6rem; padding: 0.1rem 0.4rem;">
+                                                {r.status}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {(domainStatus.diagnostics?.advice?.length > 0) && (
+                        <div
+                            class="stat-card proxied"
+                            style="margin-top: 1.5rem; border: 2px solid var(--warning); background: rgba(250, 204, 21, 0.05);"
+                        >
+                            <span class="label-text" style="color: var(--warning); font-weight: bold;">⚠️ O2O Detection & Critical Advice</span>
+                            <div
+                                class="value"
+                                style="font-size: 0.9rem; line-height: 1.6; color: var(--text); margin-top: 0.5rem;"
+                            >
+                                {domainStatus.diagnostics.advice.map((line: string) => (
+                                    <p style="margin-bottom: 0.5rem;">{line}</p>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+
+                    {cfStatus.ownership_verification && (
+                        <div class="code-block" style="margin-top: 1rem;">
+                            <p style="color: var(--primary); font-size: 0.8rem; margin-bottom: 0.5rem; font-weight: bold;">
+                                Ownership Verification (TXT):
+                            </p>
+                            <div style="font-size: 0.75rem; color: var(--muted);">
+                                <strong>Name:</strong>{" "}
+                                {cfStatus.ownership_verification.name}
+                                <br />
+                                <strong>Value:</strong>{" "}
+                                <code style="word-break: break-all;">
+                                    {cfStatus.ownership_verification.value}
+                                </code>
+                            </div>
+                        </div>
+                    )}
+
+                    {cfStatus.ssl_validation &&
+                        cfStatus.ssl_validation.length > 0 && (
+                            <div class="code-block" style="margin-top: 1rem;">
+                                <p style="color: var(--success); font-size: 0.8rem; margin-bottom: 0.5rem; font-weight: bold;">
+                                    SSL Validation Records (TXT):
+                                </p>
+                                {cfStatus.ssl_validation.map((v: any) => (
+                                    <div style="font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem;">
+                                        <strong>Name:</strong> {v.hostname}
+                                        <br />
+                                        <strong>Value:</strong>{" "}
+                                        <code style="word-break: break-all;">
+                                            {v.value}
+                                        </code>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                    {cfStatus.verification_errors &&
+                        cfStatus.verification_errors.length > 0 && (
+                            <div
+                                class="code-block"
+                                style="margin-top: 1rem; border-color: var(--warning);"
+                            >
+                                <p style="color: var(--warning); font-size: 0.8rem; margin-top: 0;">
+                                    Verification Errors:
+                                </p>
+                                <pre style="color: var(--warning);">
+                                    {JSON.stringify(
+                                        cfStatus.verification_errors,
+                                        null,
+                                        2,
+                                    )}
+                                </pre>
+                            </div>
+                        )}
+                    {cfStatus.error && (
+                        <div class={`stat-card warn`}>
+                            <span class="label-text">API Error</span>
+                            <div class="value">{cfStatus.error}</div>
+                        </div>
+                    )}
+                </section>
+            )
+        }
+
+        <section class="debug-section">
+            <div class="grid-layouts">
+                <div class="column">
+                    <h2>OAuth Environment</h2>
+                    <div class="status-list">
+                        {
+                            oauthStatus.map((s) => (
+                                <div class={`status-item ${s.status}`}>
+                                    <span class="dot" />
+                                    <span class="label">{s.label}</span>
+                                    <span class="stat">
+                                        {s.status === "ok"
+                                            ? "Configured"
+                                            : "Missing"}
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+                <div class="column">
+                    <h2>Session Info</h2>
+                    <div class="stat-card info">
+                        <span class="label-text"
+                            >Active Session ID (Masked)</span
+                        >
+                        <div class="value">{maskedSessionId}</div>
+                    </div>
+                    <div class="stat-card info" style="margin-top: 1rem;">
+                        <span class="label-text">Current User ID</span>
+                        <div class="value">{userId || "N/A"}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="debug-section">
+            <h2>Routing & Business Logic</h2>
+            <div class="grid-stats tiny">
+                {
+                    routingDiagnostics.map((d) => (
+                        <div class="stat-card">
+                            <span class="label-text">{d.label}</span>
+                            <div class="value">{d.value}</div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class="debug-section">
+            <h2>Active Site Configuration</h2>
+            <div class="code-block json">
+                <pre>{JSON.stringify(siteConfig, null, 2)}</pre>
+            </div>
+        </section>
+
+        <section class="debug-section">
+            <h2>Critical Edge Headers</h2>
+            <div class="code-block">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            importantHeaders.map((h) => (
+                                <tr>
+                                    <td class="key">
+                                        <code>{h}</code>
+                                    </td>
+                                    <td class="val">
+                                        {headers[h] || (
+                                            <span class="missing">missing</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="debug-footer">
+            <div class="footer-actions">
+                <button id="theme-toggle" class="btn-secondary"
+                    >🌓 Toggle Theme</button
+                >
+                <button onclick="window.location.reload()" class="btn-refresh"
+                    >🔄 Refresh Stream</button
+                >
+            </div>
+            <p>
+                Environment: {import.meta.env.MODE} | Runtime: {
+                    runtime ? "Cloudflare" : "Local"
+                }
+            </p>
+        </footer>
+    </div>
+</Layout>
+
+<script is:inline>
+    const toggleBtn = document.getElementById("theme-toggle");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            const doc = document.documentElement;
+            const current =
+                doc.getAttribute("data-theme") ||
+                (window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark"
+                    : "light");
+            const next = current === "dark" ? "light" : "dark";
+            doc.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+        });
+    }
+</script>
+
+<style>
+    :root {
+        --bg: var(--background);
+        --card: var(--secondary);
+        --border: var(--border);
+        --text: var(--foreground);
+        --muted: var(--muted-foreground);
+        --primary: var(--primary);
+        --success: #4ade80;
+        --warning: #facc15;
+    }
+
+    .debug-container {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        color: var(--text);
+        font-family: "JetBrains Mono", "Inter", monospace;
+    }
+
+    .debug-header {
+        margin-bottom: 3rem;
+    }
+
+    .badge {
+        display: inline-block;
+        background: var(--primary);
+        color: #000;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+    h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+    }
+    .description {
+        color: var(--muted);
+        margin-top: 0.5rem;
+    }
+
+    .grid-stats.tiny {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .grid-layouts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .status-list {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .status-item:last-child {
+        border-bottom: none;
+    }
+
+    .status-item .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--muted);
+    }
+    .status-item.ok .dot {
+        background: var(--success);
+    }
+    .status-item.warn .dot {
+        background: var(--warning);
+    }
+    .status-item.info .dot {
+        background: var(--primary);
+    }
+
+    .status-item .label {
+        font-size: 0.85rem;
+        flex: 1;
+    }
+
+    .status-item .stat {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .stat-card.ok {
+        border-color: var(--success);
+    }
+    .stat-card.info {
+        border-color: var(--primary);
+    }
+    .stat-card.warn {
+        border-color: var(--warning);
+    }
+
+    .stat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        border-radius: 12px;
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-card .label-text {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+        font-size: 0.95rem;
+        font-weight: 600;
+        word-break: break-all;
+    }
+
+    .stat-card.proxied {
+        border-color: var(--success);
+        box-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
+    }
+
+    .code-block {
+        background: #020617;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th {
+        text-align: left;
+        font-size: 0.8rem;
+        color: var(--muted);
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+    td {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #1e293b;
+        font-size: 0.85rem;
+    }
+    .key code {
+        color: var(--primary);
+        font-weight: bold;
+    }
+    .missing {
+        opacity: 0.3;
+        font-style: italic;
+    }
+
+    .json pre {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--success);
+    }
+
+    .debug-footer {
+        margin-top: 4rem;
+        text-align: center;
+        border-top: 1px solid var(--border);
+        padding-top: 2rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+    }
+
+    .btn-refresh,
+    .btn-secondary {
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        transition: transform 0.2s;
+        font-family: inherit;
+    }
+
+    .btn-refresh {
+        background: var(--primary);
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background: var(--card);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .footer-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-refresh:hover,
+    .btn-secondary:hover {
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 640px) {
+        .debug-container {
+            margin: 2rem auto;
+        }
+        .grid-stats {
+            grid-template-columns: 1fr;
+        }
+        .grid-layouts {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

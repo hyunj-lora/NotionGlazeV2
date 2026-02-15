@@ -1,0 +1,39 @@
+---
+interface Props {
+    content: any;
+    children?: any;
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class={`notion-table-wrapper ${className || ""}`}>
+    <table class="notion-table">
+        <tbody class="notion-table-body">
+            <slot />
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .notion-table-wrapper {
+        margin: 2rem 0;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .notion-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .notion-table :global(tr) {
+        border-bottom: 1px solid #eee;
+    }
+
+    .notion-table :global(td) {
+        padding: 0.75rem;
+        text-align: left;
+    }
+</style>

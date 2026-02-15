@@ -1,0 +1,254 @@
+---
+import {
+    DashboardLayout,
+    DashboardCard,
+    OnboardingChecklist,
+    EngineStatus,
+    ActivityList,
+} from "@notionglaze/ui";
+import {
+    TenantService,
+    AnalyticsService,
+    type NotionPost,
+} from "@notionglaze/core";
+
+const { tenant, userId, runtime } = Astro.locals;
+const db = runtime?.env?.DB;
+
+let stats = {
+    totalPosts: 0,
+    publishedPosts: 0,
+    lastSync: "Never",
+};
+
+let analytics = {
+    views: 0,
+    visitors: 0,
+};
+
+let recentPosts: Partial<NotionPost>[] = [];
+
+if (db && tenant) {
+    const tenantService = new TenantService(db);
+
+    // 1. Fetch Post Stats
+    const postStats = await tenantService.getTenantStats(tenant.id);
+    stats.totalPosts = postStats.totalPosts;
+    stats.publishedPosts = postStats.publishedPosts;
+
+    if (tenant.last_sync_at) {
+        stats.lastSync = new Date(tenant.last_sync_at).toLocaleString();
+    }
+
+    // 2. Recent Posts
+    recentPosts = await tenantService.getRecentPosts(tenant.id, 5);
+
+    // 3. Fetch Analytics
+    try {
+        const analyticsService = new AnalyticsService(db);
+        analytics = await analyticsService.getSummary(tenant.id, 7);
+    } catch (e) {
+        console.error("Dashboard Analytics Error:", e);
+    }
+}
+
+const onboardingSteps = [
+    {
+        id: "connect",
+        label: "Connect Notion Engine",
+        done: !!tenant?.notion_access_token,
+        link: "/api/v1/gateway/notion/init?mode=connect",
+    },
+    {
+        id: "select",
+        label: "Secure Content Source",
+        done: !!tenant?.root_page_id,
+        link: "/dashboard/select-database",
+    },
+    {
+        id: "sync",
+        label: "Ignite First Sync",
+        done: stats.totalPosts > 0,
+        action: "trigger-sync",
+    },
+    {
+        id: "theme",
+        label: "Refine Design Identity",
+        done: (() => {
+            try {
+                if (!tenant?.config_json) return false;
+                const cfg = JSON.parse(tenant.config_json);
+                return !!cfg.site_theme;
+            } catch (e) {
+                return false;
+            }
+        })(),
+        link: "/dashboard/design",
+    },
+];
+---
+
+<DashboardLayout title="Overview" tenant={tenant || undefined}>
+    <div class="overview-grid">
+        {/* Zone A: Analytics Pulse */}
+        <section class="overview-zone zone-analytics">
+            <div class="zone-header">
+                <h2
+                    class="text-sm font-black uppercase tracking-widest text-muted-foreground"
+                >
+                    Analytics Pulse (7D)
+                </h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <DashboardCard class="stat-card">
+                    <span class="label">Total Page Views</span>
+                    <span class="value">{analytics.views}</span>
+                    <div class="trend up text-primary font-bold">
+                        Total traffic across all posts
+                    </div>
+                </DashboardCard>
+                <DashboardCard class="stat-card">
+                    <span class="label">Unique Visitors</span>
+                    <span class="value">{analytics.visitors}</span>
+                    <div class="trend text-primary font-bold">
+                        Unique audience count
+                    </div>
+                </DashboardCard>
+            </div>
+        </section>
+
+        {/* Zone B: Site Health & Actions */}
+        <section class="overview-zone zone-health">
+            <div class="zone-header">
+                <h2
+                    class="text-sm font-black uppercase tracking-widest text-muted-foreground"
+                >
+                    Engine Status
+                </h2>
+            </div>
+            <EngineStatus
+                tenant={tenant}
+                lastSync={stats.lastSync}
+                publishedPosts={stats.publishedPosts}
+                totalPosts={stats.totalPosts}
+            />
+        </section>
+
+        {/* Zone C: Activity & Onboarding */}
+        <section class="overview-zone zone-content col-span-full lg:col-span-2">
+            <OnboardingChecklist steps={onboardingSteps} />
+
+            <div class="zone-header flex items-center justify-between mb-4">
+                <h2
+                    class="text-sm font-black uppercase tracking-widest text-muted-foreground"
+                >
+                    Recent Activity
+                </h2>
+                <a
+                    href="/dashboard/posts"
+                    class="text-xs font-bold text-primary">View All →</a
+                >
+            </div>
+
+            <ActivityList posts={recentPosts} />
+        </section>
+    </div>
+
+    <script is:inline>
+        const syncBtn = document.getElementById("sync-now-btn");
+        const onboardingSyncBtn = document.getElementById(
+            "onboarding-sync-trigger",
+        );
+
+        const triggerSync = async (btn) => {
+            if (!btn) return;
+            btn.disabled = true;
+            btn.classList.add("spinning");
+
+            try {
+                const res = await fetch("/api/v1/sync", { method: "POST" });
+                if (res.ok) {
+                    window.location.reload();
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    alert(`Sync failed: ${data.error || "Please try again."}`);
+                    btn.disabled = false;
+                    btn.classList.remove("spinning");
+                }
+            } catch (e) {
+                alert("Connection error.");
+                btn.disabled = false;
+                btn.classList.remove("spinning");
+            }
+        };
+
+        syncBtn?.addEventListener("click", () => triggerSync(syncBtn));
+        onboardingSyncBtn?.addEventListener("click", () =>
+            triggerSync(onboardingSyncBtn),
+        );
+    </script>
+</DashboardLayout>
+
+<style>
+    .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+        .overview-grid {
+            grid-template-columns: 1fr 320px;
+        }
+    }
+
+    .overview-zone {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .zone-header {
+        margin-bottom: -0.5rem;
+    }
+
+    .stat-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .stat-card .label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .stat-card .value {
+        font-size: 2.5rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+    }
+
+    .stat-card .trend {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: hsl(var(--muted-foreground));
+        margin-top: 0.5rem;
+    }
+
+    .spinning {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>

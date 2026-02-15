@@ -1,0 +1,97 @@
+---
+import NotionRenderer from "../core/NotionRenderer.astro";
+import Database from "../components/Database.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+}
+
+const { blocks, idToSlugMap } = Astro.props;
+
+const components = {
+    DatabaseLink: Database,
+};
+---
+
+<div class="notion-theme">
+    <NotionRenderer
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        components={components}
+    />
+</div>
+
+<style>
+    .notion-theme {
+        /* Standard Notion-like variables */
+        --foreground: #37352f;
+        --background: #ffffff;
+        --border: rgba(55, 53, 47, 0.16);
+        --muted: #f7f6f3;
+        --muted-foreground: rgba(55, 53, 47, 0.65);
+        --primary: #2383e2;
+        --radius: 3px;
+
+        max-width: 100%;
+        line-height: 1.5;
+        font-size: 16px;
+        color: var(--foreground);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    :global(.dark) .notion-theme {
+        --foreground: rgba(255, 255, 255, 0.9);
+        --background: #191919;
+        --border: rgba(255, 255, 255, 0.14);
+        --muted: #252525;
+        --muted-foreground: rgba(255, 255, 255, 0.5);
+    }
+
+    .notion-theme :global(h1),
+    .notion-theme :global(h2),
+    .notion-theme :global(h3) {
+        font-weight: 600;
+        line-height: 1.2;
+        margin-top: 2em;
+        margin-bottom: 4px;
+        color: inherit;
+    }
+
+    .notion-theme :global(h1) { font-size: 1.875em; }
+    .notion-theme :global(h2) { font-size: 1.5em; }
+    .notion-theme :global(h3) { font-size: 1.25em; }
+
+    .notion-theme :global(p) {
+        margin: 1px 0;
+        padding: 3px 2px;
+    }
+
+    .notion-theme :global(ul),
+    .notion-theme :global(ol) {
+        margin: 0;
+        padding-left: 26px;
+    }
+
+    .notion-theme :global(li) {
+        padding: 6px 0;
+    }
+
+    .notion-theme :global(img) {
+        max-width: 100%;
+        border-radius: 1px;
+    }
+
+    /* Core Notion Overrides */
+    .notion-theme :global(.notion-callout) {
+        border: 1px solid transparent !important;
+        background: var(--muted) !important;
+        border-radius: 3px !important;
+    }
+
+    .notion-theme :global(.notion-quote) {
+        border-left: 3px solid var(--foreground) !important;
+        font-size: 1.2em !important;
+        padding: 0.2em 0.9em !important;
+    }
+</style>

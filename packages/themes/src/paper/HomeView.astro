@@ -1,0 +1,117 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "Paper";
+const siteDescription = config.site_description || "A space for deep thoughts.";
+
+// Pre-load Paper PostCard
+const PostCardModule = await POST_CARDS.paper();
+const PostCard = PostCardModule.default;
+---
+
+<div class="paper-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1>{siteName}</h1>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>The page is blank. Ready for your ink.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    .paper-theme-home {
+        background-color: #fcfaf2;
+        color: #2b2b2b;
+        min-height: 100vh;
+        background-image: radial-gradient(#d6d2c1 0.5px, transparent 0.5px);
+        background-size: 20px 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    .blog-header {
+        margin: 8rem 0 10rem 0;
+        text-align: center;
+        border-bottom: 2px double #d6d2c1;
+        padding-bottom: 4rem;
+    }
+
+    h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 4.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
+
+    .blog-header p {
+        font-family: "EB Garamond", serif;
+        font-size: 1.5rem;
+        color: #555;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6rem;
+        padding-top: 6rem;
+        padding-bottom: 10rem;
+    }
+
+    .empty {
+        padding: 10rem;
+        text-align: center;
+        font-family: "EB Garamond", serif;
+        font-size: 1.25rem;
+        color: #999;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+    }
+</style>

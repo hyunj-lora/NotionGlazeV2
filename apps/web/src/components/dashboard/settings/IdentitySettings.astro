@@ -1,0 +1,165 @@
+---
+/**
+ * IdentitySettings.astro
+ * Handles site name, description, and favicon management.
+ */
+import ThemeSelector from "./ThemeSelector.astro";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+---
+
+<section class="settings-section" id="sec-identity">
+    <div class="section-info">
+        <h3>Digital Identity</h3>
+        <p>Define the core soul and description of your digital workspace.</p>
+    </div>
+    <div class="settings-card">
+        <div class="grid w-full max-w-sm items-center gap-1.5 mb-6">
+            <label
+                class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block"
+                >Blog Name</label
+            >
+            <input
+                type="text"
+                id="site-name"
+                class="flex h-11 w-full rounded-xl border border-input bg-background/50 px-4 py-2 text-sm font-bold shadow-sm transition-all focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-muted-foreground/30"
+                value={config.site_name || "NotionGlaze Blog"}
+                placeholder="My Awesome Blog"
+            />
+        </div>
+
+        <div class="grid w-full gap-1.5 mb-8">
+            <label
+                class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block"
+                >Manifesto (Description)</label
+            >
+            <textarea
+                id="site-description"
+                rows="3"
+                class="flex min-h-[100px] w-full rounded-xl border border-input bg-background/50 px-4 py-3 text-sm font-medium shadow-sm transition-all focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-muted-foreground/30 resize-none"
+                placeholder="A small description of your site..."
+                >{config.site_description || ""}</textarea
+            >
+        </div>
+
+        <div class="grid w-full gap-3 mb-8">
+            <label
+                class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block mb-2"
+                >Aesthetic Blueprint (Theme)</label
+            >
+            <ThemeSelector config={config} />
+        </div>
+
+        <div class="grid w-full gap-3">
+            <label
+                class="text-[10px] font-black uppercase tracking-widest text-muted-foreground block"
+                >Favicon (Icon)</label
+            >
+            <div
+                class="flex items-start gap-4 p-5 rounded-2xl bg-secondary/10 border border-dashed border-border group"
+            >
+                <div
+                    class="relative group h-20 w-20 flex-shrink-0 flex items-center justify-center rounded-2xl border-2 border-dashed border-border bg-background shadow-sm transition-all hover:border-primary/50 overflow-hidden"
+                >
+                    <img
+                        id="favicon-preview-img"
+                        src={config.favicon_url || "/favicon.ico"}
+                        alt="Favicon"
+                        class="h-12 w-12 object-contain transition-transform group-hover:scale-110"
+                    />
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                    >
+                        <span
+                            class="text-[9px] font-black text-white uppercase tracking-wider"
+                            >Change</span
+                        >
+                    </div>
+                    <input
+                        type="file"
+                        id="favicon-file-input"
+                        accept="image/*"
+                        class="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                </div>
+                <div class="flex-1 grid gap-3">
+                    <div class="grid gap-1.5">
+                        <p
+                            class="text-[9px] font-bold uppercase text-muted-foreground tracking-widest"
+                        >
+                            Icon URL
+                        </p>
+                        <input
+                            type="text"
+                            id="favicon-url"
+                            class="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-[11px] font-medium shadow-sm transition-all focus:ring-1 focus:ring-primary focus:border-primary"
+                            value={config.favicon_url || ""}
+                            placeholder="https://your-icon.png"
+                        />
+                    </div>
+                    <p
+                        class="text-[10px] text-muted-foreground leading-tight font-medium italic"
+                    >
+                        Upload a square image (SVG, PNG, or ICO). <br
+                        />Recommended size: 256x256px.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script is:inline>
+    (function () {
+        // Change Tracking Signal (to parent)
+        const notifyChange = () => {
+            document.dispatchEvent(new CustomEvent("settings-change"));
+        };
+
+        const favInput = document.getElementById("favicon-file-input");
+        const favPreview = document.getElementById("favicon-preview-img");
+        const favUrlVal = document.getElementById("favicon-url");
+
+        favInput?.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const fd = new FormData();
+            fd.append("file", file);
+
+            try {
+                favPreview.style.opacity = "0.3";
+                const res = await fetch("/api/v1/setup/upload", {
+                    method: "POST",
+                    body: fd,
+                });
+                const data = await res.json();
+                if (data.url) {
+                    favUrlVal.value = data.url;
+                    favPreview.src = data.url;
+                    notifyChange();
+                }
+            } catch (err) {
+                console.error("Upload failed", err);
+            } finally {
+                favPreview.style.opacity = "1";
+            }
+        });
+
+        // Listen for internal changes
+        document
+            .querySelectorAll("#sec-identity input, #sec-identity textarea")
+            .forEach((el) => {
+                el.addEventListener("input", notifyChange);
+            });
+
+        // Also listen for potential radio changes from ThemeSelector
+        document.querySelectorAll('input[name="site_theme"]').forEach((el) => {
+            el.addEventListener("change", notifyChange);
+        });
+    })();
+</script>

@@ -1,0 +1,512 @@
+---
+import NotionRenderer from "../core/NotionRenderer.astro";
+import Database from "../components/Database.astro";
+
+interface Props {
+    blocks: any[];
+    idToSlugMap?: Record<string, string>;
+}
+
+const { blocks, idToSlugMap } = Astro.props;
+
+const components = {
+    DatabaseLink: Database,
+};
+---
+
+<div class="brutal-theme">
+    <NotionRenderer
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        components={components}
+    />
+</div>
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+    .brutal-theme {
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.5;
+        font-size: 1.125rem;
+        color: #000000;
+        font-family: "Inter", sans-serif;
+        padding: 4rem 2rem;
+    }
+
+    :global(.dark) .brutal-theme {
+        color: #ffffff;
+        --border-color: #ffffff;
+        --bg-hover: #2e1065;
+        --bg-active: #ff00f2;
+        --card-bg: #000000;
+        --th-bg: #2e1065;
+        --text-muted: #d4d4d8;
+        --btn-bg: #000000;
+    }
+
+    /* Shared Component Overrides */
+
+    /* Callout */
+    .brutal-theme :global(.notion-callout) {
+        background: #00ff00 !important; /* Neon Green in Light */
+        border: 4px solid #000000 !important;
+        box-shadow: 10px 10px 0px #000000;
+        border-radius: 0 !important;
+        padding: 1.5rem !important;
+        color: #000000 !important;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-callout) {
+        background: #ff00ff !important; /* Neon Magenta in Dark */
+        border-color: #ffffff !important;
+        box-shadow: 10px 10px 0px #ffffff;
+        color: #ffffff !important;
+    }
+
+    .brutal-theme :global(.notion-callout-icon) {
+        font-size: 2rem !important;
+    }
+
+    .brutal-theme :global(.notion-callout-content) {
+        font-family: inherit;
+        font-size: 1.0625rem !important;
+        font-weight: 800;
+        line-height: 1.4 !important;
+    }
+
+    /* CodeBlock */
+    .brutal-theme :global(.notion-code) {
+        border: 4px solid #000000 !important;
+        box-shadow: 10px 10px 0px #000000;
+        border-radius: 0 !important;
+        margin: 3rem 0 !important;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-code) {
+        border-color: #ffffff !important;
+        box-shadow: 10px 10px 0px #ffffff;
+    }
+
+    .brutal-theme :global(.notion-code-header) {
+        background: #000000 !important;
+        border-bottom: 4px solid #000000 !important;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-code-header) {
+        background: #ffffff !important;
+        border-bottom-color: #ffffff !important;
+    }
+
+    .brutal-theme :global(.notion-code-lang) {
+        color: #00ff00 !important;
+        font-family: "Space Mono", monospace;
+        font-weight: 700 !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-code-lang) {
+        color: #000000 !important;
+    }
+
+    /* Bookmark */
+    .brutal-theme :global(.notion-bookmark) {
+        background: #ffffff !important;
+        border: 4px solid #000000 !important;
+        box-shadow: 10px 10px 0px #000000;
+        border-radius: 0 !important;
+        color: #000000 !important;
+        margin: 3rem 0 !important;
+        position: relative;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-bookmark) {
+        background: #000000 !important;
+        border-color: #ffffff !important;
+        box-shadow: 10px 10px 0px #ffffff;
+        color: #ffffff !important;
+    }
+
+    .brutal-theme :global(.notion-bookmark-info) {
+        padding: 2rem !important;
+    }
+
+    .brutal-theme :global(.notion-bookmark-title),
+    .brutal-theme :global(.notion-bookmark-desc) {
+        display: none !important;
+    }
+
+    .brutal-theme :global(.notion-bookmark-link) {
+        font-family: "Space Mono", monospace;
+        font-size: 0.9rem !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        opacity: 1 !important;
+    }
+
+    .brutal-theme :global(.notion-bookmark)::after {
+        content: "";
+        display: block;
+        width: 150px;
+        background: #ff00ff; /* Neon Magenta Deco */
+        border-left: 4px solid #000000;
+    }
+
+    :global(.dark) .brutal-theme :global(.notion-bookmark)::after {
+        background: #ffff00; /* Neon Yellow Deco in dark */
+        border-color: #ffffff;
+    }
+
+    /* Toggle */
+    .brutal-theme :global(.notion-toggle) {
+        margin: 2rem 0;
+    }
+    .brutal-theme :global(.notion-toggle-header) {
+        gap: 1.5rem !important;
+        background: #000000;
+        padding: 1rem 1.5rem;
+        color: #ffffff;
+        border: 4px solid #000000;
+        font-weight: 900;
+        box-shadow: 6px 6px 0px #000000;
+        width: fit-content;
+    }
+    :global(.dark) .brutal-theme :global(.notion-toggle-header) {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+        box-shadow: 6px 6px 0px #ffffff;
+    }
+    .brutal-theme :global(.notion-toggle-icon) {
+        font-family: "Space Mono", monospace;
+        color: #00ff00;
+        transform: none !important; /* Keep the custom look */
+    }
+    .brutal-theme :global(.notion-toggle-icon::after) {
+        content: "[+]";
+    }
+    .brutal-theme :global(details[open] .notion-toggle-icon::after) {
+        content: "[-]";
+    }
+    :global(.dark) .brutal-theme :global(.notion-toggle-icon) {
+        color: #ff00ff;
+    }
+    .brutal-theme :global(.notion-toggle-content) {
+        margin-top: 1.5rem !important;
+        padding: 1.5rem !important;
+        border: 4px solid #000000 !important;
+        background: #ffffff !important;
+        box-shadow: 6px 6px 0px #000000;
+        color: #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-toggle-content) {
+        border-color: #ffffff !important;
+        background: #000000 !important;
+        box-shadow: 6px 6px 0px #ffffff;
+        color: #ffffff !important;
+    }
+
+    /* Equation */
+    .brutal-theme :global(.notion-equation) {
+        margin: 4rem 0 !important;
+        padding: 3rem !important;
+        background: #ffffff !important;
+        border: 4px solid #000000 !important;
+        box-shadow: 16px 16px 0px #ffff00 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-equation) {
+        background: #000000 !important;
+        border-color: #ffffff !important;
+        box-shadow: 16px 16px 0px #00ff00 !important;
+        color: #ffffff;
+    }
+    .brutal-theme :global(.notion-math-display) {
+        font-weight: 900 !important;
+        font-size: 2.5rem !important;
+        letter-spacing: -2px !important;
+    }
+
+    /* Quote */
+    .brutal-theme :global(.notion-quote) {
+        margin: 4rem 0 !important;
+        padding: 3rem !important;
+        background: #ffffff !important;
+        border: 4px solid #000000 !important;
+        box-shadow: 15px 15px 0px #000000 !important;
+        text-align: center !important;
+        color: #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-quote) {
+        background: #000000 !important;
+        border-color: #ffde17 !important;
+        box-shadow: 15px 15px 0px #ffde17 !important;
+        color: #ffffff !important;
+    }
+    .brutal-theme :global(.notion-quote-content) {
+        font-size: 1.5rem !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
+    }
+
+    /* Todo */
+    .brutal-theme :global(.notion-todo) {
+        gap: 1.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .brutal-theme :global(.notion-todo-checkbox) {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .brutal-theme :global(.notion-todo-visual) {
+        border-width: 4px !important;
+        border-color: #000000 !important;
+        border-radius: 0 !important;
+        background-color: #ff00ff !important;
+        box-shadow: 4px 4px 0px #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-todo-visual) {
+        background-color: #00ff00 !important;
+        border-color: #ffffff !important;
+        box-shadow: 4px 4px 0px #ffffff !important;
+    }
+    .brutal-theme
+        :global(.notion-todo input:checked ~ .notion-todo-visual::after) {
+        content: "X" !important;
+        font-weight: 900 !important;
+        font-size: 1.5rem !important;
+        color: #000000 !important;
+    }
+    .brutal-theme :global(.notion-todo-content) {
+        font-size: 1.25rem !important;
+        font-weight: 900 !important;
+        color: #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-todo-content) {
+        color: #ffffff !important;
+    }
+    .brutal-theme :global(.notion-todo-checked) {
+        text-decoration-thickness: 4px !important;
+    }
+
+    /* Divider */
+    .brutal-theme :global(.notion-divider) {
+        height: 12px !important;
+        background: #000000 !important;
+        margin: 6rem 0 !important;
+        border: 4px solid #000000 !important;
+        box-shadow: 6px 6px 0px #ff00ff !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-divider) {
+        background: #ffffff !important;
+        border-color: #ffffff !important;
+        box-shadow: 6px 6px 0px #00ff00 !important;
+    }
+
+    /* Table */
+    .brutal-theme :global(.notion-table-wrapper) {
+        margin: 4rem 0 !important;
+        border: 4px solid #000000 !important;
+        box-shadow: 12px 12px 0px #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-table-wrapper) {
+        border-color: #ffffff !important;
+        box-shadow: 12px 12px 0px #ffffff !important;
+    }
+    .brutal-theme :global(.notion-table) {
+        background: #ffffff !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-table) {
+        background: #000000 !important;
+    }
+    .brutal-theme :global(.notion-table :global(tr)) {
+        border-bottom: 2px solid #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-table :global(tr)) {
+        border-color: #ffffff !important;
+    }
+    .brutal-theme :global(.notion-table :global(td)) {
+        padding: 1.5rem !important;
+        border-right: 2px solid #000000 !important;
+        font-weight: 800 !important;
+        font-size: 1.125rem !important;
+        color: #000000 !important;
+    }
+    :global(.dark) .brutal-theme :global(.notion-table :global(td)) {
+        border-color: #ffffff !important;
+        color: #ffffff !important;
+    }
+    .brutal-theme :global(.notion-table :global(tr:first-child)) {
+        background: #000000 !important;
+        color: #ffffff !important;
+    }
+    .brutal-theme :global(.notion-table :global(tr:first-child td)) {
+        color: #ffffff !important;
+    }
+    :global(.dark)
+        .brutal-theme
+        :global(.notion-table :global(tr:first-child)) {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+    :global(.dark)
+        .brutal-theme
+        :global(.notion-table :global(tr:first-child td)) {
+        color: #000000 !important;
+    }
+
+    /* Image/Video figcaption and errors */
+    .brutal-theme :global(.notion-figcaption) {
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        background: #000000;
+        color: #00ff00;
+        padding: 0.5rem 1rem !important;
+        display: inline-block;
+        margin-top: 0 !important; /* Managed by figure in shared */
+        border: 4px solid #000000;
+    }
+    :global(.dark) .brutal-theme :global(.notion-figcaption) {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+    }
+    .brutal-theme :global(.notion-media-error) {
+        margin: 3rem 0;
+        padding: 2rem;
+        border: 4px solid #000;
+        background: #ff00ff;
+        text-align: center;
+        border-radius: 0 !important;
+    }
+    .brutal-theme :global(.notion-error-content p) {
+        font-weight: 800;
+        color: #000;
+        text-transform: uppercase;
+        margin: 0;
+    }
+    .brutal-theme :global(.notion-error-icon) {
+        font-size: 2rem !important;
+        margin-bottom: 1rem;
+    }
+
+    /* Database Component Overrides */
+    .brutal-theme {
+        --border-color: #000000;
+        --bg-hover: #ffde17;
+        --bg-active: #ff00f2;
+        --card-bg: #ffffff;
+        --th-bg: #ffde17;
+        --text-muted: #52525b;
+        --btn-bg: #ffffff;
+    }
+
+    /* Column Layout Styles */
+    .brutal-theme :global(.column-list) {
+        display: flex;
+        gap: 2rem;
+        margin: 3rem 0;
+        width: 100%;
+    }
+
+    .brutal-theme :global(.column) {
+        flex: 1;
+        min-width: 0;
+        border: 4px solid #000000;
+        padding: 1.5rem;
+        box-shadow: 8px 8px 0px #000000;
+        background: #ffffff;
+    }
+
+    :global(.dark) .brutal-theme :global(.column) {
+        border-color: #ffffff;
+        box-shadow: 8px 8px 0px #ffffff;
+        background: #000000;
+    }
+
+    @media (max-width: 640px) {
+        .brutal-theme :global(.column-list) {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+
+    .brutal-theme :global(p) {
+        margin-bottom: 2rem;
+        font-weight: 800;
+    }
+
+    .brutal-theme :global(h1),
+    .brutal-theme :global(h2),
+    .brutal-theme :global(h3) {
+        color: #000000;
+        margin-top: 5rem;
+        margin-bottom: 2.5rem;
+        line-height: 0.9;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: -0.06em;
+    }
+
+    :global(.dark) .brutal-theme :global(h1),
+    :global(.dark) .brutal-theme :global(h2),
+    :global(.dark) .brutal-theme :global(h3) {
+        color: #ffffff;
+    }
+
+    .brutal-theme :global(h1) {
+        font-size: 6rem;
+        border-bottom: 12px solid #000000;
+        padding-bottom: 1.5rem;
+        margin-bottom: 5rem;
+    }
+
+    :global(.dark) .brutal-theme :global(h1) {
+        border-color: #ffffff;
+    }
+
+    .brutal-theme :global(h2) {
+        font-size: 3.5rem;
+    }
+    .brutal-theme :global(h3) {
+        font-size: 2.5rem;
+    }
+
+    .brutal-theme :global(ul),
+    .brutal-theme :global(ol) {
+        margin-bottom: 3rem;
+        padding-left: 2.5rem;
+        list-style: none;
+    }
+
+    .brutal-theme :global(li) {
+        position: relative;
+        margin-bottom: 1.5rem;
+        font-weight: 900;
+        font-size: 1.5rem;
+    }
+
+    .brutal-theme :global(ul li::before) {
+        content: "■";
+        position: absolute;
+        left: -2rem;
+        color: #000000;
+        font-size: 1.25rem;
+    }
+    :global(.dark) .brutal-theme :global(ul li::before) {
+        color: #ffffff;
+    }
+
+    .brutal-theme :global(img),
+    .brutal-theme :global(video) {
+        width: 100%;
+        border: 4px solid #000000;
+        box-shadow: 15px 15px 0px #000000;
+        margin: 5rem 0;
+    }
+    :global(.dark) .brutal-theme :global(img),
+    :global(.dark) .brutal-theme :global(video) {
+        border-color: #ffffff;
+        box-shadow: 15px 15px 0px #ffffff;
+    }
+</style>

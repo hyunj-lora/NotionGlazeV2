@@ -1,0 +1,77 @@
+---
+/**
+ * IdentitySettings.astro
+ * Handles site name, description, and favicon management.
+ */
+import ThemeSelector from "./ThemeSelector.astro";
+import DashboardSection from "../DashboardSection.astro";
+import DashboardCard from "../DashboardCard.astro";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+---
+
+<DashboardSection
+    id="sec-identity"
+    number="01"
+    title="Aesthetic Blueprint"
+    description="Choose the visual language and layout architecture for your site."
+>
+    <DashboardCard>
+        <ThemeSelector config={config} />
+    </DashboardCard>
+</DashboardSection>
+
+<script is:inline>
+    (function () {
+        // Change Tracking Signal (to parent)
+        const notifyChange = () => {
+            document.dispatchEvent(new CustomEvent("settings-change"));
+        };
+
+        const favInput = document.getElementById("favicon-file-input");
+        const favPreview = document.getElementById("favicon-preview-img");
+        const favUrlVal = document.getElementById("favicon-url");
+
+        favInput?.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const fd = new FormData();
+            fd.append("file", file);
+
+            try {
+                favPreview.style.opacity = "0.3";
+                const res = await fetch("/api/v1/setup/upload", {
+                    method: "POST",
+                    body: fd,
+                });
+                const data = await res.json();
+                if (data.url) {
+                    favUrlVal.value = data.url;
+                    favPreview.src = data.url;
+                    notifyChange();
+                }
+            } catch (err) {
+                console.error("Upload failed", err);
+            } finally {
+                favPreview.style.opacity = "1";
+            }
+        });
+
+        // Listen for internal changes
+        document
+            .querySelectorAll("#sec-identity input, #sec-identity textarea")
+            .forEach((el) => {
+                el.addEventListener("input", notifyChange);
+            });
+
+        // Also listen for potential radio changes from ThemeSelector
+        document.querySelectorAll('input[name="site_theme"]').forEach((el) => {
+            el.addEventListener("change", notifyChange);
+        });
+    })();
+</script>

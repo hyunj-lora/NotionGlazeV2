@@ -1,0 +1,31 @@
+---
+interface Props {
+    value: { start: string; end?: string; time_zone?: string } | null;
+}
+
+const { value } = Astro.props;
+const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+};
+---
+
+{
+    value ? (
+        <span class="notion-date">
+            {formatDate(value.start)}
+            {value.end && ` → ${formatDate(value.end)}`}
+        </span>
+    ) : null
+}
+
+<style>
+    .notion-date {
+        color: var(--fg-color-secondary);
+        font-size: 14px;
+        white-space: nowrap;
+    }
+</style>

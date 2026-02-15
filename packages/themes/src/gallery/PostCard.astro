@@ -1,0 +1,87 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 2rem;
+        break-inside: avoid;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: var(--muted);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1.5rem;
+    }
+    .post-card a:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+        box-shadow: 0 20px 40px rgba(var(--foreground-rgb), 0.1);
+    }
+    .meta {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    h2 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+        margin-bottom: 0.5rem;
+        font-weight: 800;
+        color: var(--foreground);
+    }
+    p {
+        font-size: 0.95rem;
+        color: var(--muted-foreground);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+    .read-more {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 0.8rem;
+    }
+</style>

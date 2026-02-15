@@ -1,0 +1,78 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+        <div class="read-more">Read Entry →</div>
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 4rem;
+        transition: transform 0.2s ease;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    .meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        margin-bottom: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    h2 {
+        font-size: 2.25rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        font-weight: 800;
+    }
+    p {
+        font-size: 1.125rem;
+        color: var(--muted-foreground);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        max-width: 650px;
+    }
+    .read-more {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 0.9rem;
+    }
+    .post-card:hover h2 {
+        color: var(--primary);
+    }
+</style>

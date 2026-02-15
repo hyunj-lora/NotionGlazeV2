@@ -1,0 +1,68 @@
+---
+interface Props {
+    title: string;
+    summary?: string | null;
+    tags?: string[];
+    publishedAt?: number | null;
+    slug: string;
+}
+
+const { title, summary, tags, publishedAt, slug } = Astro.props;
+const formattedDate = publishedAt
+    ? new Date(publishedAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+      })
+    : "";
+---
+
+<article class="post-card">
+    <a href={`/blog/${slug}`}>
+        <div class="meta">
+            {formattedDate && <time>{formattedDate}</time>}
+            {
+                tags && tags.length > 0 && (
+                    <span class="tags">{tags.join(" · ")}</span>
+                )
+            }
+        </div>
+        <h2>{title}</h2>
+        {summary && <p>{summary}</p>}
+    </a>
+</article>
+
+<style>
+    .post-card {
+        margin-bottom: 2rem;
+    }
+    .post-card a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+    .meta {
+        font-size: 0.85rem;
+        color: rgba(55, 53, 47, 0.65);
+        margin-bottom: 4px;
+    }
+    :global(.dark) .meta {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    p {
+        font-size: 1rem;
+        color: rgba(55, 53, 47, 0.65);
+        margin-bottom: 0;
+    }
+    :global(.dark) p {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .post-card:hover h2 {
+        text-decoration: underline;
+    }
+</style>

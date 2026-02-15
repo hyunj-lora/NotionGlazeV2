@@ -1,0 +1,133 @@
+---
+
+---
+
+<section class="philosophy">
+    <div class="container">
+        <div class="grid">
+            <div class="content">
+                <span class="eyebrow">The Philosophy of Less</span>
+                <h2 class="title">Less Bloat.<br />More Soul.</h2>
+                <div class="body">
+                    <p>
+                        Most tools try to add more features you don't need. We
+                        did the opposite. We stripped away the bloat, the
+                        iframes, and the heavy scripts that slow you down.
+                    </p>
+                    <p>
+                        NotionGlaze treats your content with respect. We don't
+                        just display it; we polish and deliver it at the global
+                        edge, so it reaches your reader instantly.
+                    </p>
+                </div>
+            </div>
+            <div class="visual">
+                <div class="diagram-container">
+                    <img
+                        src="/landing/architecture.png"
+                        alt="NotionGlaze Architecture Diagram"
+                        class="diag-img"
+                    />
+                    <div class="overlay-glow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .philosophy {
+        padding: 10rem 0;
+        background: hsl(0 0% 0%);
+        color: hsl(0 0% 100%);
+        overflow: hidden;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 6rem;
+        align-items: center;
+    }
+
+    .eyebrow {
+        color: hsl(var(--primary));
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+
+    .title {
+        font-size: 4rem;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 2rem;
+    }
+
+    .body p {
+        font-size: 1.25rem;
+        line-height: 1.7;
+        color: hsl(0 0% 100% / 0.7);
+        margin-bottom: 2rem;
+    }
+
+    .visual {
+        position: relative;
+    }
+
+    .diagram-container {
+        position: relative;
+    }
+
+    .diag-img {
+        width: 100%;
+        filter: drop-shadow(0 0 30px hsl(var(--primary) / 0.3));
+    }
+
+    .overlay-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 150%;
+        height: 150%;
+        background: radial-gradient(
+            circle,
+            hsl(var(--primary) / 0.15) 0%,
+            transparent 70%
+        );
+        z-index: -1;
+    }
+
+    @media (max-width: 1024px) {
+        .grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        .body p {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 600px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .philosophy {
+            padding: 6rem 0;
+        }
+        .title {
+            font-size: 3rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .philosophy {
+            padding: 4rem 0;
+        }
+        .title {
+            font-size: 2.25rem;
+        }
+    }
+</style>

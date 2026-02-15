@@ -1,0 +1,77 @@
+---
+import { DashboardLayout, SyncSettings, StickyFooter } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+import "../../styles/globals.css";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+    } catch (e) {
+        console.error("Sync Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="Source & Sync" tenant={tenant}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8 px-4">
+        <header class="mb-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                Source & Sync
+            </h1>
+            <p class="text-muted-foreground">
+                Connect your Notion workspace and manage content
+                synchronization.
+            </p>
+        </header>
+
+        <SyncSettings config={config} tenant={tenant} />
+    </div>
+
+    <StickyFooter id="sync-footer" saveId="save-sync-btn" />
+
+    <script is:inline>
+        document.addEventListener("DOMContentLoaded", () => {
+            const saveBtn = document.getElementById("save-sync-btn");
+            saveBtn?.addEventListener("click", async () => {
+                saveBtn.classList.add("btn-loading");
+                saveBtn.disabled = true;
+
+                const payload = {
+                    root_page_id:
+                        document.getElementById("root-page-id")?.value,
+                    sync_interval:
+                        document.getElementById("sync-interval")?.value,
+                    auto_sync: document.getElementById("auto-sync")?.checked,
+                };
+
+                try {
+                    const res = await fetch("/api/v1/setup/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+                    if (res.ok) {
+                        window.showToast("Sync settings updated!", "success");
+                        setTimeout(() => window.location.reload(), 800);
+                    } else {
+                        const data = await res.json().catch(() => ({}));
+                        window.showToast(data.error || "Save failed", "error");
+                    }
+                } catch (e) {
+                    window.showToast("Connection error", "error");
+                } finally {
+                    saveBtn.classList.remove("btn-loading");
+                    saveBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</DashboardLayout>

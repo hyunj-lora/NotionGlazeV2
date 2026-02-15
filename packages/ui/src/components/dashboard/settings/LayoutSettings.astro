@@ -1,0 +1,686 @@
+---
+import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+const headerConfig = config.header || {};
+const footerConfig = config.footer || {};
+---
+
+<div class="space-y-8">
+    <!-- Row 1: Header (Nav) & Page Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Header Config -->
+        <DashboardCard>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold mb-1">Header Layout</h3>
+                    <p class="text-sm text-muted-foreground">
+                        Control how the navigation bar behaves
+                    </p>
+                </div>
+                <!-- Behavior -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2"
+                            >Behavior</label
+                        >
+                        <select
+                            id="header_behavior"
+                            class="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                        >
+                            <option
+                                value="static"
+                                selected={headerConfig.behavior === "static"}
+                                >Static (Scrolls away)</option
+                            >
+                            <option
+                                value="sticky"
+                                selected={headerConfig.behavior === "sticky"}
+                                >Always Sticky</option
+                            >
+                            <option
+                                value="smart"
+                                selected={headerConfig.behavior === "smart"}
+                                >Smart (Auto-hide)</option
+                            >
+                        </select>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <div class="pt-2 border-t border-border">
+                        <label class="block text-sm font-medium mb-3"
+                            >Call to Action (Button)</label
+                        >
+                        <div class="grid grid-cols-1 gap-3">
+                            <input
+                                type="text"
+                                id="cta_label"
+                                value={headerConfig.cta_button?.label || ""}
+                                placeholder="Label (e.g. Subscribe)"
+                                class="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                            />
+                            <div class="grid grid-cols-2 gap-3">
+                                <input
+                                    type="text"
+                                    id="cta_url"
+                                    value={headerConfig.cta_button?.url || ""}
+                                    placeholder="URL (https://...)"
+                                    class="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                                />
+                                <select
+                                    id="cta_style"
+                                    class="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                                >
+                                    <option
+                                        value="ghost"
+                                        selected={headerConfig.cta_button
+                                            ?.style === "ghost"}>Ghost</option
+                                    >
+                                    <option
+                                        value="soft"
+                                        selected={headerConfig.cta_button
+                                            ?.style === "soft"}>Soft</option
+                                    >
+                                    <option
+                                        value="solid"
+                                        selected={headerConfig.cta_button
+                                            ?.style === "solid" ||
+                                            !headerConfig.cta_button?.style}
+                                        >Solid</option
+                                    >
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </DashboardCard>
+
+        {/* HIDDEN FOR BOOTSTRAP: Page Dimensions */}
+        {
+            /*
+        <DashboardCard>
+            ...
+        </DashboardCard>
+        */
+        }
+    </div>
+
+    <!-- Row 2: Live Preview -->
+    <div class="space-y-4">
+        <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-4">
+                <span
+                    class="text-sm font-bold uppercase tracking-wider text-muted-foreground"
+                    >Live Preview</span
+                >
+                <div
+                    class="px-2 py-0.5 rounded-full bg-primary/10 text-[10px] font-bold text-primary animate-pulse flex items-center gap-1.5"
+                >
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    LIVE
+                </div>
+            </div>
+            <div
+                class="flex items-center bg-muted/50 p-1 rounded-lg border border-border/50 shadow-sm"
+                id="viewport-toggle"
+            >
+                <button
+                    data-viewport="desktop"
+                    class="active p-2 rounded-md transition-all duration-200 bg-background text-foreground shadow-sm px-4 flex items-center gap-2 text-xs font-medium border border-border/50"
+                >
+                    Desktop
+                </button>
+                <button
+                    data-viewport="mobile"
+                    class="p-2 rounded-md transition-all duration-200 text-muted-foreground hover:text-foreground px-4 flex items-center gap-2 text-xs font-medium"
+                >
+                    Mobile
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="layout-preview-container"
+            class="relative rounded-3xl border border-light-border bg-white shadow-xl overflow-hidden transition-all duration-700 min-h-[500px] flex flex-col"
+        >
+            <!-- Browser Header -->
+            <div
+                class="flex items-center gap-3 p-4 border-b border-light-border bg-slate-50"
+            >
+                <div class="flex gap-1.5">
+                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <div
+                        class="bg-white border border-slate-200 rounded-full px-4 py-1 text-[10px] text-slate-400 w-full max-w-sm flex items-center justify-center"
+                    >
+                        yoursite.com
+                    </div>
+                </div>
+                <div class="w-12"></div>
+            </div>
+
+            <!-- Viewport -->
+            <div
+                class="flex-1 p-8 overflow-hidden flex flex-col items-center bg-white transition-colors duration-500"
+                id="preview-viewport-box"
+            >
+                <!-- Nav Mock -->
+                <div
+                    class="w-full flex justify-between items-center mb-12 border-b border-transparent pb-4"
+                    id="preview-nav-mock"
+                >
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center"
+                        >
+                            <div class="w-4 h-4 rounded-sm bg-primary/60"></div>
+                        </div>
+                        <div
+                            class="font-bold text-lg tracking-tight text-slate-900"
+                        >
+                            MyBlog
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="h-2 w-12 bg-slate-200 rounded-full"></div>
+                        <div class="h-2 w-12 bg-slate-200 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Width Box -->
+                <div
+                    id="preview-width-box"
+                    class="w-full transition-all duration-500 relative min-h-full flex flex-col items-center"
+                    style="max-width: 800px;"
+                >
+                    <!-- Guides -->
+                    <div
+                        class="absolute -top-10 left-0 right-0 flex justify-between px-2 opacity-20 transition-opacity desktop-only"
+                    >
+                        <div class="w-px h-6 bg-primary"></div>
+                        <div
+                            class="text-[10px] font-mono text-primary flex items-center gap-2"
+                        >
+                            <div class="h-[1px] w-8 bg-primary/20"></div>
+                            <span id="preview-width-label">800px</span>
+                            <div class="h-[1px] w-8 bg-primary/20"></div>
+                        </div>
+                        <div class="w-px h-6 bg-primary"></div>
+                    </div>
+
+                    <div class="w-full space-y-12">
+                        <article class="space-y-8">
+                            <header class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        id="preview-tag"
+                                        class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest"
+                                    >
+                                        Technology
+                                    </div>
+                                    <div
+                                        id="preview-date"
+                                        class="text-xs text-slate-400 flex items-center gap-2"
+                                    >
+                                        <div
+                                            class="w-1 h-1 rounded-full bg-slate-200"
+                                        >
+                                        </div>Oct 24
+                                    </div>
+                                    <div
+                                        id="preview-reading-time"
+                                        class="text-xs text-slate-400 flex items-center gap-2 ml-auto"
+                                    >
+                                        5 min read
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div
+                                        class="h-10 bg-slate-100 rounded-xl w-full"
+                                    >
+                                    </div>
+                                    <div
+                                        class="h-10 bg-slate-100 rounded-xl w-3/4"
+                                    >
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- Author -->
+                            <div
+                                id="preview-author"
+                                class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100"
+                            >
+                                <div
+                                    class="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-primary/10"
+                                >
+                                </div>
+                                <div class="space-y-1.5 flex-1">
+                                    <div
+                                        class="h-3 bg-slate-200 rounded-full w-24"
+                                    >
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Mock -->
+                            <div
+                                id="preview-card"
+                                class="bg-white border border-slate-100 shadow-xl p-8 space-y-6 transition-all duration-500 rounded-xl"
+                            >
+                                <div
+                                    class="aspect-video bg-slate-50 rounded-lg flex items-center justify-center relative"
+                                >
+                                    <div class="text-slate-300">IMG</div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div
+                                        class="h-6 bg-slate-100 rounded-lg w-2/3"
+                                    >
+                                    </div>
+                                    <div
+                                        class="h-4 bg-slate-50 rounded-lg w-full"
+                                    >
+                                    </div>
+                                </div>
+                                <div
+                                    id="preview-button"
+                                    class="h-12 bg-primary flex items-center justify-center text-primary-foreground font-bold rounded-lg text-sm"
+                                >
+                                    Button
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 text-[10px] font-mono text-slate-400 bg-white shadow-lg px-4 py-2 rounded-full border border-slate-100"
+            >
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-primary animate-pulse">
+                    </div>
+                    PREVIEW
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3: Appearance, Footer, Options -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* HIDDEN FOR BOOTSTRAP: Color Scheme */}
+        {
+            /*
+        <DashboardCard>
+            ...
+        </DashboardCard>
+        */
+        }
+
+        <!-- Footer Settings -->
+        <DashboardCard>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold mb-1">Footer</h3>
+                    <p class="text-sm text-muted-foreground">
+                        Style and copyright
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="cursor-pointer">
+                        <input
+                            type="radio"
+                            name="footer_style"
+                            value="minimal"
+                            checked={!footerConfig.style ||
+                                footerConfig.style === "minimal"}
+                            class="sr-only peer"
+                        />
+                        <div
+                            class="p-3 rounded-lg border border-border peer-checked:border-primary peer-checked:bg-primary/5 hover:bg-accent/50 transition-all text-center"
+                        >
+                            <div class="text-sm font-medium">Minimal</div>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input
+                            type="radio"
+                            name="footer_style"
+                            value="clean-stack"
+                            checked={footerConfig.style === "clean-stack"}
+                            class="sr-only peer"
+                        />
+                        <div
+                            class="p-3 rounded-lg border border-border peer-checked:border-primary peer-checked:bg-primary/5 hover:bg-accent/50 transition-all text-center"
+                        >
+                            <div class="text-sm font-medium">Clean Stack</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1"
+                        >Copyright Text</label
+                    >
+                    <input
+                        type="text"
+                        id="footer_copyright"
+                        value={footerConfig.copyright_text ||
+                            config.footer_text ||
+                            ""}
+                        placeholder="© 2024 Your Name"
+                        class="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm"
+                    />
+                </div>
+            </div>
+        </DashboardCard>
+    </div>
+
+    <!-- Row 4: Component Visibility & CSS -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <DashboardCard>
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold mb-1">Component Visibility</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 cursor-pointer"
+                    >
+                        <input
+                            type="checkbox"
+                            id="show-post-date"
+                            checked={config.show_post_date !== false}
+                            class="w-4 h-4 rounded border-border text-primary"
+                        />
+                        <span class="text-sm font-medium">Post dates</span>
+                    </label>
+                    <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 cursor-pointer"
+                    >
+                        <input
+                            type="checkbox"
+                            id="show-reading-time"
+                            checked={config.show_reading_time !== false}
+                            class="w-4 h-4 rounded border-border text-primary"
+                        />
+                        <span class="text-sm font-medium">Reading time</span>
+                    </label>
+                    <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 cursor-pointer"
+                    >
+                        <input
+                            type="checkbox"
+                            id="show-tags"
+                            checked={config.show_tags !== false}
+                            class="w-4 h-4 rounded border-border text-primary"
+                        />
+                        <span class="text-sm font-medium">Post tags</span>
+                    </label>
+                    <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 cursor-pointer"
+                    >
+                        <input
+                            type="checkbox"
+                            id="show-author"
+                            checked={config.show_author !== false}
+                            class="w-4 h-4 rounded border-border text-primary"
+                        />
+                        <span class="text-sm font-medium">Author info</span>
+                    </label>
+                </div>
+            </div>
+        </DashboardCard>
+
+        <DashboardCard>
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold mb-1">Custom CSS</h3>
+                <textarea
+                    id="custom-css"
+                    rows="5"
+                    placeholder="/* Your custom CSS here */"
+                    class="w-full px-4 py-3 rounded-lg border border-border bg-background font-mono text-sm"
+                    >{config.custom_css || ""}</textarea
+                >
+            </div>
+        </DashboardCard>
+    </div>
+
+    <StickyFooter id="layout-footer" saveId="save-layout-btn" />
+</div>
+
+<style>
+    .appearance-option input:checked + div {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+    }
+    .appearance-option:has(input:checked) {
+        border-color: hsl(var(--primary) / 0.5);
+        background: hsl(var(--primary) / 0.05);
+    }
+    #viewport-toggle button.active {
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-color: hsl(var(--border) / 0.5);
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        const initLayout = () => {
+            // Preview Elements
+            const previewContainer = document.getElementById(
+                "layout-preview-container",
+            );
+            const widthBox = document.getElementById("preview-width-box");
+            const widthLabel = document.getElementById("preview-width-label");
+            const previewCard = document.getElementById("preview-card");
+            const previewButton = document.getElementById("preview-button");
+
+            // Viewport Toggle
+            const desktopBtn = document.querySelector(
+                'button[data-viewport="desktop"]',
+            );
+            const mobileBtn = document.querySelector(
+                'button[data-viewport="mobile"]',
+            );
+
+            if (desktopBtn && mobileBtn) {
+                const newDesktop = desktopBtn.cloneNode(true);
+                const newMobile = mobileBtn.cloneNode(true);
+                desktopBtn.parentNode.replaceChild(newDesktop, desktopBtn);
+                mobileBtn.parentNode.replaceChild(newMobile, mobileBtn);
+
+                newDesktop.addEventListener("click", () => {
+                    newDesktop.classList.add("active");
+                    newMobile.classList.remove("active");
+                    previewContainer.classList.remove("mobile-viewport");
+                    /* HIDDEN FOR BOOTSTRAP
+                    widthBox.style.maxWidth =
+                        document.getElementById("content-width").value + "px";
+                    */
+                });
+                newMobile.addEventListener("click", () => {
+                    newMobile.classList.add("active");
+                    newDesktop.classList.remove("active");
+                    previewContainer.classList.add("mobile-viewport");
+                    widthBox.style.maxWidth = "100%";
+                });
+            }
+
+            /* HIDDEN FOR BOOTSTRAP
+            const widthInput = document.getElementById("content-width");
+            const radiusInput = document.getElementById("border-radius");
+
+            if (widthInput) {
+                const newWidth = widthInput.cloneNode(true);
+                widthInput.parentNode.replaceChild(newWidth, widthInput);
+                newWidth.addEventListener("input", (e) => {
+                    const val = e.target.value;
+                    document.getElementById("content-width-value").textContent =
+                        val + "px";
+                    widthLabel.textContent = val + "px";
+                    if (
+                        !previewContainer.classList.contains("mobile-viewport")
+                    ) {
+                        widthBox.style.maxWidth = val + "px";
+                    }
+                });
+            }
+
+            if (radiusInput) {
+                const newRadius = radiusInput.cloneNode(true);
+                radiusInput.parentNode.replaceChild(newRadius, radiusInput);
+                newRadius.addEventListener("input", (e) => {
+                    const val = e.target.value;
+                    document.getElementById("border-radius-value").textContent =
+                        val + "px";
+                    previewCard.style.borderRadius = val + "px";
+                    previewButton.style.borderRadius = val + "px";
+                });
+            }
+            */
+
+            // Visiblity Toggles
+            const bindToggle = (id, targetId) => {
+                const input = document.getElementById(id);
+                const target = document.getElementById(targetId);
+                if (input && target) {
+                    const newInput = input.cloneNode(true);
+                    input.parentNode.replaceChild(newInput, input);
+                    newInput.addEventListener("change", (e) => {
+                        target.style.opacity = e.target.checked ? "1" : "0.2";
+                    });
+                    // Init state
+                    target.style.opacity = newInput.checked ? "1" : "0.2";
+                }
+            };
+
+            bindToggle("show-post-date", "preview-date");
+            bindToggle("show-reading-time", "preview-reading-time");
+            bindToggle("show-tags", "preview-tag");
+            bindToggle("show-author", "preview-author");
+
+            // Save Handler
+            const saveBtn = document.getElementById("save-layout-btn");
+            if (saveBtn) {
+                const newSave = saveBtn.cloneNode(true);
+                saveBtn.parentNode.replaceChild(newSave, saveBtn);
+
+                newSave.addEventListener("click", async () => {
+                    newSave.classList.add("btn-loading");
+                    newSave.disabled = true;
+
+                    try {
+                        // Fetch the current config to ensure safe merging
+                        const currentConfigRes = await fetch(
+                            "/api/v1/setup/config",
+                        );
+                        if (!currentConfigRes.ok) {
+                            console.error("Failed to fetch current config.");
+                            newSave.disabled = false;
+                            newSave.classList.remove("btn-loading");
+                            return;
+                        }
+                        const currentConfig = await currentConfigRes.json();
+
+                        // Gather Header Data
+                        const headerBehavior =
+                            document.getElementById("header_behavior")?.value;
+                        const ctaLabel =
+                            document.getElementById("cta_label")?.value;
+                        const ctaUrl =
+                            document.getElementById("cta_url")?.value;
+                        const ctaStyle =
+                            document.getElementById("cta_style")?.value;
+
+                        const headerData = {
+                            ...currentConfig.header, // Preserve existing header fields
+                            behavior: headerBehavior,
+                            cta_button: ctaLabel
+                                ? {
+                                      label: ctaLabel,
+                                      url: ctaUrl,
+                                      style: ctaStyle,
+                                  }
+                                : null,
+                        };
+
+                        // Gather Footer
+                        const footerStyle = document.querySelector(
+                            'input[name="footer_style"]:checked',
+                        )?.value;
+                        const footerCopyright =
+                            document.getElementById("footer_copyright")?.value;
+
+                        const footerData = {
+                            ...currentConfig.footer, // Preserve existing footer fields
+                            style: footerStyle,
+                            copyright_text: footerCopyright,
+                        };
+
+                        const newConfig = {
+                            ...currentConfig, // Start with the current config
+                            /* HIDDEN FOR BOOTSTRAP
+                            content_width:
+                                document.getElementById("content-width")?.value,
+                            border_radius:
+                                document.getElementById("border-radius")?.value,
+                            site_appearance: document.querySelector(
+                                'input[name="site-appearance"]:checked',
+                            )?.value,
+                            */
+                            footer_text:
+                                document.getElementById("footer_copyright")
+                                    ?.value, // Legacy field
+                            custom_css:
+                                document.getElementById("custom-css")?.value,
+                            show_post_date:
+                                document.getElementById("show-post-date")
+                                    ?.checked,
+                            show_reading_time:
+                                document.getElementById("show-reading-time")
+                                    ?.checked,
+                            show_tags:
+                                document.getElementById("show-tags")?.checked,
+                            show_author:
+                                document.getElementById("show-author")?.checked,
+                            header: headerData,
+                            footer: footerData,
+                        };
+
+                        const res = await fetch("/api/v1/setup/config", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(newConfig),
+                        });
+
+                        if (res.ok) {
+                            window.location.reload();
+                        } else {
+                            console.error(
+                                "Failed to save config:",
+                                await res.text(),
+                            );
+                        }
+                    } catch (e) {
+                        console.error("Error saving config:", e);
+                    } finally {
+                        newSave.disabled = false;
+                        newSave.classList.remove("btn-loading");
+                    }
+                });
+            }
+        };
+
+        initLayout();
+        document.addEventListener("astro:page-load", initLayout);
+    })();
+</script>

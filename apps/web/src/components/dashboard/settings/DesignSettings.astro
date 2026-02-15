@@ -1,0 +1,260 @@
+---
+import LivePolishPreview from "./LivePolishPreview.astro";
+import Label from "../../ui/Label.astro";
+import Input from "../../ui/Input.astro";
+import "../../ui/../../styles/globals.css";
+
+interface Props {
+    config: any;
+}
+
+const { config } = Astro.props;
+---
+
+<div class="design-settings-group">
+    <!-- SECTION: APPEARANCE -->
+    <section class="settings-section" id="sec-appearance">
+        <div class="section-info">
+            <h3>Ambient Appearance</h3>
+            <p>Control the light and dark aspects of your UI.</p>
+        </div>
+        <div class="settings-card">
+            <div class="appearance-options">
+                {
+                    ["system", "light", "dark"].map((mode) => (
+                        <label
+                            class={`appearance-pill ${(!config.site_appearance && mode === "system") || config.site_appearance === mode ? "active" : ""}`}
+                        >
+                            <input
+                                type="radio"
+                                name="site-appearance"
+                                value={mode}
+                                checked={
+                                    (!config.site_appearance &&
+                                        mode === "system") ||
+                                    config.site_appearance === mode
+                                }
+                            />
+                            <span>{mode.toUpperCase()}</span>
+                        </label>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- Live Polish Preview Logic ---
+        const radiusSlider = document.getElementById(
+            "border-radius-slider",
+        ) as HTMLInputElement | null;
+        const radiusHidden = document.getElementById(
+            "border-radius",
+        ) as HTMLInputElement | null;
+        const radiusDisplay = document.getElementById("radius-value-display");
+        const widthBtns = document.querySelectorAll(".width-preset-btn");
+        const widthHidden = document.getElementById(
+            "content-width",
+        ) as HTMLInputElement | null;
+        const previewBox = document.getElementById("ui-preview-box");
+
+        function syncPreview() {
+            if (!previewBox) return;
+            if (radiusHidden) {
+                previewBox.style.borderRadius = radiusHidden.value;
+            }
+            if (widthHidden) {
+                const w = widthHidden.value;
+                // Map real widths to preview widths
+                let previewWidth = "100%";
+                if (w === "800px") previewWidth = "220px";
+                else if (w === "1000px") previewWidth = "260px";
+                else if (w === "1200px") previewWidth = "300px";
+                else if (w === "1400px") previewWidth = "340px";
+
+                previewBox.style.width = previewWidth;
+            }
+        }
+
+        // Initial Sync
+        syncPreview();
+
+        radiusSlider?.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            const val = target.value + "px";
+            if (radiusDisplay) radiusDisplay.textContent = val;
+
+            if (radiusHidden) radiusHidden.value = val;
+            // Dispatch change input on hidden input so parent form detects change
+            radiusHidden?.dispatchEvent(new Event("input", { bubbles: true }));
+            syncPreview();
+        });
+
+        // --- Hex to HSL Helper (Client-Side) ---
+        function hexToHsl(hex: string) {
+            let c = hex.substring(1).split("");
+            if (c.length === 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            const r = parseInt(c[0] + c[1], 16) / 255;
+            const g = parseInt(c[2] + c[3], 16) / 255;
+            const b = parseInt(c[4] + c[5], 16) / 255;
+            const max = Math.max(r, g, b),
+                min = Math.min(r, g, b);
+            let h = 0,
+                s = 0,
+                l = (max + min) / 2;
+            if (max !== min) {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r:
+                        h = (g - b) / d + (g < b ? 6 : 0);
+                        break;
+                    case g:
+                        h = (b - r) / d + 2;
+                        break;
+                    case b:
+                        h = (r - g) / d + 4;
+                        break;
+                }
+                h /= 6;
+            }
+            return `${(h * 360).toFixed(1)} ${(s * 100).toFixed(1)}% ${(l * 100).toFixed(1)}%`;
+        }
+
+        // --- Appearance & Color Logic ---
+        document.querySelectorAll(".appearance-pill").forEach((p) =>
+            p.addEventListener("click", () => {
+                const input = p.querySelector(
+                    "input",
+                ) as HTMLInputElement | null;
+                const val = input?.value;
+                document
+                    .querySelectorAll(".appearance-pill")
+                    .forEach((x) => x.classList.toggle("active", x === p));
+                if (input) input.checked = true;
+                input?.dispatchEvent(new Event("change", { bubbles: true })); // Notify parent
+
+                const isDark =
+                    val === "dark" ||
+                    (val === "system" &&
+                        window.matchMedia("(prefers-color-scheme: dark)")
+                            .matches);
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    isDark ? "dark" : "light",
+                );
+            }),
+        );
+
+        const colorPick = document.getElementById(
+            "brand-color",
+        ) as HTMLInputElement | null;
+        const colorText = document.getElementById(
+            "brand-color-text",
+        ) as HTMLInputElement | null;
+        const colorPrev = document.getElementById("brand-color-preview");
+        const dashboardShell = document.querySelector(
+            ".dashboard-shell",
+        ) as HTMLElement;
+
+        function updateBrandColor(hex: string) {
+            if (colorText) colorText.value = hex;
+            if (colorPick) colorPick.value = hex;
+            if (colorPrev) colorPrev.style.backgroundColor = hex;
+
+            // 1. Update global CSS variable for other components
+            document.documentElement.style.setProperty("--primary", hex);
+
+            // 2. Update .dashboard-shell with HSL for Shadcn (Live Preview)
+            // This makes buttons, inputs, and active states update instantly!
+        }
+
+        document
+            .getElementById("picker-trigger")
+            ?.addEventListener("click", () => colorPick?.click());
+
+        colorPick?.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            updateBrandColor(target.value);
+            // Dispatch input
+            colorText?.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+
+        // Also update color picker if text input changes manually
+        colorText?.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            updateBrandColor(target.value);
+        });
+    </script>
+
+    <style>
+        /* Styling copied/adapted from settings.astro */
+        .settings-section {
+            margin-bottom: 4rem;
+        }
+        .section-info {
+            margin-bottom: 1.5rem;
+        }
+        .section-info h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+        .section-info p {
+            color: var(--muted-foreground);
+            font-size: 0.95rem;
+        }
+        .settings-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--p-shadow);
+        }
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--foreground);
+        }
+        .grid-2-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Appearance & Brand Color */
+        .appearance-options {
+            display: flex;
+            gap: 1rem;
+        }
+        .appearance-pill {
+            flex: 1;
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            display: block; /* Ensure label behaves as block for click area */
+        }
+        .appearance-pill input {
+            display: none;
+        }
+        .appearance-pill.active {
+            border-color: hsl(var(--primary));
+            color: hsl(var(--primary));
+            background: hsl(var(--primary) / 0.05);
+            transform: translateY(-3px);
+        }
+    </style>
+</div>

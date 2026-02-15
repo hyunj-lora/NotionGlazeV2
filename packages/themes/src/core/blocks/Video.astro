@@ -1,0 +1,90 @@
+---
+import { getMediaUrl, getCaption } from "../../shared/media-utils";
+import RichText from "../RichText.astro";
+
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+const videoUrl = getMediaUrl(content);
+const caption = getCaption(content);
+---
+
+<div class={`notion-video-wrapper ${className || ""}`}>
+    {
+        videoUrl ? (
+            <figure class="notion-figure">
+                <video
+                    controls
+                    preload="metadata"
+                    aria-label={caption || "Video content"}
+                    class="notion-video"
+                >
+                    <source src={videoUrl} type="video/mp4" />
+                    <p>
+                        Your browser doesn't support HTML5 video.{" "}
+                        <a href={videoUrl}>Download</a>
+                    </p>
+                </video>
+                {content.caption?.length > 0 && (
+                    <figcaption class="notion-figcaption">
+                        <RichText content={content.caption} />
+                    </figcaption>
+                )}
+            </figure>
+        ) : (
+            <div class="notion-media-error">
+                <div class="notion-error-content">
+                    <span class="notion-error-icon">⚠️</span>
+                    <p>VIDEO UNAVAILABLE</p>
+                </div>
+            </div>
+        )
+    }
+</div>
+
+<style>
+    .notion-video-wrapper {
+        margin: 3rem 0;
+    }
+
+    .notion-figure {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .notion-video {
+        width: 100%;
+        height: auto;
+        display: block;
+        background: #000;
+    }
+
+    .notion-figcaption {
+        margin-top: 1rem;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    .notion-media-error {
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+
+    .notion-error-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .notion-error-icon {
+        font-size: 1.5rem;
+    }
+</style>

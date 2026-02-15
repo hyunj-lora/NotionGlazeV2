@@ -1,0 +1,1256 @@
+---
+import PropertySelect from "./database/PropertySelect.astro";
+import PropertyDate from "./database/PropertyDate.astro";
+import PropertyPerson from "./database/PropertyPerson.astro";
+
+interface Props {
+    content: any; // EnrichedDatabase content { title, schema, rows, viewType, layoutFlags }
+}
+
+const { content } = Astro.props;
+const {
+    title = "Database",
+    schema = {},
+    rows = [],
+    viewType = "table",
+    layoutFlags = [],
+} = content;
+
+// Asymmetric View Logic
+const isVisual = ["gallery", "board", "calendar", "timeline"].includes(
+    viewType,
+);
+const primaryView = viewType;
+// If primary is visual, secondary is table. If primary is table/list/feed, no secondary (or could be nothing).
+// For simplification and robustness, we only offer Table as secondary for Visual views.
+const secondaryView = isVisual ? "table" : null;
+
+// Columns for Table View
+const columns = Object.entries(schema).map(([key, value]) => ({
+    key,
+    name: (value as any).name,
+    type: (value as any).type as string,
+    options: (value as any).options || [],
+}));
+
+// Grouping for Board View (Heuristic: First Select/Status property)
+const groupCol = columns.find((c) => ["select", "status"].includes(c.type));
+let groups = groupCol ? groupCol.options || [] : [];
+
+// Logic: Sort rows into groups, capture "No Status"
+const groupedRows: Record<string, any[]> = {};
+const unassignedRows: any[] = [];
+
+if (groupCol) {
+    // Initialize groups
+    groups.forEach((g: any) => {
+        groupedRows[g.name] = [];
+    });
+
+    rows.forEach((row: any) => {
+        const val = row.properties[groupCol.key];
+        if (val && val.name) {
+            if (!groupedRows[val.name]) groupedRows[val.name] = [];
+            groupedRows[val.name].push(row);
+        } else {
+            unassignedRows.push(row);
+        }
+    });
+
+    // Add "No Status" if there are unassigned items
+    if (unassignedRows.length > 0) {
+        groups = [{ name: "No Status", color: "gray" }, ...groups];
+        groupedRows["No Status"] = unassignedRows;
+    }
+} else {
+    // Fallback if no group column: Everything is "No Status"
+    groups = [{ name: "All Items", color: "gray" }];
+    groupedRows["All Items"] = rows;
+}
+
+// Logic for Calendar / Timeline (Date Property)
+const dateCol = columns.find((c) => c.type === "date");
+// Helper to parse date (Notion dates are ISO strings YYYY-MM-DD or with time)
+const getDate = (row: any) => {
+    if (!dateCol) return null;
+    const val = row.properties[dateCol.key];
+    if (!val || !val.start) return null;
+    return new Date(val.start);
+};
+// Calendar Grid Generation (Simple Month View based on first event or Today)
+const today = new Date();
+const firstDate = rows.map(getDate).find((d: any) => d) || today;
+const currentMonth = firstDate.getMonth();
+const currentYear = firstDate.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const startDayOfWeek = new Date(currentYear, currentMonth, 1).getDay(); // 0=Sun
+    const calendarDays = Array.from({ length: 35 }, (_, i) => {
+        // 5 weeks grid
+        const dayNum = i - startDayOfWeek + 1;
+        const isCurrentMonth = dayNum > 0 && dayNum <= daysInMonth;
+        return {
+            dayNum,
+            isCurrentMonth,
+            date: new Date(currentYear, currentMonth, dayNum),
+        };
+    });
+
+    const dbId = `db-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div
+    id={dbId}
+    class="notion-database"
+    data-primary-view={primaryView}
+    data-secondary-view={secondaryView}
+    data-layout-flags={JSON.stringify(layoutFlags)}
+>
+    <div class="database-header">
+        <h3 class="database-title">{title}</h3>
+        {
+            secondaryView && (
+                <div class="view-switcher">
+                    <button class="view-btn active" data-view={primaryView}>
+                        {primaryView.charAt(0).toUpperCase() +
+                            primaryView.slice(1)}
+                    </button>
+                    <button class="view-btn" data-view={secondaryView}>
+                        {secondaryView.charAt(0).toUpperCase() +
+                            secondaryView.slice(1)}
+                    </button>
+                </div>
+            )
+        }
+    </div>
+
+    <div id="db-content-container">
+        {/* PRIMARY VIEW RENDER */}
+        {
+            primaryView === "gallery" && (
+                <div class="database-view view-gallery">
+                    <div
+                        class={`database-gallery ${layoutFlags.includes("Masonry") ? "masonry" : "grid"}`}
+                    >
+                        {rows.map((row: any) => (
+                            <a href={row.url} class="gallery-card">
+                                {row.cover && (
+                                    <div class="card-cover">
+                                        <img
+                                            src={row.cover}
+                                            alt={
+                                                row.properties["Name"] ||
+                                                "Untitled"
+                                            }
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                )}
+                                <div class="card-content">
+                                    <div class="card-title">
+                                        {row.icon && (
+                                            <span class="card-icon">
+                                                {row.icon}
+                                            </span>
+                                        )}
+                                        <span>
+                                            {row.properties["Name"] ||
+                                                "Untitled"}
+                                        </span>
+                                    </div>
+                                    <div class="card-props">
+                                        {columns.slice(0, 3).map((col) => {
+                                            if (
+                                                col.type === "title" ||
+                                                !row.properties[col.key]
+                                            )
+                                                return null;
+                                            return (
+                                                <div class="prop-row">
+                                                    <span class="prop-name">
+                                                        {col.name}:
+                                                    </span>
+                                                    <span class="prop-val-text">
+                                                        {typeof row.properties[
+                                                            col.key
+                                                        ] === "object"
+                                                            ? "..."
+                                                            : row.properties[
+                                                                  col.key
+                                                              ]}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            primaryView === "board" && (
+                <div class="database-view view-board">
+                    <div class="board-container">
+                        {groups.map((group: any) => (
+                            <div class="board-column">
+                                <div class="board-column-header">
+                                    <span
+                                        class="board-badge"
+                                        style={`background: ${group.color || "gray"}`}
+                                    >
+                                        {group.name}
+                                    </span>
+                                    <span class="board-count">
+                                        {(groupedRows[group.name] || []).length}
+                                    </span>
+                                </div>
+                                <div class="board-items">
+                                    {(groupedRows[group.name] || []).map(
+                                        (row: any) => (
+                                            <a
+                                                href={row.url}
+                                                class="board-card"
+                                            >
+                                                <div class="card-title">
+                                                    {row.properties["Name"] ||
+                                                        "Untitled"}
+                                                </div>
+                                            </a>
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                        {groups.length === 0 && (
+                            <div class="empty-state">
+                                No Select/Status property for Board view.
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            primaryView === "list" && (
+                <div class="database-view view-list">
+                    <div class="list-container">
+                        {rows.map((row: any) => (
+                            <a href={row.url} class="list-item">
+                                <span class="list-icon">
+                                    {row.icon || "📄"}
+                                </span>
+                                <span class="list-title">
+                                    {row.properties["Name"] || "Untitled"}
+                                </span>
+                                <div class="list-props">
+                                    {columns.slice(0, 2).map((col) => {
+                                        if (col.type === "title") return null;
+                                        // Render simple text for list
+                                        return (
+                                            <span class="list-prop-pill">
+                                                {col.name}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            primaryView === "feed" && (
+                <div class="database-view view-feed">
+                    <div class="feed-container">
+                        {rows.slice(0, 10).map(
+                            (
+                                row: any, // Initial Render Limit
+                            ) => (
+                                <a href={row.url} class="feed-item">
+                                    {row.cover && (
+                                        <div class="feed-cover">
+                                            <img
+                                                src={row.cover}
+                                                loading="lazy"
+                                                alt=""
+                                            />
+                                        </div>
+                                    )}
+                                    <div class="feed-content">
+                                        <div class="feed-title">
+                                            {row.properties["Name"] ||
+                                                "Untitled"}
+                                        </div>
+                                        <div class="feed-meta">
+                                            {dateCol &&
+                                                row.properties[dateCol.key] && (
+                                                    <span class="feed-date">
+                                                        {new Date(
+                                                            row.properties[
+                                                                dateCol.key
+                                                            ].start,
+                                                        ).toLocaleDateString()}
+                                                    </span>
+                                                )}
+                                        </div>
+                                    </div>
+                                </a>
+                            ),
+                        )}
+                    </div>
+                    {/* Hidden Container for Remaining Items (Client-side usage) */}
+                    <div class="feed-data-store" style="display:none;">
+                        {rows.slice(10).map((row: any) => (
+                            <a href={row.url} class="feed-item">
+                                {row.cover && (
+                                    <div class="feed-cover">
+                                        <img
+                                            src={row.cover}
+                                            loading="lazy"
+                                            alt=""
+                                        />
+                                    </div>
+                                )}
+                                <div class="feed-content">
+                                    <div class="feed-title">
+                                        {row.properties["Name"] || "Untitled"}
+                                    </div>
+                                    <div class="feed-meta">
+                                        {dateCol &&
+                                            row.properties[dateCol.key] && (
+                                                <span class="feed-date">
+                                                    {new Date(
+                                                        row.properties[
+                                                            dateCol.key
+                                                        ].start,
+                                                    ).toLocaleDateString()}
+                                                </span>
+                                            )}
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                    {rows.length > 10 && (
+                        <div
+                            class="feed-sentinel"
+                            style="height: 20px; margin: 20px 0; text-align: center; color: #888;"
+                        >
+                            Loading more...
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
+        {
+            primaryView === "calendar" && (
+                <div class="database-view view-calendar">
+                    <div class="calendar-header">
+                        <button class="cal-nav-btn prev-month">&larr;</button>
+                        <span class="cal-month-label">
+                            {new Date(currentYear, currentMonth).toLocaleString(
+                                "default",
+                                { month: "long", year: "numeric" },
+                            )}
+                        </span>
+                        <button class="cal-nav-btn next-month">&rarr;</button>
+                    </div>
+                    {/* Data Store for Client-side Interaction */}
+                    <script type="application/json" class="calendar-data-store">
+                        {JSON.stringify(rows)}
+                    </script>
+                    <div class="calendar-grid">
+                        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                            (d) => (
+                                <div class="day-header">{d}</div>
+                            ),
+                        )}
+                        {calendarDays.map((day: any) => (
+                            <div
+                                class={`day-cell ${!day.isCurrentMonth ? "other-month" : ""}`}
+                            >
+                                <span class="day-num">
+                                    {day.dayNum > 0 ? day.dayNum : ""}
+                                </span>
+                                {day.isCurrentMonth &&
+                                    rows
+                                        .filter((r: any) => {
+                                            const d = getDate(r) as Date;
+                                            return (
+                                                d &&
+                                                d.getDate() === day.dayNum &&
+                                                d.getMonth() === currentMonth
+                                            );
+                                        })
+                                        .map((r: any) => (
+                                            <a
+                                                href={r.url}
+                                                class="calendar-event"
+                                                title={r.properties["Name"]}
+                                            >
+                                                {r.properties["Name"]}
+                                            </a>
+                                        ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            primaryView === "timeline" && (
+                <div class="database-view view-timeline">
+                    <div class="timeline-container">
+                        {/* Simple Gantt: One Item Per Row for V1 Reliability */}
+                        <div class="timeline-header-row">
+                            <div class="timeline-label-col">Item</div>
+                            <div class="timeline-bar-col">
+                                {/* Full Month Duration Header?? For V1 just current month label */}
+                                <span>
+                                    {new Date(
+                                        currentYear,
+                                        currentMonth,
+                                    ).toLocaleString("default", {
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+                        {(() => {
+                            // Timeline Range Logic
+                            const validRows = rows
+                                .map((r: any) => ({ ...r, _date: getDate(r) }))
+                                .filter((r: any) => r._date);
+                            const minDate = validRows.length
+                                ? new Date(
+                                      Math.min(
+                                          ...validRows.map((r: any) =>
+                                              r._date.getTime(),
+                                          ),
+                                      ),
+                                  )
+                                : new Date();
+                            const maxDate = validRows.length
+                                ? new Date(
+                                      Math.max(
+                                          ...validRows.map((r: any) =>
+                                              r._date.getTime(),
+                                          ),
+                                      ),
+                                  )
+                                : new Date();
+                            // Add buffer
+                            minDate.setDate(minDate.getDate() - 2);
+                            maxDate.setDate(maxDate.getDate() + 5);
+                            const totalTime =
+                                maxDate.getTime() - minDate.getTime() || 1; // Avoid div by zero
+
+                            return validRows
+                                .sort(
+                                    (a: any, b: any) =>
+                                        a._date.getTime() - b._date.getTime(),
+                                )
+                                .map((row: any) => {
+                                    const start = row._date.getTime();
+                                    // Hack: End date is optional in Notion. If missing, assume 1 day duration.
+                                    let end = new Date(
+                                        (dateCol &&
+                                            row.properties[dateCol.key]?.end) ||
+                                            start,
+                                    ).getTime();
+                                    if (end === start) end += 86400000; // 1 day
+
+                                    const leftPct =
+                                        ((start - minDate.getTime()) /
+                                            totalTime) *
+                                        100;
+                                    const widthPct =
+                                        ((end - start) / totalTime) * 100;
+
+                                    return (
+                                        <div class="timeline-row">
+                                            <a
+                                                href={row.url}
+                                                class="timeline-label"
+                                            >
+                                                {row.properties["Name"]}
+                                            </a>
+                                            <div class="timeline-track">
+                                                <div
+                                                    class="timeline-bar"
+                                                    style={`left: ${leftPct}%; width: ${widthPct}%;`}
+                                                />
+                                            </div>
+                                        </div>
+                                    );
+                                });
+                        })()}
+                    </div>
+                </div>
+            )
+        }
+
+        {
+            primaryView === "table" && (
+                <div class="database-view view-table">
+                    <div class="database-table-wrapper">
+                        <table class="database-table">
+                            <thead>
+                                <tr>
+                                    {columns.map((col) => (
+                                        <th>{col.name}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody class="pagination-body">
+                                {rows.map((row: any) => (
+                                    <tr>
+                                        {columns.map((col) => {
+                                            const val = row.properties[col.key];
+                                            return (
+                                                <td>
+                                                    {col.type === "select" ||
+                                                    col.type === "status" ? (
+                                                        <PropertySelect
+                                                            value={val}
+                                                        />
+                                                    ) : col.type ===
+                                                      "multi_select" ? (
+                                                        (val || []).map(
+                                                            (v: any) => (
+                                                                <PropertySelect
+                                                                    value={v}
+                                                                />
+                                                            ),
+                                                        )
+                                                    ) : col.type === "date" ? (
+                                                        <PropertyDate
+                                                            value={val}
+                                                        />
+                                                    ) : col.type ===
+                                                      "people" ? (
+                                                        <PropertyPerson
+                                                            value={val}
+                                                        />
+                                                    ) : typeof val ===
+                                                      "object" ? (
+                                                        JSON.stringify(val)
+                                                    ) : (
+                                                        val
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )
+        }
+    </div>
+
+    {/* SECONDARY VIEW TEMPLATE (Always Table for now) */}
+    {
+        secondaryView && (
+            <template id={`tmpl-secondary-${dbId}`}>
+                <div class="database-view view-table">
+                    <div class="database-table-wrapper">
+                        <table class="database-table">
+                            <thead>
+                                <tr>
+                                    {columns.map((col) => (
+                                        <th>{col.name}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody class="pagination-body">
+                                {rows.map((row: any) => (
+                                    <tr>
+                                        {columns.map((col) => {
+                                            const val = row.properties[col.key];
+                                            return (
+                                                <td>
+                                                    {col.type === "select" ||
+                                                    col.type === "status" ? (
+                                                        <PropertySelect
+                                                            value={val}
+                                                        />
+                                                    ) : col.type ===
+                                                      "multi_select" ? (
+                                                        (val || []).map(
+                                                            (v: any) => (
+                                                                <PropertySelect
+                                                                    value={v}
+                                                                />
+                                                            ),
+                                                        )
+                                                    ) : col.type === "date" ? (
+                                                        <PropertyDate
+                                                            value={val}
+                                                        />
+                                                    ) : col.type ===
+                                                      "people" ? (
+                                                        <PropertyPerson
+                                                            value={val}
+                                                        />
+                                                    ) : typeof val ===
+                                                      "object" ? (
+                                                        JSON.stringify(val)
+                                                    ) : (
+                                                        val
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    {rows.length > 50 && (
+                        <div class="pagination-controls">
+                            <button class="page-btn prev-btn" disabled>
+                                Previous
+                            </button>
+                            <span class="page-info">Page 1</span>
+                            <button class="page-btn next-btn">Next</button>
+                        </div>
+                    )}
+                </div>
+            </template>
+        )
+    }
+
+    {
+        /* Pagination for Primary View if it's Table and not covered by template */
+    }
+    {
+        primaryView === "table" && rows.length > 50 && (
+            <div class="pagination-controls">
+                <button class="page-btn prev-btn" disabled>
+                    Previous
+                </button>
+                <span class="page-info">Page 1</span>
+                <button class="page-btn next-btn">Next</button>
+            </div>
+        )
+    }
+</div>
+
+<script define:vars={{ dbId, titleIdent: title.replace(/\s+/g, "-"), dateColKey: dateCol?.key }}>
+    function initInteractiveElements(container) {
+        // Pagination Logic
+        const tbody = container.querySelector(".pagination-body");
+        if (tbody) {
+            const rows = Array.from(tbody.querySelectorAll("tr") || []);
+            const prevBtn = container.querySelector(".prev-btn");
+            const nextBtn = container.querySelector(".next-btn");
+            const info = container.querySelector(".page-info");
+
+            if (rows.length > 50) {
+                let currentPage = 1;
+                const perPage = 50;
+                const totalPages = Math.ceil(rows.length / perPage);
+
+                function renderPage(page) {
+                    const start = (page - 1) * perPage;
+                    const end = start + perPage;
+                    rows.forEach((row, idx) => {
+                        row.style.display =
+                            idx >= start && idx < end ? "" : "none";
+                    });
+                    if (info)
+                        info.textContent = `Page ${page} of ${totalPages}`;
+                    if (prevBtn) prevBtn.disabled = page === 1;
+                    if (nextBtn) nextBtn.disabled = page === totalPages;
+                }
+                renderPage(1);
+                prevBtn?.addEventListener("click", () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderPage(currentPage);
+                    }
+                });
+                nextBtn?.addEventListener("click", () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderPage(currentPage);
+                    }
+                });
+            }
+        }
+    }
+
+    // Initialize THIS database instance only
+    const dbEl = document.getElementById(dbId);
+    if (dbEl) {
+        const container = dbEl.querySelector("#db-content-container");
+
+        // Feed Infinite Scroll Logic
+        const feedContainer = container.querySelector(".feed-container");
+        const sentinel = container.querySelector(".feed-sentinel");
+        const feedStore = container.querySelector(".feed-data-store");
+        if (feedContainer && sentinel && feedStore) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting) {
+                        const items = Array.from(feedStore.children).slice(
+                            0,
+                            10,
+                        );
+                        if (items.length === 0) {
+                            sentinel.style.display = "none";
+                            return;
+                        }
+                        items.forEach((item) =>
+                            feedContainer.appendChild(item),
+                        );
+                    }
+                },
+                { rootMargin: "200px" },
+            );
+            observer.observe(sentinel);
+        }
+
+        // Calendar Navigation Logic
+        const calContainer = container.querySelector(".view-calendar");
+        if (calContainer) {
+            const dataScript = calContainer.querySelector(".calendar-data-store");
+            const grid = calContainer.querySelector(".calendar-grid");
+            const label = calContainer.querySelector(".cal-month-label");
+            const prevBtn = calContainer.querySelector(".prev-month");
+            const nextBtn = calContainer.querySelector(".next-month");
+
+            if (dataScript && grid && label) {
+                const rows = JSON.parse(dataScript.textContent);
+                // Initialize state from rendered HTML or default logic (find first event)
+                const firstRow = rows.find(r => r.properties[dateColKey]?.start && new Date(r.properties[dateColKey].start));
+                let viewDate = firstRow ? new Date(firstRow.properties[dateColKey].start) : new Date();
+                let currentMonth = viewDate.getMonth();
+                let currentYear = viewDate.getFullYear();
+
+                const renderCalendar = (month, year) => {
+                    // Update Label
+                    label.textContent = new Date(year, month).toLocaleString("default", { month: "long", year: "numeric" });
+                    
+                    // Generate Days
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                    const startDay = new Date(year, month, 1).getDay(); // 0-6
+                    
+                    // Clear Grid (keep headers)
+                    const headers = Array.from(grid.querySelectorAll(".day-header"));
+                    grid.innerHTML = "";
+                    headers.forEach(h => grid.appendChild(h));
+
+                    // Generate 35 cells (5 weeks) or 42 (6 weeks) to be safe
+                    for (let i = 0; i < 35; i++) {
+                        const dayNum = i - startDay + 1;
+                        const isCurrent = dayNum > 0 && dayNum <= daysInMonth;
+                        const dateObj = new Date(year, month, dayNum);
+                        
+                        const cell = document.createElement("div");
+                        cell.className = `day-cell ${!isCurrent ? "other-month" : ""}`;
+                        
+                        const numSpan = document.createElement("span");
+                        numSpan.className = "day-num";
+                        numSpan.textContent = dayNum > 0 ? dayNum : ""; // Only show valid dates? Or previous month dates? V1 used empty.
+                        cell.appendChild(numSpan);
+
+                        if (isCurrent) {
+                            // Find events
+                            const dayEvents = rows.filter(r => {
+                                const dVal = r.properties[dateColKey];
+                                if (!dVal || !dVal.start) return false;
+                                const d = new Date(dVal.start);
+                                return d.getDate() === dayNum && d.getMonth() === month && d.getFullYear() === year;
+                            });
+
+                            dayEvents.forEach(ev => {
+                                const a = document.createElement("a");
+                                a.href = ev.url;
+                                a.className = "calendar-event";
+                                a.title = ev.properties["Name"] || "Untitled";
+                                a.textContent = ev.properties["Name"] || "Untitled";
+                                cell.appendChild(a);
+                            });
+                        }
+                        grid.appendChild(cell);
+                    }
+                };
+
+                prevBtn?.addEventListener("click", () => {
+                    currentMonth--;
+                    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                nextBtn?.addEventListener("click", () => {
+                    currentMonth++;
+                    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+                    renderCalendar(currentMonth, currentYear);
+                });
+            }
+        }
+
+        if (container) initInteractiveElements(container);
+
+        // View Switching
+        const switchBtns = dbEl.querySelectorAll(".view-btn");
+        const tmplId = `tmpl-secondary-${dbId}`;
+
+        // Save initial primary HTML to restore later
+        const initialHtml = container.innerHTML;
+
+        switchBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const view = btn.dataset.view;
+                const currentView =
+                    dbEl.dataset.currentView || dbEl.dataset.primaryView;
+
+                if (view === currentView) return;
+
+                // Toggle Active State
+                switchBtns.forEach((b) =>
+                    b.classList.toggle("active", b.dataset.view === view),
+                );
+                dbEl.dataset.currentView = view;
+
+                // Switch Content
+                if (view === dbEl.dataset.primaryView) {
+                    container.innerHTML = initialHtml;
+                    initInteractiveElements(container);
+                } else {
+                    const template = document.getElementById(tmplId);
+                    if (template) {
+                        container.innerHTML = "";
+                        container.appendChild(template.content.cloneNode(true));
+                        initInteractiveElements(container);
+                    }
+                }
+            });
+        });
+    }
+</script>
+
+<style>
+    /* CSS Variables for Theme Inheritance */
+    .notion-database {
+        --db-border: var(--border, var(--border-color, #e2e8f0));
+        --db-bg: var(--background, var(--btn-bg, var(--zen-bg, #fff)));
+        --db-card-bg: var(--secondary, var(--card-bg, #f8fafc));
+        --db-text: var(--foreground, currentColor);
+        --db-muted: var(--muted-foreground, var(--text-muted, #64748b));
+        --db-primary: var(--primary, var(--bg-active, var(--zen-accent, #6366f1)));
+        margin: 2rem 0;
+    }
+
+    .database-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--db-border);
+    }
+    .database-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--db-text);
+    }
+    .view-switcher {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .view-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        color: var(--db-muted);
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    .view-btn:hover {
+        color: var(--db-text);
+        background: var(--db-border);
+    }
+    .view-btn.active {
+        color: var(--db-primary);
+        font-weight: 600;
+        background: color-mix(in srgb, var(--db-primary), transparent 90%);
+    }
+
+    /* Gallery */
+    .database-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    .gallery-card {
+        border: 1px solid var(--db-border);
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        background: var(--db-card-bg);
+        transition: transform 0.2s;
+    }
+    .gallery-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .card-cover {
+        height: 140px;
+        overflow: hidden;
+        border-bottom: 1px solid var(--db-border);
+    }
+    .card-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .card-content {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .card-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .card-props {
+        font-size: 0.8rem;
+        color: var(--db-muted);
+    }
+    .prop-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 4px;
+    }
+
+    /* Board */
+    .view-board {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+    .board-container {
+        display: flex;
+        gap: 1rem;
+        min-width: 100%;
+    }
+    .board-column {
+        min-width: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .board-column-header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--db-border);
+        margin-bottom: 0.5rem;
+    }
+    .board-badge {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .board-card {
+        background: var(--db-card-bg);
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid var(--db-border);
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: var(--db-text);
+        font-size: 0.9rem;
+    }
+
+    /* List */
+    .list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .list-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        border: 1px solid var(--db-border);
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--db-text);
+        background: var(--db-bg);
+        transition: background 0.2s;
+    }
+    .list-item:hover {
+        background: var(--db-card-bg);
+    }
+    .list-title {
+        font-weight: 500;
+        flex: 1;
+    }
+    .list-prop-pill {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+        background: var(--db-border);
+        border-radius: 4px;
+        color: var(--db-muted);
+    }
+
+    /* Table */
+    .database-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid var(--db-border);
+        border-radius: 6px;
+    }
+    .database-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    .database-table th {
+        text-align: left;
+        padding: 12px;
+        background: var(--db-card-bg);
+        border-bottom: 1px solid var(--db-border);
+        font-weight: 600;
+        color: var(--db-muted);
+        white-space: nowrap;
+    }
+    .database-table td {
+        padding: 12px;
+        border-bottom: 1px solid var(--db-border);
+        vertical-align: middle;
+        white-space: nowrap;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Pagination */
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+    .page-btn {
+        padding: 4px 12px;
+        border: 1px solid var(--db-border);
+        background: var(--db-bg);
+        border-radius: 4px;
+        cursor: pointer;
+        color: var(--db-text);
+    }
+    .page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Feed */
+    .view-feed .feed-container {
+        display: grid;
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .feed-item {
+        display: block;
+        border: 1px solid var(--db-border);
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        color: var(--db-text);
+        background: var(--db-card-bg);
+        transition: transform 0.2s;
+    }
+    .feed-item:hover {
+        transform: translateY(-2px);
+    }
+    .feed-cover img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .feed-content {
+        padding: 1.5rem;
+    }
+    .feed-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .feed-meta {
+        font-size: 0.85rem;
+        color: var(--db-muted);
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    /* Calendar */
+    .view-calendar {
+        border: 1px solid var(--db-border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--db-bg);
+    }
+    .calendar-header {
+        padding: 1rem;
+        font-weight: 700;
+        text-align: center;
+        background: var(--db-card-bg);
+        border-bottom: 1px solid var(--db-border);
+    }
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        background: var(--db-border);
+        gap: 1px;
+    }
+    .day-header,
+    .day-cell {
+        background: var(--db-bg);
+        padding: 4px;
+        min-height: 100px;
+    }
+    .day-header {
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.8rem;
+        min-height: auto;
+        padding: 8px 0;
+        background: var(--db-card-bg);
+    }
+    .day-cell.other-month {
+        background: var(--db-card-bg);
+        opacity: 0.5;
+    }
+    .day-num {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--db-muted);
+        display: block;
+        margin-bottom: 4px;
+    }
+    .calendar-event {
+        display: block;
+        background: var(--db-primary);
+        color: #fff;
+        font-size: 0.75rem;
+        padding: 2px 4px;
+        border-radius: 2px;
+        margin-bottom: 2px;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .cal-nav-btn {
+        background: transparent;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: var(--db-muted);
+        padding: 0 1rem;
+    }
+    .cal-nav-btn:hover {
+        color: var(--db-text);
+    }
+    .cal-month-label {
+        width: 150px;
+        display: inline-block;
+        text-align: center;
+    }
+
+    /* Timeline (List-Gantt Hybrid) */
+    .view-timeline {
+        border: 1px solid var(--db-border);
+        overflow-x: auto;
+        border-radius: 8px;
+        background: var(--db-bg);
+    }
+    .timeline-container {
+        min-width: 600px;
+        padding: 1rem;
+    }
+    .timeline-header-row {
+        display: flex;
+        border-bottom: 1px solid var(--db-border);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        padding-bottom: 0.5rem;
+        color: var(--db-muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .timeline-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        text-decoration: none;
+        color: inherit;
+        padding: 4px 0;
+    }
+    .timeline-row:hover .timeline-bar {
+        opacity: 1;
+    }
+    .timeline-label,
+    .timeline-label-col {
+        width: 180px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 1rem;
+        font-size: 0.9rem;
+    }
+    .timeline-track,
+    .timeline-bar-col {
+        flex: 1;
+        position: relative;
+        background: var(--db-card-bg);
+        height: 24px;
+        border-radius: 4px;
+    }
+    .timeline-bar-col {
+        background: transparent;
+        display: flex;
+        align-items: center;
+    }
+    .timeline-bar {
+        position: absolute;
+        height: 100%;
+        background: var(--db-primary);
+        border-radius: 4px;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+</style>

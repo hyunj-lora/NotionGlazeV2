@@ -1,0 +1,37 @@
+---
+import { DashboardLayout, GeneralSettings } from "@notionglaze/ui";
+import { TenantService } from "@notionglaze/core";
+import "../../styles/globals.css";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let tenant: any = null;
+
+if (db && tenantId) {
+    try {
+        const tenantService = new TenantService(db);
+        tenant = await tenantService.getTenantByOwnerId(tenantId);
+    } catch (e) {
+        console.error("Settings Page DB Error:", e);
+    }
+}
+
+const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
+---
+
+<DashboardLayout title="General Settings" tenant={tenant}>
+    <div class="max-w-4xl mx-auto pb-24 pt-8 px-4">
+        <header class="mb-8">
+            <h1 class="text-3xl font-black tracking-tight mb-2">
+                General Settings
+            </h1>
+            <p class="text-muted-foreground">
+                Manage your workspace identity and account preferences.
+            </p>
+        </header>
+
+        <!-- Settings Component -->
+        <GeneralSettings config={config} tenant={tenant} />
+    </div>
+</DashboardLayout>

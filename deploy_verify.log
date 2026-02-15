@@ -1,0 +1,288 @@
+
+> deploy
+> npm run deploy --workspace=@notionglaze/sync-worker && npm run deploy --workspace=@notionglaze/web
+
+
+> @notionglaze/sync-worker@0.0.1 deploy
+> wrangler deploy
+
+
+ ⛅️ wrangler 4.61.1
+───────────────────
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+Total Upload: 69.48 KiB / gzip: 13.65 KiB
+Worker Startup Time: 1 ms
+Your Worker has access to the following bindings:
+Binding                              Resource         
+env.DB (notion-glaze-db)             D1 Database      
+env.BUCKET (notionglaze-assets)      R2 Bucket        
+
+Uploaded notion-glaze-sync-worker (5.24 sec)
+Deployed notion-glaze-sync-worker triggers (4.96 sec)
+  https://notion-glaze-sync-worker.humanerd.workers.dev
+  schedule: */5 * * * *
+Current Version ID: 575a6c51-38d7-4340-b504-92c8d22e0659
+
+> @notionglaze/web@0.0.1 deploy
+> export CLOUDFLARE_ACCOUNT_ID=ba5e8b86f33e63c791da65ef587bdc98 && npm run db:migrate:prod && astro build && wrangler pages deploy dist --project-name=notion-glaze-landing
+
+
+> @notionglaze/web@0.0.1 db:migrate:prod
+> wrangler d1 migrations apply notion-glaze-db --remote
+
+
+ ⛅️ wrangler 4.50.0 (update available 4.61.1)
+─────────────────────────────────────────────
+Resource location: remote 
+
+✅ No migrations to apply!
+23:25:10 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+23:25:10 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+23:25:10 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+23:25:11 [vite] Re-optimizing dependencies because lockfile has changed
+23:25:11 [content] Syncing content
+23:25:11 [content] Synced content
+23:25:11 [types] Generated 219ms
+23:25:11 [build] output: "server"
+23:25:11 [build] mode: "server"
+23:25:11 [build] directory: /volume2/humanerd/docker/dev-humanerd/NotionGlazeV2/apps/web/dist/
+23:25:11 [build] adapter: @astrojs/cloudflare
+23:25:11 [build] Collecting build info...
+23:25:11 [build] ✓ Completed in 341ms.
+23:25:11 [build] Building server entrypoints...
+23:25:23 [vite] ✓ built in 12.20s
+23:25:23 [build] ✓ Completed in 12.26s.
+
+ building client (vite) 
+23:25:23 [vite] transforming...
+23:25:23 [vite] ✓ 7 modules transformed.
+23:25:23 [vite] rendering chunks...
+23:25:23 [vite] computing gzip size...
+23:25:23 [vite] dist/_astro/DomainSettings.astro_astro_type_script_index_0_lang.CwylEHra.js      10.62 kB │ gzip:  3.17 kB
+23:25:23 [vite] dist/_astro/ThemePreviewModal.astro_astro_type_script_index_0_lang.BztnP18a.js  148.20 kB │ gzip: 16.95 kB
+23:25:23 [vite] ✓ built in 394ms
+
+ prerendering static routes 
+23:25:23 ▶ src/pages/legal/privacy.astro
+23:25:23   └─ /legal/privacy/index.html23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/privacy.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/privacy.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+29ms) 
+23:25:23 ▶ src/pages/legal/refund.astro
+23:25:23   └─ /legal/refund/index.html23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/refund.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/refund.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+5ms) 
+23:25:23 ▶ src/pages/legal/terms.astro
+23:25:23   └─ /legal/terms/index.html23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/terms.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+23:25:23 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/legal/terms.astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+4ms) 
+23:25:23 ✓ Completed in 73ms.
+
+23:25:23 [build] Rearranging server assets...
+23:25:23 [build] Server built in 13.13s
+23:25:23 [build] Complete!
+
+ ⛅️ wrangler 4.50.0 (update available 4.61.1)
+─────────────────────────────────────────────
+Uploading... (22/22)
+✨ Success! Uploaded 0 files (22 already uploaded) (0.38 sec)
+
+Attaching additional modules:
+┌────────────────────────────────────────────────┬──────┬─────────────┐
+│ Name                                           │ Type │ Size        │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ _@astrojs-ssr-adapter.mjs                      │ esm  │ 0.14 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ _astro-internal_middleware.mjs                 │ esm  │ 7.65 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/BlogHeader_GyHvhGbV.mjs                 │ esm  │ 2.94 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/DashboardLayout_Cwd5quoq.mjs            │ esm  │ 15.72 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_BD_2Ux5j.mjs                   │ esm  │ 2.25 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_BPZi47yB.mjs                   │ esm  │ 2.24 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_Bme4fGCw.mjs                   │ esm  │ 2.36 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_C9WgPFfe.mjs                   │ esm  │ 2.93 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_DHHC5H8q.mjs                   │ esm  │ 2.36 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_DQY7RTVc.mjs                   │ esm  │ 2.24 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_aKwP6FD8.mjs                   │ esm  │ 2.64 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/HomeView_z2C7P5vb.mjs                   │ esm  │ 2.29 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/Layout_CGfHCLAl.mjs                     │ esm  │ 8.97 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/NotionRenderer_BOHB2U6o.mjs             │ esm  │ 11.90 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_BpMvNzBH.mjs                   │ esm  │ 1.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_CFfABAZh.mjs                   │ esm  │ 1.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_CPtOmBB-.mjs                   │ esm  │ 1.60 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_CnnDa-CU.mjs                   │ esm  │ 1.60 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_DCE2-Nfb.mjs                   │ esm  │ 1.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_D_C6Nhue.mjs                   │ esm  │ 1.60 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_MnIBYp9b.mjs                   │ esm  │ 1.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostCard_y-OFRGrR.mjs                   │ esm  │ 1.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_A9dBNax_.mjs                   │ esm  │ 5.04 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_BAaNXi-l.mjs                   │ esm  │ 7.73 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_CWf4XMd_.mjs                   │ esm  │ 4.65 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_Cn3uR-Pu.mjs                   │ esm  │ 7.74 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_D0xggZLd.mjs                   │ esm  │ 9.57 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_DHZfrnSF.mjs                   │ esm  │ 7.79 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_DoBg-Dt-.mjs                   │ esm  │ 9.59 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/PostView_QMzNxdyk.mjs                   │ esm  │ 9.33 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/ThemeSelector_CJD0odyR.mjs              │ esm  │ 6.09 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/_@astrojs-ssr-adapter_BQKTMzEX.mjs      │ esm  │ 39.28 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/analytics_CRnmJhrt.mjs                  │ esm  │ 1.18 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/astro/server_B6gB0pnz.mjs               │ esm  │ 254.63 KiB  │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/astro-designed-error-pages_n-jiuU7M.mjs │ esm  │ 40.92 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/cloudflare-kv-binding_DMly_2Gl.mjs      │ esm  │ 2.94 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/cloudflare_A-Eajt_2.mjs                 │ esm  │ 4.99 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/crypto_BLiYpdJa.mjs                     │ esm  │ 2.04 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/domain_Bpp0-L6p.mjs                     │ esm  │ 9.16 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/image-endpoint_BQFst8iE.mjs             │ esm  │ 66.43 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/index_BF7fHZOO.mjs                      │ esm  │ 1.49 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/index_C5Nszooy.mjs                      │ esm  │ 117.48 KiB  │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/index_CJ5McVSM.mjs                      │ esm  │ 85.16 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/index_CgE_MpMM.mjs                      │ esm  │ 47.53 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/noop-middleware_HfBhZq4t.mjs            │ esm  │ 0.33 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/path_CH3auf61.mjs                       │ esm  │ 3.01 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/remote_CrdlObHx.mjs                     │ esm  │ 2.21 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/sharp_C0zgnAoO.mjs                      │ esm  │ 2.90 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/tenant_CjpjB000.mjs                     │ esm  │ 1.65 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ chunks/utils_CmiplEvQ.mjs                      │ esm  │ 93.16 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ manifest_DQYGN7a9.mjs                          │ esm  │ 96.63 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ noop-entrypoint.mjs                            │ esm  │ 0.09 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/_image.astro.mjs                         │ esm  │ 0.17 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/assets/_---path_.astro.mjs           │ esm  │ 1.80 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/submit-painpoint.astro.mjs           │ esm  │ 1.11 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/admin/control.astro.mjs           │ esm  │ 2.39 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/auth/logout.astro.mjs             │ esm  │ 1.13 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/auth/revoke.astro.mjs             │ esm  │ 1.42 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/content/contact.astro.mjs         │ esm  │ 5.07 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/content/refresh.astro.mjs         │ esm  │ 0.99 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/gateway/notion/init.astro.mjs     │ esm  │ 1.58 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/gateway/notion/verify.astro.mjs   │ esm  │ 6.99 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/og/_id_.png.astro.mjs             │ esm  │ 927.91 KiB  │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/config.astro.mjs            │ esm  │ 3.94 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/domain-reset.astro.mjs      │ esm  │ 1.24 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/domain-status.astro.mjs     │ esm  │ 1.28 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/notion-meta.astro.mjs       │ esm  │ 2.30 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/raw-cf.astro.mjs            │ esm  │ 1.01 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/sources.astro.mjs           │ esm  │ 3.01 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/setup/upload.astro.mjs            │ esm  │ 1.56 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/sync.astro.mjs                    │ esm  │ 1.87 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/v1/tenant/status.astro.mjs           │ esm  │ 1.13 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/api/webhook/paddle.astro.mjs             │ esm  │ 1.90 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/blog/_slug_.astro.mjs                    │ esm  │ 4.45 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/blog/rss.xml.astro.mjs                   │ esm  │ 1.38 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/blog/sitemap.xml.astro.mjs               │ esm  │ 1.35 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/blog.astro.mjs                           │ esm  │ 2.50 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dash-admin.astro.mjs                     │ esm  │ 19.77 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/analytics.astro.mjs            │ esm  │ 7.41 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/billing.astro.mjs              │ esm  │ 10.87 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/design.astro.mjs               │ esm  │ 15.59 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/posts.astro.mjs                │ esm  │ 7.96 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/select-database.astro.mjs      │ esm  │ 5.30 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard/settings.astro.mjs             │ esm  │ 76.31 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/dashboard.astro.mjs                      │ esm  │ 15.36 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/debug.astro.mjs                          │ esm  │ 14.39 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/index.astro.mjs                          │ esm  │ 16.28 KiB   │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/legal/privacy.astro.mjs                  │ esm  │ 0.06 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/legal/refund.astro.mjs                   │ esm  │ 0.06 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/legal/terms.astro.mjs                    │ esm  │ 0.06 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/login.astro.mjs                          │ esm  │ 2.66 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/rss.xml.astro.mjs                        │ esm  │ 1.41 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ pages/sitemap.xml.astro.mjs                    │ esm  │ 1.31 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ renderers.mjs                                  │ esm  │ 0.10 KiB    │
+├────────────────────────────────────────────────┼──────┼─────────────┤
+│ Total (94 modules)                             │      │ 2194.57 KiB │
+└────────────────────────────────────────────────┴──────┴─────────────┘
+✨ Compiled Worker successfully
+✨ Uploading Worker bundle
+✨ Uploading _routes.json
+🌎 Deploying...
+✨ Deployment complete! Take a peek over at https://7ceeb37a.notion-glaze-landing.pages.dev

@@ -1,0 +1,145 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import Hero from "../components/landing/Hero.astro";
+import StatusQuo from "../components/landing/StatusQuo.astro";
+import FounderConfession from "../components/landing/FounderConfession.astro";
+import Philosophy from "../components/landing/Philosophy.astro";
+import FeatureDeepDive from "../components/landing/FeatureDeepDive.astro";
+import HeistSync from "../components/landing/HeistSync.astro";
+import WhiteLabel from "../components/landing/WhiteLabel.astro";
+import UseCases from "../components/landing/UseCases.astro";
+import SocialProof from "../components/landing/SocialProof.astro";
+import ComparisonTable from "../components/landing/ComparisonTable.astro";
+import Pricing from "../components/landing/Pricing.astro";
+import FAQ from "../components/landing/FAQ.astro";
+import FinalCTA from "../components/landing/FinalCTA.astro";
+import LandingHeader from "../components/landing/LandingHeader.astro";
+import LandingFooter from "../components/landing/LandingFooter.astro";
+
+export const prerender = false;
+---
+
+<Layout title="NotionGlaze - The No-Compromise Notion Blog Engine">
+	<LandingHeader />
+
+	<main class="landing-renewal">
+		<Hero />
+		<StatusQuo />
+		<FounderConfession />
+		<Philosophy />
+
+		<FeatureDeepDive
+			id="asset-shield"
+			icon="🛡️"
+			headline='The "Global Asset Shield"'
+			subheadline="Notion images shouldn't expire. Ours don't."
+			body={[
+				"Notion's AWS links expire. It’s a fact. Other platforms let your images break after an hour.",
+				"We created the Perma-Asset Engine. We mirror every single image to our private, high-availability global vault. The Promise: Your portfolio will never, ever show a broken link again.",
+			]}
+			imagePath="/landing/asset-shield.png"
+		/>
+
+		<FeatureDeepDive
+			id="instant-delivery"
+			icon="⚡"
+			headline="0.1s Global Delivery"
+			subheadline="Speed isn't just a metric. It's revenue."
+			body={[
+				"Bloated code kills your Google ranking. We deliver pure, edge-rendered HTML/CSS.",
+				"Your site is replicated across Vercel’s Global Edge Network. Whether your reader is in Tokyo, New York, or London, they get sub-second load times.",
+			]}
+			metric={{ value: "99/100", label: "Google Lighthouse Score" }}
+			imagePath="/landing/global-map.png"
+			reversed={true}
+			dark={true}
+		/>
+
+		<FeatureDeepDive
+			id="fusion"
+			icon="🌀"
+			headline="Multi-Source Fusion"
+			subheadline="Aggregation without the headache."
+			body={[
+				"Stop trying to cram everything into one database. Aggregate content from multiple Notion databases into one seamless site.",
+				"Manage your Portfolio, Blog, and News separately in Notion, but publish them as one unified experience. We stitch it all together invisibly.",
+			]}
+			imagePath="/landing/fusion.png"
+		/>
+
+		<FeatureDeepDive
+			id="ai-sidekick"
+			icon="🤖"
+			headline="Your AI Editorial Team"
+			subheadline="You write. We polish."
+			body={[
+				"Auto-Tagging: AI categorizes your posts based on context.",
+				"Smart Summaries: Generates engaging excerpts for card previews.",
+				"SEO Autopilot: Generates meta-descriptions that Google loves.",
+			]}
+			imagePath="/landing/ai-chat.png"
+			reversed={true}
+		/>
+
+		<HeistSync />
+		<WhiteLabel />
+		<UseCases />
+		<SocialProof />
+		<ComparisonTable />
+		<Pricing />
+		<FAQ />
+		<FinalCTA />
+	</main>
+
+	<LandingFooter />
+</Layout>
+
+<style is:global>
+	:root {
+		--background-rgb: 255, 255, 255;
+	}
+	:root[data-theme="dark"] {
+		--background-rgb: 2, 6, 23;
+	}
+
+	.landing-renewal {
+		padding-top: 80px; /* Header height */
+	}
+
+	/* Shared Landing Styles */
+	.container {
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+
+	.gradient-text {
+		background: linear-gradient(
+			135deg,
+			hsl(var(--foreground)) 20%,
+			hsl(var(--primary)) 80%
+		);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+
+	@media (max-width: 768px) {
+		.landing-renewal {
+			padding-top: 70px;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.landing-renewal {
+			padding-top: 60px;
+		}
+		.container {
+			padding: 0 1rem;
+		}
+	}
+</style>

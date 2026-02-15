@@ -1,0 +1,167 @@
+---
+
+---
+
+<section class="founder-confession">
+    <div class="container overflow-visible">
+        <div class="glass-container">
+            <div class="content">
+                <h2 class="title">"I built this to solve my own headache."</h2>
+                <div class="body">
+                    <p>
+                        I didn't start NotionGlaze as a project to sell. I
+                        started it because I was tired of second-guessing my own
+                        blog.
+                    </p>
+                    <p>
+                        I love Notion. But the technical friction was killing my
+                        momentum. I spent more time checking if my images were
+                        still alive than actually writing. I wanted a way to
+                        publish my thoughts that felt as seamless as the writing
+                        experience itself.
+                    </p>
+                    <p>
+                        I built the engine I needed. One that prioritizes pure
+                        speed, rock-solid reliability, and a clean,
+                        distraction-free aesthetic.
+                    </p>
+                </div>
+                <div class="footer">
+                    <div class="founder-info">
+                        <strong>— HUMANERD</strong>
+                        <span>Creator of NotionGlaze</span>
+                    </div>
+                </div>
+            </div>
+            <div class="visual">
+                <div class="avatar-wrapper">
+                    <div class="frustrated-emoji">😤</div>
+                    <!-- Future: Add an actual photo or generated character here -->
+                    <div class="avatar-placeholder">HN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .founder-confession {
+        padding: 6rem 0;
+        background: hsl(var(--background));
+        position: relative;
+    }
+
+    .glass-container {
+        background: hsl(var(--primary) / 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid hsl(var(--primary) / 0.1);
+        border-radius: 40px;
+        padding: 5rem;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 4rem;
+        align-items: center;
+        box-shadow: 0 40px 100px -20px hsl(0 0% 0% / 0.1);
+    }
+
+    .title {
+        font-size: 2.5rem;
+        font-style: italic;
+        margin-bottom: 2rem;
+        font-family: serif;
+    }
+
+    .body p {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: hsl(var(--foreground));
+        margin-bottom: 1.5rem;
+        opacity: 0.9;
+    }
+
+    .footer {
+        margin-top: 3rem;
+    }
+
+    .founder-info strong {
+        display: block;
+        font-size: 1.5rem;
+        letter-spacing: 0.1em;
+    }
+
+    .founder-info span {
+        color: hsl(var(--muted-foreground));
+        font-size: 0.875rem;
+    }
+
+    .visual {
+        display: flex;
+        justify-content: center;
+    }
+
+    .avatar-wrapper {
+        width: 180px;
+        height: 180px;
+        background: hsl(var(--primary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 20px 40px -10px hsl(var(--primary) / 0.5);
+    }
+
+    .avatar-placeholder {
+        font-size: 3rem;
+        font-weight: 900;
+        color: white;
+    }
+
+    .frustrated-emoji {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 3rem;
+        background: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 20px hsl(0 0% 0% / 0.1);
+    }
+
+    @media (max-width: 1024px) {
+        .glass-container {
+            grid-template-columns: 1fr;
+            padding: 3rem;
+            text-align: center;
+        }
+        .visual {
+            order: -1;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .glass-container {
+            padding: 2rem;
+            border-radius: 24px;
+        }
+        .title {
+            font-size: 1.75rem;
+        }
+        .avatar-wrapper {
+            width: 120px;
+            height: 120px;
+        }
+        .avatar-placeholder {
+            font-size: 2rem;
+        }
+        .frustrated-emoji {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>

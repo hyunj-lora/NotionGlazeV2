@@ -1,0 +1,241 @@
+---
+const { config = {} } = Astro.props;
+// Fallback logic for backward compatibility
+const legacyNav = config.navigation || [];
+
+// New Config Structure with defaults
+const headerConfig = config.header || {};
+const logoType = headerConfig.logo_type || "text";
+const logoText = headerConfig.logo_text || config.site_name || "NotionGlaze";
+const logoImage = headerConfig.logo_image;
+const behavior = headerConfig.behavior || "static"; // 'static', 'sticky', 'smart'
+
+const menuItems = headerConfig.navigation || legacyNav;
+const cta = headerConfig.cta_button;
+
+const isSmart = behavior === "smart";
+const isSticky = behavior === "sticky";
+---
+
+<header
+    class:list={[
+        "blog-header-nav",
+        { "is-smart": isSmart, "is-sticky": isSticky },
+    ]}
+    id="main-header"
+>
+    <div class="header-container container">
+        <div class="nav-inner">
+            <a href="/" class="blog-logo">
+                {
+                    logoType === "image" && logoImage ? (
+                        <img src={logoImage} alt={logoText} class="logo-img" />
+                    ) : (
+                        <span class="logo-text">{logoText}</span>
+                    )
+                }
+            </a>
+
+            <nav class="main-navigation">
+                {
+                    menuItems.map((item: any) => (
+                        <a
+                            href={
+                                item.type === "post"
+                                    ? `/blog/${item.value}`
+                                    : item.url || item.value
+                            }
+                            class="nav-link"
+                        >
+                            {item.label}
+                        </a>
+                    ))
+                }
+                {
+                    menuItems.length === 0 && (
+                        <a href="/blog" class="nav-link">
+                            Posts
+                        </a>
+                    )
+                }
+
+                {
+                    cta && (
+                        <a
+                            href={cta.url}
+                            class:list={["nav-cta", cta.style || "ghost"]}
+                        >
+                            {cta.label}
+                        </a>
+                    )
+                }
+            </nav>
+        </div>
+    </div>
+</header>
+
+<script>
+    const header = document.getElementById("main-header");
+    if (header && header.classList.contains("is-smart")) {
+        let lastScroll = 0;
+        const threshold = 100;
+
+        window.addEventListener("scroll", () => {
+            const currentScroll = window.scrollY;
+
+            if (currentScroll <= 0) {
+                header.classList.remove("scroll-up");
+                return;
+            }
+
+            if (
+                currentScroll > lastScroll &&
+                !header.classList.contains("scroll-down") &&
+                currentScroll > threshold
+            ) {
+                // Scroll Down
+                header.classList.remove("scroll-up");
+                header.classList.add("scroll-down");
+            } else if (
+                currentScroll < lastScroll &&
+                header.classList.contains("scroll-down")
+            ) {
+                // Scroll Up
+                header.classList.remove("scroll-down");
+                header.classList.add("scroll-up");
+            }
+            lastScroll = currentScroll;
+        });
+    }
+</script>
+
+<style>
+    .blog-header-nav {
+        /* Base styles */
+        width: 100%;
+        z-index: 50;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: transparent;
+    }
+
+    /* Sticky Modes */
+    .blog-header-nav.is-sticky {
+        position: sticky;
+        top: 0;
+        background: var(--background); /* Solid bg when sticky */
+        border-bottom: 1px solid var(--border);
+    }
+
+    .blog-header-nav.is-smart {
+        position: sticky;
+        top: 0;
+        background: var(--background); /* Solid bg for smart mode too */
+    }
+
+    /* Smart Hiding Logic */
+    .blog-header-nav.scroll-down {
+        transform: translateY(-100%);
+    }
+
+    .blog-header-nav.scroll-up {
+        transform: translateY(0);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Shadow on reappear */
+        border-bottom: 1px solid var(--border);
+    }
+
+    .header-container {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .nav-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 3rem; /* Tighter height */
+    }
+
+    .blog-logo {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-text {
+        font-family: var(--heading-font);
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        background: linear-gradient(
+            135deg,
+            var(--foreground) 0%,
+            var(--primary) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .logo-img {
+        max-height: 40px;
+        width: auto;
+    }
+
+    .main-navigation {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+    .nav-link {
+        font-size: 0.95rem;
+        font-weight: 500; /* Slightly lighter weight */
+        color: var(--muted-foreground);
+        transition: color 0.2s;
+        text-decoration: none;
+    }
+    .nav-link:hover {
+        color: var(--foreground);
+    }
+
+    /* CTA Button Styles */
+    .nav-cta {
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .nav-cta.ghost {
+        color: var(--foreground);
+        background: transparent;
+        border: 1px solid var(--border);
+    }
+    .nav-cta.ghost:hover {
+        background: var(--muted);
+    }
+
+    .nav-cta.soft {
+        background: rgba(
+            var(--primary-rgb),
+            0.1
+        ); /* Assuming primary-rgb exists, checking usage */
+        color: var(--primary);
+    }
+    .nav-cta.soft:hover {
+        background: rgba(var(--primary-rgb), 0.2);
+    }
+
+    @media (max-width: 640px) {
+        .nav-inner {
+            gap: 1rem;
+        }
+        .main-navigation {
+            gap: 1rem;
+        }
+        .nav-link {
+            display: none; /* Hide links on mobile, keep CTA? Or hamburger? Keeping simple for now */
+        }
+        /* Keep basic mobile behavior for now, plan said check mobile later */
+    }
+</style>

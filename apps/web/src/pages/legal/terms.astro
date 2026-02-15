@@ -1,0 +1,199 @@
+---
+export const prerender = true;
+import Layout from "@notionglaze/ui/Layout.astro";
+---
+
+export const prerender = true;
+
+<Layout title="Terms and Conditions | NotionGlaze">
+    <main class="legal-container">
+        <h1>Terms and Conditions</h1>
+        <p class="last-updated">Last Updated: January 24, 2026</p>
+
+        <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>
+                By accessing and using NotionGlaze ("the Service"), you accept
+                and agree to be bound by the terms and provision of this
+                agreement. If you do not agree to abide by these terms, please
+                do not use this Service.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Description of Service</h2>
+            <p>
+                NotionGlaze provides a platform that transforms Notion pages
+                into high-performance websites. The Service includes content
+                synchronization, asset optimization, hosting, and customization
+                tools. We reserve the right to modify, suspend, or discontinue
+                the Service at any time, with or without notice.
+            </p>
+        </section>
+
+        <section>
+            <h2>3. User Account and Security</h2>
+            <p>
+                You are responsible for maintaining the confidentiality of your
+                Notion account credentials used to access the Service. You are
+                fully responsible for all activities that occur under your
+                account. NotionGlaze utilizes OAuth 2.0 to access your Notion
+                workspace securely and does not store your direct password.
+            </p>
+            <p>
+                For more details on our security practices, please visit our
+                <a href="/legal/security">Security & Trust</a> page.
+            </p>
+        </section>
+
+        <section>
+            <h2>4. Subscription and Billing</h2>
+            <p>
+                <strong>Merchant of Record:</strong> Our order process is conducted
+                by our online reseller Paddle.com. Paddle.com is the Merchant of Record
+                for all our orders. Paddle provides all customer service inquiries
+                and handles returns.
+            </p>
+            <p>
+                <strong>Payments:</strong> The Service is billed on a subscription
+                basis (Monthly or Annually). You agree to pay the fees applicable
+                to your subscription plan.
+            </p>
+            <p>
+                <strong>Renewal:</strong> Subscriptions automatically renew unless
+                canceled at least 24 hours before the end of the current billing period.
+            </p>
+        </section>
+
+        <section>
+            <h2>5. Content Ownership and License</h2>
+            <p>
+                You retain all rights and ownership of the content you create in
+                Notion and publish via NotionGlaze. By using the Service, you
+                grant NotionGlaze a worldwide, non-exclusive license to host,
+                copy, process, and display your content solely for the purpose
+                of providing the website service to your audience.
+            </p>
+        </section>
+
+        <section>
+            <h2>6. Prohibited Use</h2>
+            <p>You agree not to use the Service to:</p>
+            <ul>
+                <li>
+                    Publish illegal, harmful, threatening, or obscene content.
+                </li>
+                <li>Distribute malware, viruses, or any malicious code.</li>
+                <li>Engage in phishing or fraudulent activities.</li>
+                <li>Violate the intellectual property rights of others.</li>
+                <li>
+                    Attempt to bypass or disable any security features of the
+                    Service.
+                </li>
+            </ul>
+            <p>
+                We reserve the right to terminate accounts that violate these
+                restrictions immediately and without refund.
+            </p>
+        </section>
+
+        <section>
+            <h2>7. Limitation of Liability</h2>
+            <p>
+                To the maximum extent permitted by law, NotionGlaze and its
+                operators shall not be liable for any indirect, incidental,
+                special, consequential, or punitive damages, including without
+                limitation, loss of data, profits, or business reputation,
+                arising out of your use of the Service or any security breach
+                beyond our reasonable control.
+            </p>
+        </section>
+
+        <section>
+            <h2>8. Governing Law</h2>
+            <p>
+                These Terms shall be governed by and construed in accordance
+                with the laws of South Korea, without regard to its conflict of
+                law provisions. Any disputes arising from these Terms shall be
+                resolved in the courts of Seoul, South Korea.
+            </p>
+        </section>
+
+        <section>
+            <h2>9. Changes to Terms</h2>
+            <p>
+                We reserve the right to update these Terms at any time. We will
+                notify users of significant changes via email or a prominent
+                notice on our dashboard. Continued use of the Service after
+                changes constitutes acceptance of the new Terms.
+            </p>
+        </section>
+
+        <section>
+            <h2>10. Contact Information</h2>
+            <p>
+                For questions regarding these Terms, please contact us at <a
+                    href="mailto:contact@notionglaze.cc"
+                    >contact@notionglaze.cc</a
+                >.
+            </p>
+        </section>
+    </main>
+</Layout>
+
+<style>
+    .legal-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+        font-family: "Inter", sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: var(--foreground);
+    }
+
+    .last-updated {
+        color: var(--muted-foreground);
+        margin-bottom: 3rem;
+        font-size: 0.9rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--foreground);
+    }
+
+    p {
+        line-height: 1.7;
+        color: var(--muted-foreground);
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--muted-foreground);
+    }
+
+    li {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

@@ -1,0 +1,78 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import {
+    resolvePostTheme,
+    resolveSiteTheme,
+    type SiteConfig,
+} from "@notionglaze/core";
+import { POST_VIEWS, type ThemeName } from "@notionglaze/themes";
+
+const { slug } = Astro.params;
+const { blogTenantId: tenantId } = Astro.locals as any;
+const db = (Astro.locals as any).runtime?.env?.DB;
+
+const { results: allPosts = [] } = (await db
+    .prepare("SELECT id, slug FROM posts WHERE tenant_id = ?")
+    .bind(tenantId)
+    .all()) || { results: [] };
+
+const idToSlugMap = Object.fromEntries(
+    allPosts.map((p: any) => [p.id.replace(/-/g, ""), p.slug]),
+);
+
+const post = await db
+    .prepare("SELECT * FROM posts WHERE tenant_id = ? AND slug = ?")
+    .bind(tenantId, slug)
+    .first();
+
+const tenant = await db
+    .prepare("SELECT config_json, plan FROM tenants WHERE id = ?")
+    .bind(tenantId)
+    .first();
+
+if (!post) {
+    return Astro.redirect("/404");
+}
+
+let blocks = [];
+let tags = [];
+try {
+    blocks = JSON.parse(post.content_json || "[]");
+    tags = JSON.parse(post.tags || "[]");
+} catch (e) {
+    console.error("JSON parse failed for post content/tags", e);
+}
+
+// Determine Theme - Conditional based on enable_tag_based_themes setting
+let config: SiteConfig = {};
+try {
+    config = JSON.parse(tenant?.config_json || "{}");
+    if (tenant?.plan) (config as any).plan = tenant.plan;
+} catch (e) {
+    console.error("Config parse failed", e);
+}
+
+// Determine Theme
+const siteTheme = resolveSiteTheme({ config, tenant, tags }) as ThemeName;
+
+// Load Dynamic Post View
+const PostViewModule = await POST_VIEWS[siteTheme]();
+const PostView = PostViewModule.default;
+---
+
+<Layout
+    title={post.seo_title || post.title}
+    description={post.seo_description || post.summary}
+    ogImage={`${Astro.url.origin}/api/v1/og/${post.id}.png`}
+    siteTheme={siteTheme}
+    canonical={post.canonical_url}
+    noindex={!!post.noindex}
+>
+    <PostView
+        config={config}
+        post={post}
+        blocks={blocks}
+        idToSlugMap={idToSlugMap}
+        tags={tags}
+    />
+</Layout>

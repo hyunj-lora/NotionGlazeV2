@@ -1,0 +1,369 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import {
+    AdminService,
+    type AdminStats,
+    type AdminTenant as Tenant,
+    type PainPoint,
+} from "@notionglaze/core";
+import AdminSidebar from "../components/admin/AdminSidebar.astro";
+import AdminStatsGrid from "../components/admin/AdminStats.astro";
+import AdminHealth from "../components/admin/AdminHealth.astro";
+import TenantsTable from "../components/admin/TenantsTable.astro";
+import PainPoints from "../components/admin/PainPoints.astro";
+import SystemTerminal from "../components/admin/SystemTerminal.astro";
+
+// 1. Authentication Layer
+const runtime = (Astro.locals as any).runtime;
+const db = runtime?.env?.DB;
+const ADMIN_TOKEN = "notionglaze-master-key";
+
+const url = new URL(Astro.request.url);
+const providedToken =
+    url.searchParams.get("key") || Astro.cookies.get("admin_session")?.value;
+
+const isAuthenticated = providedToken === ADMIN_TOKEN;
+
+if (isAuthenticated && url.searchParams.get("key")) {
+    Astro.cookies.set("admin_session", ADMIN_TOKEN, {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+    });
+}
+
+if (!isAuthenticated) {
+    return Astro.redirect("/404"); // Stealth Mode: Return 404 if not authenticated
+}
+
+// 2. Data Aggregation
+let stats: AdminStats = {
+    totalTenants: 0,
+    totalPosts: 0,
+    totalSources: 0,
+    syncFailures: 0,
+    syncingNow: 0,
+    painPoints: 0,
+    proUsers: 0,
+    mrr: 0,
+};
+
+let tenants: Tenant[] = [];
+let painPoints: PainPoint[] = [];
+let error = null;
+
+if (db) {
+    try {
+        const adminService = new AdminService(db);
+        stats = await adminService.getStats();
+        tenants = await adminService.getTenants();
+        painPoints = await adminService.getPainPoints();
+    } catch (e) {
+        error = e instanceof Error ? e.message : "Database connection fail";
+        console.error(error);
+    }
+}
+---
+
+<Layout title="Command Center | NotionGlaze Internal">
+    <div class="admin-shell">
+        <AdminSidebar />
+
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Infrastructure Overview</h1>
+                <div class="admin-actions">
+                    <button
+                        class="btn-refresh"
+                        onclick="window.location.reload()">Refresh Data</button
+                    >
+                </div>
+            </header>
+
+            <div id="section-overview" class="view-section">
+                <AdminStatsGrid stats={stats} />
+                <AdminHealth stats={stats} />
+            </div>
+
+            <div
+                id="section-tenants"
+                class="view-section"
+                style="display: none;"
+            >
+                <TenantsTable tenants={tenants} />
+            </div>
+
+            <div
+                id="section-feedback"
+                class="view-section"
+                style="display: none;"
+            >
+                <PainPoints painPoints={painPoints} />
+            </div>
+            <div
+                id="section-system"
+                class="view-section"
+                style="display: none;"
+            >
+                <SystemTerminal stats={stats} />
+            </div>
+        </main>
+    </div>
+</Layout>
+
+<style>
+    .admin-shell {
+        display: flex;
+        min-height: 100vh;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: "Inter", sans-serif;
+    }
+
+    .admin-main {
+        flex: 1;
+        padding: 2rem 3rem;
+        max-width: 1400px;
+    }
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+    }
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .btn-refresh {
+        background: var(--secondary);
+        border: 1px solid var(--border);
+        color: var(--foreground);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .data-section {
+        scroll-margin-top: 100px;
+    }
+</style>
+
+<script is:inline>
+    // Navigation logic for tabs
+    const navItems = document.querySelectorAll(".nav-item");
+    const sections = document.querySelectorAll(".view-section");
+    const h1 = document.querySelector("h1");
+
+    function updateView() {
+        const hash = window.location.hash || "#overview";
+        const targetId = hash.replace("#", "section-");
+
+        sections.forEach((s) => (s.style.display = "none"));
+        const target = document.getElementById(targetId);
+        if (target) {
+            target.style.display = "block";
+
+            // Update H1 title
+            if (hash === "#overview")
+                h1.textContent = "Infrastructure Overview";
+            else if (hash === "#tenants") h1.textContent = "Tenant Management";
+            else if (hash === "#feedback") h1.textContent = "User Feedback";
+            else if (hash === "#system")
+                h1.textContent = "System Health Console";
+        }
+
+        // Update active class
+        navItems.forEach((item) => {
+            item.classList.toggle("active", item.getAttribute("href") === hash);
+        });
+    }
+
+    // Initial load
+    window.addEventListener("load", () => {
+        updateView();
+        startPolling();
+    });
+    window.addEventListener("hashchange", updateView);
+
+    async function runAction(action, tenantId, value = "") {
+        if (
+            action === "delete-tenant" &&
+            !confirm("Are you absolutely sure? This will delete all posts!")
+        )
+            return;
+
+        const btn = event.target.closest("button");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "⏳";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch("/api/v1/admin/control", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, tenantId, value }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert("Action completed successfully");
+                // Don't reload, let polling update it or trigger manual update
+                fetchData();
+            } else {
+                alert("Error: " + data.error);
+            }
+        } catch (e) {
+            alert("Network error");
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+    // Make runAction available globally for inline onclick handlers
+    window.runAction = runAction;
+
+    // --- Live Polling Logic ---
+    let pollInterval = null;
+
+    function startPolling() {
+        if (pollInterval) return;
+        fetchData(); // Initial fetch
+        pollInterval = setInterval(fetchData, 5000);
+    }
+
+    async function fetchData() {
+        try {
+            // Assume cookie handles auth, or pass key from url param if needed
+            const urlParams = new URLSearchParams(window.location.search);
+            const key = urlParams.get("key");
+            const endpoint = key
+                ? `/api/v1/admin/polling?key=${key}`
+                : `/api/v1/admin/polling`;
+
+            const res = await fetch(endpoint);
+            if (!res.ok) return;
+            const data = await res.json();
+
+            updateStats(data.stats);
+            updateTenants(data.tenants);
+            updateTerminal(data.logs);
+            updateHealth(data.stats);
+        } catch (e) {
+            console.error("Polling failed", e);
+        }
+    }
+
+    function updateStats(stats) {
+        if (!stats) return;
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        };
+        setVal("stat-mrr", `$${stats.mrr}`);
+        setVal("stat-pro", stats.proUsers);
+        setVal("stat-content", stats.totalPosts);
+
+        const syncEl = document.getElementById("stat-syncing");
+        if (syncEl)
+            syncEl.innerHTML = `${stats.syncingNow} <small>SYNCING</small>`;
+
+        setVal("stat-sources", stats.totalSources);
+    }
+
+    function updateHealth(stats) {
+        if (!stats) return;
+        const workerEl = document.getElementById("health-worker");
+        if (workerEl) {
+            const isCrit = stats.syncFailures > 2;
+            workerEl.className = `h-status ${isCrit ? "crit" : "ok"}`;
+            workerEl.textContent = isCrit ? "DEGRADED" : "OPERATIONAL";
+        }
+    }
+
+    function updateTenants(tenants) {
+        const tbody = document.getElementById("tenants-table-body");
+        if (!tbody || !tenants) return;
+
+        // Simple re-render strategy (efficient enough for admin dashboard < 100 rows)
+        tbody.innerHTML = tenants
+            .map((t) => {
+                const statusClass = t.sync_status || "idle";
+                const errorMsg = t.last_sync_error
+                    ? `<div class="error-msg" title="${t.last_sync_error}">${t.last_sync_error.slice(0, 40)}...</div>`
+                    : "";
+                const lastSync = t.last_synced_at
+                    ? new Date(t.last_synced_at).toLocaleString()
+                    : "Never";
+
+                return `
+                <tr>
+                    <td>
+                        <div class="tenant-name">
+                            <strong>${t.subdomain || "no-sub"}</strong>
+                            <span>${t.id.slice(0, 10)}...</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="asset-count">
+                            <span>${t.post_count} Posts</span>
+                            <small>${t.source_count} Sources</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${t.sync_status}</span>
+                        ${errorMsg}
+                    </td>
+                    <td>
+                        <span class="plan-badge ${t.plan || "trial"}">${t.plan || "trial"}</span>
+                    </td>
+                    <td class="date-cell">${lastSync}</td>
+                    <td class="action-cell">
+                        <button class="btn-icon" onclick="runAction('force-sync', '${t.id}')" title="Force Sync">⚡</button>
+                        <button class="btn-icon" onclick="runAction('update-plan', '${t.id}', '${t.plan === "pro" ? "trial" : "pro"}')" title="Toggle Plan">💎</button>
+                        <button class="btn-icon danger" onclick="runAction('delete-tenant', '${t.id}')" title="Delete">🗑️</button>
+                    </td>
+                </tr>
+            `;
+            })
+            .join("");
+    }
+
+    function updateTerminal(logs) {
+        const container = document.getElementById("terminal-output");
+        if (!container || !logs) return;
+
+        // Only append new unique logs or just refresh recent ones
+        // For simplicity, we'll keep the static header and update dynamic lines
+        // A better approach would be to manage state, but here we just replace dynamic part
+
+        // Keep first 4 lines (static info)
+        const staticLines = Array.from(
+            container.querySelectorAll(".terminal-line"),
+        ).slice(0, 4);
+
+        const dynamicLines = logs
+            .map((log) => {
+                const colorClass = log.type === "ERROR" ? "t-error" : "t-info";
+                return `
+                <div class="terminal-line">
+                    <span class="t-time">[${log.time}]</span>
+                    <span class="${colorClass}">${log.message}</span>
+                </div>
+            `;
+            })
+            .join("");
+
+        container.innerHTML = "";
+        staticLines.forEach((line) => container.appendChild(line));
+        container.insertAdjacentHTML("beforeend", dynamicLines);
+    }
+</script>

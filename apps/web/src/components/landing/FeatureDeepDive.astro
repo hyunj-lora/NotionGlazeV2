@@ -1,0 +1,199 @@
+---
+interface Props {
+    id: string;
+    icon: string;
+    headline: string;
+    subheadline: string;
+    body: string[];
+    metric?: {
+        value: string;
+        label: string;
+    };
+    imagePath: string;
+    reversed?: boolean;
+    dark?: boolean;
+}
+
+const {
+    id,
+    icon,
+    headline,
+    subheadline,
+    body,
+    metric,
+    imagePath,
+    reversed,
+    dark,
+} = Astro.props;
+---
+
+<section
+    id={id}
+    class:list={["feature-dive", { reversed: reversed, "dark-mode": dark }]}
+>
+    <div class="container">
+        <div class="grid">
+            <div class="content">
+                <div class="icon-wrap">{icon}</div>
+                <h2 class="headline">{headline}</h2>
+                <h3 class="subheadline">{subheadline}</h3>
+                <div class="body-text">
+                    {body.map((p) => <p>{p}</p>)}
+                </div>
+                {
+                    metric && (
+                        <div class="metric-box">
+                            <span class="m-val">{metric.value}</span>
+                            <span class="m-lbl">{metric.label}</span>
+                        </div>
+                    )
+                }
+            </div>
+            <div class="visual">
+                <div class="visual-container">
+                    <img src={imagePath} alt={headline} />
+                    <div class="glow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .feature-dive {
+        padding: 8rem 0;
+        overflow: hidden;
+    }
+
+    .dark-mode {
+        background: #000;
+        color: #fff;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6rem;
+        align-items: center;
+    }
+
+    .reversed .grid {
+        direction: rtl;
+    }
+
+    .reversed .content {
+        direction: ltr;
+    }
+
+    .icon-wrap {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .headline {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+    }
+
+    .subheadline {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: hsl(var(--primary));
+        margin-bottom: 2rem;
+    }
+
+    .body-text p {
+        font-size: 1.125rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+
+    .metric-box {
+        margin-top: 3rem;
+        padding: 1.5rem 2rem;
+        background: hsl(var(--primary) / 0.1);
+        border-radius: 20px;
+        display: inline-flex;
+        flex-direction: column;
+        border: 1px solid hsl(var(--primary) / 0.2);
+    }
+
+    .m-val {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: hsl(var(--primary));
+    }
+
+    .m-lbl {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+    }
+
+    .visual-container {
+        position: relative;
+    }
+
+    .visual img {
+        width: 100%;
+        border-radius: 24px;
+        box-shadow: 0 30px 60px -15px hsl(0 0% 0% / 0.3);
+    }
+
+    .glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle,
+            hsl(var(--primary) / 0.2),
+            transparent 70%
+        );
+        z-index: -1;
+    }
+
+    @media (max-width: 1024px) {
+        .grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 4rem;
+        }
+        .reversed .grid {
+            direction: ltr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feature-dive {
+            padding: 5rem 0;
+        }
+        .headline {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .feature-dive {
+            padding: 3.5rem 0;
+        }
+        .headline {
+            font-size: 2rem;
+        }
+        .icon-wrap {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .metric-box {
+            padding: 1rem 1.5rem;
+        }
+        .m-val {
+            font-size: 2rem;
+        }
+    }
+</style>

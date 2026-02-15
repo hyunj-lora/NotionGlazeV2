@@ -1,0 +1,203 @@
+---
+const { config = {} } = Astro.props;
+    
+    // Config parsing
+    const footerConfig = config.footer || {};
+    const allSocial = config.social_links || {};
+    
+    const style = footerConfig.style || 'minimal'; // 'minimal' or 'clean-stack'
+    const footerText = footerConfig.copyright_text || config.footer_text || ""; // Fallback to root footer_text
+    
+    // Filter social links based on visibility settings
+    const visiblePlatforms = config.visible_social_platforms || footerConfig.visible_social_platforms;
+    
+    const socialLinks = (footerConfig.social_links && !visiblePlatforms)
+        ? footerConfig.social_links 
+        : Object.entries(allSocial)
+            .map(([platform, url]) => ({ platform, url: url as string }))
+            .filter(x => x.url && (!visiblePlatforms || visiblePlatforms.includes(x.platform)));
+    
+    const isCleanStack = style === 'clean-stack';
+    
+    // Branding Logic: Always show for Free/Trial. Optional for Pro.
+    const isPro = config.plan === 'pro';
+    const showBranding = !isPro || !config.hide_attribution;
+---
+
+<footer class:list={["blog-footer container", style]}>
+    {isCleanStack ? (
+        <div class="footer-stack">
+            <div class="footer-brand">
+                 <!-- Optional: Logo could go here if added to schema later -->
+                 <span class="brand-text">{config.site_name || "NotionGlaze"}</span>
+            </div>
+            
+            {footerText && <p class="footer-msg stack-msg">{footerText}</p>}
+            
+            <div class="footer-social stack-social">
+                {socialLinks.map((link: any) => (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                        {link.platform}
+                    </a>
+                ))}
+                 <a href="/blog/rss.xml" target="_blank">RSS</a>
+            </div>
+            
+            {showBranding && (
+            <div class="footer-attribution-wrapper">
+                <a href="https://notionglaze.cc" target="_blank" class="notionglaze-badge">
+                    <span class="badge-prefix">Made with</span>
+                    <span class="badge-logo">NotionGlaze</span>
+                </a>
+            </div>
+            )}
+        </div>
+    ) : (
+        /* Minimal Layout (Default) */
+        <div class="footer-minimal">
+             <div class="footer-top">
+                <div class="footer-info">
+                    {footerText && <p class="footer-msg">{footerText}</p>}
+                </div>
+                <div class="footer-social">
+                    {socialLinks.map((link: any) => (
+                        <a href={link.url} target="_blank" rel="noopener noreferrer">
+                            {link.platform}
+                        </a>
+                    ))}
+                    <a href="/blog/rss.xml" target="_blank">RSS</a>
+                </div>
+            </div>
+            {showBranding && (
+                 <div class="footer-attribution-wrapper">
+                    <a href="https://notionglaze.cc" target="_blank" class="notionglaze-badge">
+                        <span class="badge-prefix">Made with</span>
+                        <span class="badge-logo">NotionGlaze</span>
+                    </a>
+                </div>
+            )}
+        </div>
+    )}
+</footer>
+
+<style>
+    .blog-footer {
+        margin-top: 6rem; /* Reduced from 8rem for tighter feel */
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        border-top: 1px solid var(--border);
+    }
+
+    /* Minimal Layout (Default) */
+    .footer-minimal .footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 2rem;
+    }
+    
+    .footer-minimal .footer-msg {
+        font-size: 0.9rem;
+        color: var(--muted-foreground);
+        margin: 0;
+    }
+
+    .footer-minimal .footer-social {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    /* Stack Layout */
+    .footer-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .footer-brand .brand-text {
+        font-family: var(--heading-font);
+        font-weight: 800;
+        font-size: 1.25rem;
+        color: var(--foreground);
+    }
+
+    .stack-msg {
+        max-width: 500px;
+        margin: 0 auto;
+        opacity: 0.8;
+    }
+    
+    .stack-social {
+        justify-content: center;
+    }
+
+    /* Shared Styles */
+    .footer-msg {
+        color: var(--muted-foreground);
+    }
+
+    .footer-social a {
+        color: var(--muted-foreground);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    .footer-social a:hover {
+        color: var(--primary);
+    }
+
+    .footer-attribution-wrapper {
+        display: flex;
+        justify-content: center;
+        opacity: 0.6; /* Subtler by default */
+        transition: opacity 0.2s;
+    }
+    .footer-attribution-wrapper:hover {
+        opacity: 1;
+    }
+
+    .notionglaze-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: transparent; /* No bg for cleaner look */
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 0.7rem;
+        text-decoration: none;
+        color: var(--muted-foreground);
+        transition: all 0.2s ease;
+    }
+
+    .notionglaze-badge:hover {
+        color: var(--primary);
+        background: rgba(var(--primary-rgb), 0.05); /* Slight tint on hover */
+    }
+
+    .badge-prefix {
+        font-weight: 400;
+        opacity: 0.8;
+    }
+
+    .badge-logo {
+        font-weight: 700;
+        color: var(--foreground);
+    }
+
+    .notionglaze-badge:hover .badge-logo {
+        color: var(--primary);
+    }
+
+    @media (max-width: 600px) {
+        .footer-minimal .footer-top {
+            flex-direction: column;
+            text-align: center;
+            gap: 1.5rem;
+        }
+    }
+</style>

@@ -1,0 +1,31 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "types": [
+      "@cloudflare/workers-types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@notionglaze/core": [
+        "../../packages/core/src/index.ts"
+      ],
+      "@notionglaze/themes/*": [
+        "../../packages/themes/src/*"
+      ],
+      "@notionglaze/ui/*": [
+        "../../packages/ui/src/*"
+      ]
+    }
+  },
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "src/pages/dashboard/branding.astro",
+    "src/pages/dashboard/customization.astro",
+    "src/pages/dashboard/general-settings.astro",
+    "src/pages/dashboard/theme.astro"
+  ]
+}

@@ -1,0 +1,275 @@
+---
+import DashboardLayout from "@notionglaze/ui/DashboardLayout.astro";
+
+const db = (Astro.locals as any).runtime?.env?.DB;
+const tenantId = (Astro.locals as any).userId;
+
+let posts = [];
+let tenant = null;
+
+if (db) {
+    tenant = await db
+        .prepare("SELECT * FROM tenants WHERE owner_id = ?")
+        .bind(tenantId)
+        .first();
+
+    if (tenant) {
+        posts = await db
+            .prepare(
+                "SELECT id, title, slug, status, last_edited_time, tags FROM posts WHERE tenant_id = ? ORDER BY last_edited_time DESC",
+            )
+            .bind(tenant.id)
+            .all()
+            .then((r: any) => r.results);
+    }
+}
+
+// Stats helper
+const stats = {
+    total: posts.length,
+    published: posts.filter((p: any) => p.status === "Published").length,
+    drafts: posts.filter((p: any) => p.status !== "Published").length,
+};
+---
+
+<DashboardLayout title="Posts Management" tenant={tenant}>
+    <header
+        class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8"
+    >
+        <div class="flex items-center gap-6">
+            <div class="flex flex-col">
+                <span
+                    class="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1"
+                    >Total Posts</span
+                >
+                <span class="text-2xl font-black tracking-tight"
+                    >{stats.total}</span
+                >
+            </div>
+            <div class="h-6 w-px bg-border"></div>
+            <div class="flex flex-col">
+                <span
+                    class="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1"
+                    >Published</span
+                >
+                <span class="text-2xl font-black tracking-tight text-green-500"
+                    >{stats.published}</span
+                >
+            </div>
+            <div class="h-6 w-px bg-border"></div>
+            <div class="flex flex-col">
+                <span
+                    class="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mb-1"
+                    >Drafts</span
+                >
+                <span class="text-2xl font-black tracking-tight text-amber-500"
+                    >{stats.drafts}</span
+                >
+            </div>
+        </div>
+
+        <div class="relative flex-1 max-w-md">
+            <svg
+                class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+                ></path></svg
+            >
+            <input
+                type="text"
+                id="post-search"
+                placeholder="Search posts by title or slug..."
+                class="w-full pl-10 pr-4 py-2.5 bg-muted/30 border border-border rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+            />
+        </div>
+    </header>
+
+    <div
+        class="rounded-3xl border border-border bg-muted/20 overflow-hidden shadow-sm shadow-black/5"
+    >
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-muted/30">
+                        <th
+                            class="px-6 py-4 text-[10px] font-bold uppercase text-muted-foreground tracking-widest border-b border-border"
+                            >Article Title</th
+                        >
+                        <th
+                            class="px-6 py-4 text-[10px] font-bold uppercase text-muted-foreground tracking-widest border-b border-border"
+                            >Status</th
+                        >
+                        <th
+                            class="px-6 py-4 text-[10px] font-bold uppercase text-muted-foreground tracking-widest border-b border-border"
+                            >Tags</th
+                        >
+                        <th
+                            class="px-6 py-4 text-[10px] font-bold uppercase text-muted-foreground tracking-widest border-b border-border text-right"
+                            >Last Updated</th
+                        >
+                        <th
+                            class="px-6 py-4 text-[10px] font-bold uppercase text-muted-foreground tracking-widest border-b border-border text-right"
+                            >Actions</th
+                        >
+                    </tr>
+                </thead>
+                <tbody id="posts-tbody" class="divide-y divide-border/50">
+                    {
+                        posts.map((post: any) => (
+                            <tr
+                                class="post-row group hover:bg-background transition-colors"
+                                data-title={post.title.toLowerCase()}
+                                data-slug={post.slug.toLowerCase()}
+                            >
+                                <td class="px-6 py-5">
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                                            {post.title}
+                                        </span>
+                                        <span class="text-[10px] font-medium text-muted-foreground tracking-wide">
+                                            /{post.slug}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div
+                                        class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${
+                                            post.status.toLowerCase() ===
+                                            "published"
+                                                ? "bg-green-500/10 text-green-500 border-green-500/20"
+                                                : "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                                        }`}
+                                    >
+                                        {post.status}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <div class="flex flex-wrap gap-1.5">
+                                        {JSON.parse(post.tags || "[]")
+                                            .slice(0, 2)
+                                            .map((tag: string) => (
+                                                <span class="px-2 py-0.5 rounded-md bg-muted text-[9px] font-bold text-muted-foreground border border-border/50 uppercase">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        {JSON.parse(post.tags || "[]").length >
+                                            2 && (
+                                            <span class="text-[10px] text-muted-foreground font-bold">
+                                                +...
+                                            </span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 text-right whitespace-nowrap">
+                                    <span class="text-xs font-medium text-muted-foreground">
+                                        {new Date(
+                                            post.last_edited_time,
+                                        ).toLocaleDateString()}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a
+                                            href={
+                                                tenant?.subdomain
+                                                    ? `https://${tenant.subdomain}.notionglaze.cc/${post.slug}`
+                                                    : `/blog/${post.slug}`
+                                            }
+                                            target="_blank"
+                                            class="h-8 w-8 inline-flex items-center justify-center rounded-xl bg-background border border-border text-muted-foreground hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm"
+                                            title="View Preview"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <>
+                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                                    <circle
+                                                        cx="12"
+                                                        cy="12"
+                                                        r="3"
+                                                    />
+                                                </>
+                                            </svg>
+                                        </a>
+                                        <a
+                                            href={`/dashboard/editor?postId=${post.id}`}
+                                            class="h-8 w-8 inline-flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
+                                            title="Edit in Studio"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2.5"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            >
+                                                <>
+                                                    <path d="M12 3v19" />
+                                                    <path d="M5 8h14" />
+                                                    <path d="M15 21a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6Z" />
+                                                </>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                    {
+                        posts.length === 0 && (
+                            <tr>
+                                <td colspan="5" class="px-6 py-20 text-center">
+                                    <p class="text-sm text-muted-foreground font-medium">
+                                        No posts found. Run Magic Sync to fetch
+                                        content.
+                                    </p>
+                                </td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script is:inline>
+        const searchInput = document.getElementById("post-search");
+        const tbody = document.getElementById("posts-tbody");
+        const rows = tbody.getElementsByClassName("post-row");
+
+        searchInput?.addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase();
+
+            Array.from(rows).forEach((row) => {
+                const title = row.getAttribute("data-title") || "";
+                const slug = row.getAttribute("data-slug") || "";
+                if (title.includes(query) || slug.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
+</DashboardLayout>

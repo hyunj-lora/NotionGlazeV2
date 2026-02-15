@@ -1,0 +1,48 @@
+---
+interface Props {
+    value: Array<{ name: string; avatar_url: string }> | null;
+}
+
+const { value } = Astro.props;
+---
+
+<div class="notion-people">
+    {
+        value &&
+            value.map((person) => (
+                <div class="notion-person">
+                    {person.avatar_url && (
+                        <img
+                            src={person.avatar_url}
+                            alt={person.name}
+                            class="notion-avatar"
+                        />
+                    )}
+                    <span class="notion-person-name">{person.name}</span>
+                </div>
+            ))
+    }
+</div>
+
+<style>
+    .notion-people {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .notion-person {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .notion-avatar {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .notion-person-name {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+</style>

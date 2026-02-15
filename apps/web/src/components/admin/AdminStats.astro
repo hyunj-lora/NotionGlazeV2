@@ -1,0 +1,70 @@
+---
+import type { AdminStats } from "@notionglaze/core";
+
+interface Props {
+    stats: AdminStats;
+}
+
+const { stats } = Astro.props;
+---
+
+<section class="admin-stats-grid">
+    <div class="stat-box">
+        <span class="label">Total MRR</span>
+        <span class="value" id="stat-mrr">${stats.mrr}</span>
+    </div>
+    <div class="stat-box">
+        <span class="label">Pro Tenants</span>
+        <span class="value" id="stat-pro">{stats.proUsers}</span>
+    </div>
+    <div class="stat-box">
+        <span class="label">Total Content</span>
+        <span class="value" id="stat-content">{stats.totalPosts}</span>
+    </div>
+    <div class="stat-box warning">
+        <span class="label">Infrastructure Load</span>
+        <span class="value" id="stat-syncing"
+            >{stats.syncingNow} <small>SYNCING</small></span
+        >
+    </div>
+    <div class="stat-box">
+        <span class="label">Content Sources</span>
+        <span class="value" id="stat-sources">{stats.totalSources}</span>
+    </div>
+</section>
+
+<style>
+    .admin-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    .stat-box {
+        background: var(--muted);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+    .stat-box.warning {
+        border-color: #ef4444;
+    }
+    .stat-box .label {
+        font-size: 0.75rem;
+        color: var(--muted-foreground);
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    .stat-box .value {
+        display: block;
+        font-size: 2.25rem;
+        font-weight: 900;
+        margin-top: 0.5rem;
+        color: var(--foreground);
+    }
+    .value small {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        margin-left: 0.25rem;
+    }
+</style>

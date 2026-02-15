@@ -1,0 +1,71 @@
+---
+/**
+ * DnsRecordItem.astro
+ * Displays a single DNS record with copy buttons and status indicators.
+ */
+interface Props {
+    type: string;
+    host: string;
+    value: string;
+    status: "ACTIVE" | "PENDING" | "CONFLICT";
+}
+
+const { type, host, value, status } = Astro.props;
+
+const statusColors = {
+    ACTIVE: "text-green-500 bg-green-500/10 border-green-500/20",
+    PENDING: "text-yellow-600 bg-yellow-500/10 border-yellow-500/20",
+    CONFLICT: "text-red-500 bg-red-500/10 border-red-500/20",
+};
+
+const themeColor =
+    status === "ACTIVE" ? "green" : status === "CONFLICT" ? "red" : "primary";
+---
+
+<div
+    class={`p-4 rounded-xl border transition-all duration-300 ${status === "ACTIVE" ? "bg-green-500/5 border-green-500/10" : "bg-primary/5 border-primary/10"}`}
+>
+    <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+            <span
+                class={`px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest border ${statusColors[status]}`}
+            >
+                {type}
+            </span>
+            <span
+                class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider"
+            >
+                {host === "@" ? "Root / Apex" : host}
+            </span>
+        </div>
+        <div class="flex items-center gap-1.5">
+            <span
+                class={`h-1.5 w-1.5 rounded-full ${status === "ACTIVE" ? "bg-green-500" : "bg-yellow-500 animate-pulse"}`}
+            ></span>
+            <span
+                class={`text-[9px] font-bold uppercase ${status === "ACTIVE" ? "text-green-600" : "text-yellow-600"}`}
+            >
+                {status === "ACTIVE" ? "Verified" : "Pending"}
+            </span>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+            <span class="text-[9px] text-muted-foreground font-medium uppercase"
+                >Value to set</span
+            >
+            <button
+                class="copy-btn text-[9px] text-primary hover:underline font-bold uppercase tracking-tight"
+                data-copy={value}
+            >
+                Copy
+            </button>
+        </div>
+        <code
+            class="text-[10px] bg-background border border-primary/20 rounded-md p-2.5 font-mono break-all text-primary/80 group-hover:border-primary/40 transition-colors"
+        >
+            {value}
+        </code>
+    </div>
+</div>

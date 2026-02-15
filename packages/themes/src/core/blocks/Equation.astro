@@ -1,0 +1,75 @@
+---
+interface Props {
+    content: any;
+    class?: string;
+}
+
+const { content, class: className } = Astro.props;
+---
+
+<div class={`notion-equation ${className || ""}`}>
+    <div class="notion-math-display">
+        {/* Fallback for non-JS */}
+        <noscript>$${content.expression}$$</noscript>
+        {/* Initial render target */}
+        <span class="notion-math-raw">{content.expression}</span>
+    </div>
+</div>
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV"
+    crossorigin="anonymous"
+/>
+
+<script type="module">
+    import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.mjs";
+
+    function renderEquations() {
+        const rawElements = document.querySelectorAll(
+            ".notion-math-raw:not([data-rendered])",
+        );
+        rawElements.forEach((el) => {
+            const expression = el.textContent?.trim();
+            if (expression) {
+                try {
+                    const parent = el.parentElement;
+                    katex.render(expression, parent, {
+                        displayMode: true,
+                        throwOnError: false,
+                    });
+                    el.setAttribute("data-rendered", "true");
+                    el.style.display = "none";
+                } catch (e) {
+                    console.error("KaTeX rendering error:", e);
+                }
+            }
+        });
+    }
+
+    // Initial render
+    renderEquations();
+
+    // Re-render on view changes if needed (e.g., pagination)
+    document.addEventListener("astro:page-load", renderEquations);
+</script>
+
+<style>
+    .notion-equation {
+        margin: 3rem 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-x: auto;
+    }
+
+    .notion-math-display {
+        font-size: 1.5rem;
+    }
+
+    .notion-math-raw {
+        /* Hide raw text before KaTeX takes over */
+        opacity: 0;
+    }
+</style>

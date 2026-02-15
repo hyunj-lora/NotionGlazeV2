@@ -1,0 +1,121 @@
+---
+
+---
+
+<footer class="landing-footer">
+    <div class="container overflow-visible">
+        <div class="footer-grid">
+            <div class="brand">
+                <a href="/" class="logo">
+                    Notion<span>Glaze</span>
+                </a>
+                <p>
+                    The "No-Compromise" Notion Blog Engine. Built for
+                    performance, designed for creators.
+                </p>
+            </div>
+            <div class="link-groups">
+                <div class="group">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="/login">Login</a>
+                </div>
+                <div class="group">
+                    <h4>Legal</h4>
+                    <a href="/legal/terms">Terms</a>
+                    <a href="/legal/privacy">Privacy</a>
+                    <a href="/legal/security">Security</a>
+                    <a href="/legal/refund">Refunds</a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <p>&copy; 2026 HUMANERD. Crafted for Notion Creators.</p>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .landing-footer {
+        padding: 6rem 0 3rem;
+        background: var(--surface-1);
+        border-top: 1px solid hsl(var(--border));
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 4rem;
+        margin-bottom: 4rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-decoration: none;
+        color: hsl(var(--foreground));
+        letter-spacing: -0.02em;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+
+    .logo span {
+        color: hsl(var(--primary));
+    }
+
+    .brand p {
+        color: hsl(var(--muted-foreground));
+        max-width: 320px;
+        line-height: 1.6;
+    }
+
+    .link-groups {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .group h4 {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1.5rem;
+        color: hsl(var(--foreground));
+    }
+
+    .group a {
+        display: block;
+        text-decoration: none;
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 0.75rem;
+        transition: color 0.3s;
+    }
+
+    .group a:hover {
+        color: hsl(var(--primary));
+    }
+
+    .bottom {
+        padding-top: 3rem;
+        border-top: 1px solid hsl(var(--border));
+        text-align: center;
+        color: hsl(var(--muted-foreground));
+        font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+        .footer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .landing-footer {
+            padding: 3rem 0 2rem;
+        }
+        .link-groups {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

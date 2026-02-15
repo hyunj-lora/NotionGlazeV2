@@ -1,0 +1,135 @@
+---
+
+---
+
+<section class="white-label">
+    <div class="container">
+        <div class="header">
+            <h2 class="title">Your Brand. Only Your Brand.</h2>
+            <p class="subtitle">
+                Focus on your message. We handle the identity.
+            </p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="bento-item main">
+                <div class="icon">🌐</div>
+                <h3>Custom Domains</h3>
+                <p>
+                    Connect yourname.com instantly with free SSL. High-speed
+                    global provisioning.
+                </p>
+            </div>
+            <div class="bento-item">
+                <div class="icon">🎨</div>
+                <h3>Type Engine</h3>
+                <p>
+                    Unlimited typography control. Use any Google Font or custom
+                    font pairings.
+                </p>
+            </div>
+            <div class="bento-item ghost">
+                <div class="icon">👻</div>
+                <h3>Ghost Mode</h3>
+                <p>
+                    No "Powered by NotionGlaze" watermarks. Just your
+                    professional identity.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .white-label {
+        padding: 8rem 0;
+        background: var(--surface-1);
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 1.5rem;
+    }
+
+    .bento-item {
+        background: hsl(var(--background));
+        padding: 3rem;
+        border-radius: 30px;
+        border: 1px solid hsl(var(--border));
+        transition: all 0.3s ease;
+    }
+
+    .bento-item:hover {
+        border-color: hsl(var(--primary));
+        box-shadow: 0 20px 40px -10px hsl(0 0% 0% / 0.05);
+    }
+
+    .bento-item.main {
+        grid-row: span 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .bento-item .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .bento-item h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .bento-item p {
+        color: hsl(var(--muted-foreground));
+        line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+        .bento-item.main {
+            grid-row: span 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .white-label {
+            padding: 5rem 0;
+        }
+        .title {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .white-label {
+            padding: 3.5rem 0;
+        }
+        .bento-item {
+            padding: 2rem;
+            border-radius: 20px;
+        }
+    }
+</style>

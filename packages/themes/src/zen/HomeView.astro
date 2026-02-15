@@ -1,0 +1,145 @@
+---
+import { BlogHeader } from "@notionglaze/ui";
+import BlogFooter from "@notionglaze/ui/BlogFooter.astro";
+import { type ThemeName, POST_CARDS } from "@notionglaze/themes";
+import { type SiteConfig } from "@notionglaze/core";
+
+interface Props {
+    config: SiteConfig;
+    posts: any[];
+    defaultTheme: ThemeName;
+}
+
+const { config, posts, defaultTheme } = Astro.props;
+
+const siteName = config.site_name || "Zen";
+const siteDescription =
+    config.site_description || "Finding peace in every word.";
+
+// Pre-load Zen PostCard
+const PostCardModule = await POST_CARDS.zen();
+const PostCard = PostCardModule.default;
+---
+
+<div class="zen-theme-home">
+    <BlogHeader config={config} />
+
+    <main class="container">
+        <header class="blog-header">
+            <h1 class="zen-title">{siteName}</h1>
+            <div class="zen-decoration"></div>
+            <p>{siteDescription}</p>
+        </header>
+
+        <section class="post-list">
+            {
+                posts.map((post) => (
+                    <PostCard
+                        title={post.title}
+                        summary={post.summary}
+                        tags={post.tags}
+                        publishedAt={post.published_at}
+                        slug={post.slug}
+                    />
+                ))
+            }
+
+            {
+                posts.length === 0 && (
+                    <div class="empty">
+                        <p>The garden is silent.</p>
+                    </div>
+                )
+            }
+        </section>
+    </main>
+
+    <BlogFooter config={config} />
+</div>
+
+<style>
+    :global(:root) {
+        --zen-bg: #f7f3f0;
+        --zen-bg-secondary: #fbfbfb;
+        --zen-text-main: #52525b;
+        --zen-text-muted: #a1a1aa;
+        --zen-heading: #18181b;
+        --zen-border: #e4e4e7;
+        --zen-accent: #2d2d2d;
+    }
+
+    :global(.dark) {
+        --zen-bg: #18181b;
+        --zen-bg-secondary: #27272a;
+        --zen-text-main: #a1a1aa;
+        --zen-text-muted: #71717a;
+        --zen-heading: #f4f4f5;
+        --zen-border: #3f3f46;
+        --zen-accent: #e4e4e7;
+    }
+
+    .zen-theme-home {
+        background-color: var(--zen-bg);
+        color: var(--zen-text-main);
+        min-height: 100vh;
+        font-family: "Inter", sans-serif;
+    }
+
+    :global(.dark) .zen-theme-home {
+        background-color: var(--zen-bg);
+        color: var(--zen-text-main);
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    .blog-header {
+        margin: 8rem 0 10rem 0;
+        text-align: center;
+    }
+
+    .zen-title {
+        font-size: 3.5rem;
+        font-weight: 200;
+        color: var(--zen-heading);
+        letter-spacing: 0.1em;
+        margin-bottom: 1.5rem;
+    }
+
+    .zen-decoration {
+        width: 40px;
+        height: 1px;
+        background: var(--zen-border);
+        margin: 0 auto 2rem auto;
+    }
+
+    .blog-header p {
+        font-size: 1.1rem;
+        color: var(--zen-text-muted);
+        font-weight: 300;
+        letter-spacing: 0.05em;
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 5rem;
+        padding-bottom: 10rem;
+    }
+
+    .empty {
+        padding: 8rem 0;
+        text-align: center;
+        color: var(--zen-text-muted);
+        font-weight: 300;
+    }
+
+    @media (max-width: 640px) {
+        .zen-title {
+            font-size: 2.5rem;
+        }
+    }
+</style>
