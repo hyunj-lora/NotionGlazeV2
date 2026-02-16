@@ -110,8 +110,20 @@
     top: 50%;
     left: 50%;
     margin: -8px 0 0 -8px;
-    border: 2px solid currentColor;
-    border-radius: 50%;
+    border: 2px solid;
+    border-color: hsl(var(--foreground));
     border-right-color: transparent;
+    border-radius: 50%;
     animation: rotation 0.6s linear infinite;
+}
+
+.btn-loading.bg-primary::after,
+:where(.bg-primary).btn-loading::after {
+    border-color: hsl(var(--primary-foreground));
+    border-right-color: transparent;
+}
+
+:where(.bg-destructive).btn-loading::after {
+    border-color: hsl(var(--destructive-foreground));
+    border-right-color: transparent;
 }

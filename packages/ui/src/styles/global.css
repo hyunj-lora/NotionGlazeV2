@@ -128,3 +128,41 @@ button,
 .button-secondary:hover {
   background: var(--muted);
 }
+
+/* Spinner for buttons */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  top: 50%;
+  left: 50%;
+  margin-top: -0.5rem;
+  margin-left: -0.5rem;
+  border: 2px solid;
+  border-color: hsl(var(--foreground));
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.button-primary.btn-loading::after,
+:where(.bg-primary).btn-loading::after {
+  border-color: hsl(var(--primary-foreground));
+  border-right-color: transparent;
+}
+
+:where(.bg-destructive).btn-loading::after {
+  border-color: hsl(var(--destructive-foreground));
+  border-right-color: transparent;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
