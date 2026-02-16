@@ -361,17 +361,17 @@ export async function processPage(page: any, tenant: any, env: Env, notion: Noti
         ai_seo_advice: aiSeoAdvice
     }));
 
-    collectBlockStatements(parsedBlocks, pageId, tenantId, null, env, statements);
+    collectBlockStatements(parsedBlocks, pageId, tenantId, null, env, statements, postService);
 
     context.requestCount++;
     await env.DB.batch(statements);
 }
 
-export function collectBlockStatements(blocks: any[], postId: string, tenantId: string, parentId: string | null, env: Env, statements: any[]) {
-    const postService = new PostService(env.DB);
+export function collectBlockStatements(blocks: any[], postId: string, tenantId: string, parentId: string | null, env: Env, statements: any[], postService?: PostService) {
+    const service = postService || new PostService(env.DB);
     for (let i = 0; i < blocks.length; i++) {
         const block = blocks[i];
-        statements.push(postService.getUpsertBlockStatement({
+        statements.push(service.getUpsertBlockStatement({
             id: block.id,
             post_id: postId,
             tenant_id: tenantId,
@@ -384,7 +384,7 @@ export function collectBlockStatements(blocks: any[], postId: string, tenantId: 
         }));
 
         if (block.children && block.children.length > 0) {
-            collectBlockStatements(block.children, postId, tenantId, block.id, env, statements);
+            collectBlockStatements(block.children, postId, tenantId, block.id, env, statements, service);
         }
     }
 }
