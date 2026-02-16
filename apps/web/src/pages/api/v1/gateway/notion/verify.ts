@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
             redirectUri = 'https://app.notionglaze.cc/api/v1/gateway/notion/verify';
         }
     }
-    const encryptionSecret = runtime?.env?.ENCRYPTION_SECRET || 'fallback-secret-for-dev-only';
+    const encryptionSecret = runtime?.env?.ENCRYPTION_SECRET;
     const db = runtime?.env?.DB;
 
     if (!clientId || !clientSecret || !redirectUri) {

@@ -49,9 +49,7 @@ try {
     }
 
     // Decrypt the token
-    const cryptoService = new CryptoService(
-        encryptionSecret || "fallback-secret-for-dev-only",
-    );
+    const cryptoService = new CryptoService(encryptionSecret);
     const decryptedToken = await cryptoService.decrypt(
         tenant.notion_access_token,
     );

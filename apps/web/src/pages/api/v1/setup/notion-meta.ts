@@ -5,7 +5,7 @@ export const GET: APIRoute = async ({ locals }) => {
     const tenantId = (locals as any).userId;
     const runtime = (locals as any).runtime;
     const db = runtime?.env?.DB;
-    const encryptionSecret = runtime?.env?.ENCRYPTION_SECRET || 'fallback-secret-for-dev-only';
+    const encryptionSecret = runtime?.env?.ENCRYPTION_SECRET;
 
     if (!tenantId || !db) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
