@@ -1,27 +1,7 @@
+import './lib/polyfills';
 import { defineMiddleware } from 'astro:middleware';
 import { recoverSessionFromCookie } from './lib/auth';
 import { AnalyticsService, TenantService, SessionService } from '@notionglaze/core';
-
-// @ts-ignore - Polyfill for React 19 on Cloudflare
-if (typeof MessageChannel === 'undefined') {
-    // @ts-ignore
-    globalThis.MessageChannel = class MessageChannel {
-        port1: any;
-        port2: any;
-        constructor() {
-            this.port1 = {
-                onmessage: null, postMessage: (msg: any) => {
-                    setTimeout(() => this.port2.onmessage?.({ data: msg }), 0);
-                }
-            };
-            this.port2 = {
-                onmessage: null, postMessage: (msg: any) => {
-                    setTimeout(() => this.port1.onmessage?.({ data: msg }), 0);
-                }
-            };
-        }
-    };
-}
 
 export const onRequest = defineMiddleware(async (context, next) => {
     const { request, locals, url } = context;
