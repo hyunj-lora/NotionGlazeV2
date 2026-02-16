@@ -28,17 +28,17 @@ describe('Reconciler Logic', () => {
     });
 
     it('should correctly map old IDs to new IDs using Tree-Zip', () => {
+        const imageBlock = { type: 'image', image: { type: 'external', external: { url: 'test.png' } } };
         const oldSnapshot: BlockSnapshot[] = [
             { id: 'old-1', type: 'paragraph', contentHash: calculateBlockContentHash(mockBlock) },
-            { id: 'old-2', type: 'image', contentHash: 'hash-image' }
+            { id: 'old-2', type: 'image', contentHash: calculateBlockContentHash(imageBlock) }
         ];
 
         const newBlocks = [
             { id: 'new-1', type: 'paragraph', paragraph: { rich_text: [{ plain_text: 'Hello World' }] } },
-            { id: 'new-2', type: 'image', image: { type: 'external', external: { url: 'test.png' } } }
+            { id: 'new-2', ...imageBlock }
         ];
 
-        // Hack for testing: set the hash of the image block manually in test or use real hashing
         const remapMap = generateRemapMap(oldSnapshot, newBlocks);
 
         expect(remapMap.get('old-1')).toBe('new-1');
