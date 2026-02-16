@@ -131,7 +131,7 @@ async function runAISEOAnalysis(params: {
 export async function syncTenant(tenant: any, env: Env) {
     console.log(`Processing Tenant: ${tenant.id}`);
     const tenantService = new TenantService(env.DB);
-    const encryptionSecret = env.ENCRYPTION_SECRET || 'fallback-secret-for-dev-only';
+    const encryptionSecret = env.ENCRYPTION_SECRET;
     const cryptoService = new CryptoService(encryptionSecret);
 
     await tenantService.startSync(tenant.id);
@@ -251,7 +251,7 @@ export async function processChunk(tenantId: string, pages: any[], env: Env, isL
             tenant.config = {};
         }
 
-        const encryptionSecret = env.ENCRYPTION_SECRET || 'fallback-secret-for-dev-only';
+        const encryptionSecret = env.ENCRYPTION_SECRET;
         const cryptoService = new CryptoService(encryptionSecret);
         const decryptedToken = await cryptoService.decrypt(tenant.notion_access_token);
 
