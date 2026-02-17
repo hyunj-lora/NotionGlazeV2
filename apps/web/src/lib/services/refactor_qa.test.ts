@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { TenantService } from './tenant.service';
-import { SessionService } from './session.service';
+import { TenantService, SessionService } from '@notionglaze/core';
 
 const mockDb = {
     prepare: vi.fn().mockReturnThis(),
