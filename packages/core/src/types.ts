@@ -80,6 +80,11 @@ export interface SiteConfig {
     user_analytics_id?: string;
     social_links?: Record<string, string>;
     visible_social_platforms?: string[];
+    social_title?: string;
+    social_description?: string;
+    og_image?: string;
+    twitter_card_type?: string;
+    twitter_handle?: string;
 }
 
 export interface DatabaseSchema {

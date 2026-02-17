@@ -11,6 +11,8 @@ interface Props {
 	isDashboard?: boolean;
 	canonical?: string;
 	noindex?: boolean;
+	socialTitle?: string;
+	socialDescription?: string;
 }
 
 const {
@@ -22,6 +24,8 @@ const {
 	isDashboard = false,
 	canonical,
 	noindex = false,
+	socialTitle: propsSocialTitle,
+	socialDescription: propsSocialDescription,
 } = Astro.props;
 
 const siteConfig = propsSiteConfig || (Astro.locals as any).siteConfig || {};
@@ -208,14 +212,14 @@ const themeVars = {
 		{noindex && <meta name="robots" content="noindex, follow" />}
 		{canonical && <link rel="canonical" href={canonical} />}
 
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={propsSocialTitle || siteConfig.social_title || title} />
+		<meta property="og:description" content={propsSocialDescription || siteConfig.social_description || description} />
 		<meta property="og:type" content="website" />
 		<meta property="og:image" content={ogImage || `${Astro.url.origin}/og-card.png`} />
 		
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={propsSocialTitle || siteConfig.social_title || title} />
+		<meta name="twitter:description" content={propsSocialDescription || siteConfig.social_description || description} />
 		<meta name="twitter:image" content={ogImage || `${Astro.url.origin}/og-card.png`} />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />

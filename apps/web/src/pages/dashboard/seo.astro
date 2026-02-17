@@ -126,6 +126,38 @@ const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2"
+                                >Social Title</label
+                            >
+                            <input
+                                type="text"
+                                id="social-title"
+                                value={config.social_title || ""}
+                                placeholder="A catchy title for social media"
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                            />
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Used for og:title and twitter:title. Falls back
+                                to Site Title if empty.
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
+                                >Social Description</label
+                            >
+                            <textarea
+                                id="social-description"
+                                rows="2"
+                                placeholder="A brief summary for social shares..."
+                                class="w-full px-4 py-2 rounded-lg border border-border bg-background"
+                                >{config.social_description || ""}</textarea
+                            >
+                            <p class="text-xs text-muted-foreground mt-1">
+                                Used for og:description and twitter:description.
+                                Falls back to Site Description if empty.
+                            </p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2"
                                 >Twitter Card Type</label
                             >
                             <select
@@ -325,6 +357,10 @@ const config = tenant?.config_json ? JSON.parse(tenant.config_json) : {};
                         document.getElementById("twitter-card-type")?.value,
                     twitter_handle:
                         document.getElementById("twitter-handle")?.value,
+                    social_title:
+                        document.getElementById("social-title")?.value,
+                    social_description:
+                        document.getElementById("social-description")?.value,
                     enable_sitemap:
                         document.getElementById("enable-sitemap")?.checked,
                     allow_indexing:
