@@ -1,18 +1,37 @@
 ---
 import { cn } from "../../lib/utils";
+import Label from "./Label.astro";
 
 type Props = {
     class?: string;
+    label?: string;
+    error?: string;
+    helperText?: string;
+    id?: string;
     [key: string]: any;
 };
 
-const { class: className, ...props } = Astro.props;
+const { class: className, label, error, helperText, id, ...props } = Astro.props;
+
+const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+const helperId = helperText ? `${inputId}-helper` : undefined;
+const errorId = error ? `${inputId}-error` : undefined;
+const describedBy = [errorId, helperId].filter(Boolean).join(" ");
 ---
 
-<input
-    class={cn(
-        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-    )}
-    {...props}
-/>
+<div class="flex flex-col gap-1.5">
+    {label && <Label for={inputId}>{label} {props.required && <span class="text-red-500" aria-hidden="true">*</span>}</Label>}
+    <input
+        id={inputId}
+        class={cn(
+            "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+            className,
+            error && "border-destructive focus-visible:ring-destructive"
+        )}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={describedBy || undefined}
+        {...props}
+    />
+    {error && <p id={errorId} class="text-[0.8rem] font-medium text-destructive">{error}</p>}
+    {!error && helperText && <p id={helperId} class="text-[0.8rem] text-muted-foreground">{helperText}</p>}
+</div>
