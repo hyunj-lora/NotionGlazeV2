@@ -15,3 +15,5 @@ export * from './services/admin.service.js';
 export * from './services/analytics.service.js';
 export * from './remapper.service.js';
 export * from './reconciler.js';
+export * from './services/user.service.js';
+export * from './services/auth.service.js';

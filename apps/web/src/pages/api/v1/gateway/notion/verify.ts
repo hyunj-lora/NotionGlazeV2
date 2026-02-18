@@ -1,14 +1,14 @@
 import type { APIRoute } from 'astro';
-import { CryptoService } from "@notionglaze/core";
+import { AuthService, UserService, TenantService, CryptoService } from '@notionglaze/core';
 
-export const GET: APIRoute = async ({ request, redirect, locals }) => {
+export const GET: APIRoute = async ({ request, locals }) => {
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
     const error = url.searchParams.get('error');
     const stateStr = url.searchParams.get('state');
 
     if (error) {
-        return new Response(`OAuth Error: ${error}`, { status: 400 });
+        return new Response(`Notion OAuth Error: ${error}`, { status: 400 });
     }
 
     if (!code) {
@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
     let mode = 'login';
     if (stateStr) {
         try {
-            const state = JSON.parse(stateStr);
+            const state = JSON.parse(decodeURIComponent(stateStr));
             mode = state.mode || 'login';
         } catch (e) {
             console.error('Failed to parse state:', stateStr);
@@ -45,6 +45,10 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
 
     if (!clientId || !clientSecret || !redirectUri) {
         return new Response('Missing Notion client credentials', { status: 500 });
+    }
+
+    if (!db || !encryptionSecret) {
+        return new Response('Database or Encryption Secret missing', { status: 500 });
     }
 
     console.log(`Starting Notion Token Exchange (Mode: ${mode})...`);
@@ -91,28 +95,31 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
         const cryptoService = new CryptoService(encryptionSecret);
         const encryptedToken = await cryptoService.encrypt(rawAccessToken);
 
-        if (!db) {
-            return new Response('Database connection missing', { status: 500 });
-        }
-
         console.log('Database Operations Starting...');
+        const userService = new UserService(db);
+        const tenantService = new TenantService(db);
+        const authService = new AuthService(db);
 
         // 1. Find or Create Internal User (Both modes need a user)
-        let user = await db.prepare('SELECT id FROM users WHERE notion_user_id = ?').bind(notionUserId).first();
+        let user = await userService.getUserByNotionId(notionUserId);
         let internalUserId = user?.id;
 
         if (!internalUserId) {
             internalUserId = crypto.randomUUID();
-            await db.prepare(`
-                INSERT INTO users (id, notion_user_id, email, name, avatar_url)
-                VALUES (?, ?, ?, ?, ?)
-            `).bind(internalUserId, notionUserId, notionUserEmail, notionUserName, notionUserAvatar).run();
+            await userService.createUser({
+                id: internalUserId,
+                notion_user_id: notionUserId,
+                email: notionUserEmail,
+                name: notionUserName,
+                avatar_url: notionUserAvatar
+            });
         } else {
             // Update profile info
-            await db.prepare(`
-                UPDATE users SET email = ?, name = ?, avatar_url = ?, updated_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-            `).bind(notionUserEmail, notionUserName, notionUserAvatar, internalUserId).run();
+            await userService.updateUser(internalUserId, {
+                email: notionUserEmail,
+                name: notionUserName,
+                avatar_url: notionUserAvatar
+            });
         }
 
         if (mode === 'login') {
@@ -120,11 +127,13 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
 
             // Fix: Sync Notion Workspace Name even on simple login
             try {
-                const existingTenant = await db.prepare('SELECT id, config_json FROM tenants WHERE id = ?').bind(notionUserId).first();
+                // Check if tenant exists for this Notion User ID (which is used as Tenant ID usually, but here ID matches Notion User ID)
+                const existingTenant = await tenantService.getTenantById(notionUserId);
+
                 if (existingTenant) {
                     let currentConfig: any = {};
                     try {
-                        currentConfig = JSON.parse(existingTenant.config_json);
+                        currentConfig = existingTenant.config_json ? JSON.parse(existingTenant.config_json) : {};
                     } catch (e) { }
 
                     // Mixin new workspace details
@@ -135,12 +144,12 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
                         bot_id: data.bot_id
                     };
 
-                    // Also update access token in case it rotated, and ENSURE owner_id is linked
-                    await db.prepare(`
-                        UPDATE tenants 
-                        SET config_json = ?, notion_access_token = ?, owner_id = ?, updated_at = CURRENT_TIMESTAMP
-                        WHERE id = ?
-                    `).bind(JSON.stringify(newConfig), encryptedToken, internalUserId, existingTenant.id).run();
+                    await tenantService.updateTenantConfigAndToken(
+                        existingTenant.id,
+                        newConfig,
+                        encryptedToken,
+                        internalUserId!
+                    );
                 } else {
                     // Auto-provision if missing (Fixes 404 on API calls)
                     console.log('Auto-provisioning tenant for login mode user...');
@@ -148,29 +157,29 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
                     const defaultSubdomain = `${workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substring(2, 6)}`;
                     const trialEndsAt = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
 
-                    await db.prepare(`
-                        INSERT INTO tenants (id, notion_access_token, root_page_id, config_json, plan, trial_ends_at, subdomain, owner_id)
-                        VALUES (?, ?, ?, ?, 'trial', ?, ?, ?)
-                    `).bind(notionUserId, encryptedToken, rootPageId, configJson, trialEndsAt, defaultSubdomain, internalUserId).run();
+                    await tenantService.createTenant({
+                        id: notionUserId,
+                        notion_access_token: encryptedToken,
+                        root_page_id: rootPageId,
+                        config_json: configJson,
+                        plan: 'trial',
+                        trial_ends_at: trialEndsAt,
+                        subdomain: defaultSubdomain,
+                        owner_id: internalUserId
+                    });
                 }
             } catch (syncErr) {
                 console.error('Failed to sync tenant info during login:', syncErr);
             }
 
-            const sessionId = crypto.randomUUID();
-            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days
-            await db.prepare(`
-                INSERT INTO sessions (id, user_id, expires_at)
-                VALUES (?, ?, ?)
-            `).bind(sessionId, internalUserId, expiresAt).run();
-
+            // Create Session
             const isSecure = !redirectUri.includes('localhost');
-            const cookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${isSecure ? '; Secure' : ''}`;
-            const glazeCookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${isSecure ? '; Secure' : ''}`;
+            const authResult = await authService.createSession(internalUserId!, isSecure);
 
             const responseHeaders = new Headers();
-            responseHeaders.append('Set-Cookie', `session_id=${sessionId}; ${cookieAttr}`);
-            responseHeaders.append('Set-Cookie', `notion_glaze_id=${internalUserId}; ${glazeCookieAttr}`);
+            authResult.cookies.forEach(cookie => {
+                responseHeaders.append('Set-Cookie', `${cookie.name}=${cookie.value}; ${cookie.attributes}`);
+            });
             responseHeaders.append('Location', '/dashboard');
 
             return new Response(null, {
@@ -191,22 +200,23 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
             const defaultSubdomain = `${workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substring(2, 6)}`;
             const trialEndsAt = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
 
-            await db.prepare(`
-                INSERT INTO tenants (id, notion_access_token, root_page_id, config_json, plan, trial_ends_at, subdomain, owner_id)
-                VALUES (?, ?, ?, ?, 'trial', ?, ?, ?)
-                ON CONFLICT(id) DO UPDATE SET
-                    notion_access_token = excluded.notion_access_token,
-                    root_page_id = COALESCE(tenants.root_page_id, excluded.root_page_id),
-                    config_json = excluded.config_json,
-                    subdomain = COALESCE(tenants.subdomain, excluded.subdomain),
-                    owner_id = excluded.owner_id
-            `).bind(notionUserId, encryptedToken, rootPageId, configJson, trialEndsAt, defaultSubdomain, internalUserId).run();
+            await tenantService.upsertTenant({
+                id: notionUserId,
+                notion_access_token: encryptedToken,
+                root_page_id: rootPageId,
+                config_json: configJson,
+                plan: 'trial',
+                trial_ends_at: trialEndsAt,
+                subdomain: defaultSubdomain,
+                owner_id: internalUserId
+            });
 
             const isSecure = !redirectUri.includes('localhost');
-            const glazeCookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${isSecure ? '; Secure' : ''}`;
+            const rememberMeCookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${isSecure ? '; Secure' : ''}`;
 
             const responseHeaders = new Headers();
-            responseHeaders.append('Set-Cookie', `notion_glaze_id=${internalUserId}; ${glazeCookieAttr}`);
+            // We only need to ensure notion_glaze_id is set if not already, or refreshed.
+            responseHeaders.append('Set-Cookie', `notion_glaze_id=${internalUserId}; ${rememberMeCookieAttr}`);
             responseHeaders.append('Location', '/dashboard/notion-source');
 
             return new Response(null, {

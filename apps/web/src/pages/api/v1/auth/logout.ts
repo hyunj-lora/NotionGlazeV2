@@ -1,22 +1,25 @@
 import type { APIRoute } from 'astro';
+import { AuthService } from '@notionglaze/core';
 
 export const POST: APIRoute = async ({ request, locals }) => {
     const runtime = (locals as any).runtime;
     const db = runtime?.env?.DB;
 
+    if (!db) {
+        return new Response(JSON.stringify({ error: 'Database not available' }), { status: 500 });
+    }
+
     try {
         const cookies = request.headers.get('cookie');
-        const sessionId = cookies?.split(';').find((c: string) => c.trim().startsWith('session_id='))?.split('=')[1];
+        const sessionId = cookies?.split(';').find((c: string) => c.trim().startsWith('session_id='))?.split('=')[1] || null;
 
-        // 1. Delete session record if present
-        if (sessionId && db) {
-            await db.prepare('DELETE FROM sessions WHERE id = ?').bind(sessionId).run();
-        }
+        const authService = new AuthService(db);
+        const { cookies: clearingCookies } = await authService.logout(sessionId);
 
-        // 2. Clear Cookies (session_id + notion_glaze_id to prevent Silent Login)
         const responseHeaders = new Headers();
-        responseHeaders.append('Set-Cookie', 'session_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; HttpOnly; SameSite=Lax');
-        responseHeaders.append('Set-Cookie', 'notion_glaze_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; HttpOnly; SameSite=Lax');
+        clearingCookies.forEach(cookie => {
+            responseHeaders.append('Set-Cookie', `${cookie.name}=${cookie.value}; ${cookie.attributes}`);
+        });
 
         return new Response(JSON.stringify({ success: true }), {
             status: 200,
