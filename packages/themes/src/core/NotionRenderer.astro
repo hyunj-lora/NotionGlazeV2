@@ -1,5 +1,5 @@
 ---
-import { groupBlocks } from "./utils";
+import { groupBlocks, shouldHideBlock } from "./utils";
 import RichText from "./RichText.astro";
 
 // Shared Core Blocks
@@ -45,7 +45,8 @@ interface Props {
 }
 
 const { blocks, idToSlugMap = {}, components = {} } = Astro.props;
-const groupedBlocks = groupBlocks(blocks);
+const visibleBlocks = blocks.filter((block: any) => !shouldHideBlock(block));
+const groupedBlocks = groupBlocks(visibleBlocks);
 
 // Component Mapping with Defaults
 const C = {

@@ -1,3 +1,16 @@
+const HIDE_MARKER = "#!hush";
+
+/**
+ * Checks if a block should be hidden based on the content starting with #!hush.
+ * Supports any block with rich_text content (Paragraph, Toggle, Code, etc.)
+ */
+export function shouldHideBlock(block: any): boolean {
+    const firstText = block?.content?.rich_text?.[0]?.plain_text;
+    return (
+        typeof firstText === "string" &&
+        firstText.trim().toLowerCase().startsWith(HIDE_MARKER)
+    );
+}
 
 /**
  * Groups adjacent list items of the same type (bulleted or numbered) 
