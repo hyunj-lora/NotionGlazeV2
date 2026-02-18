@@ -141,4 +141,37 @@ export class TenantService {
             .bind(ownerId, tenantId)
             .run();
     }
+
+    /**
+     * Checks if token validation is needed (last check was > 1 hour ago)
+     */
+    async needsTokenValidation(tenantId: string): Promise<boolean> {
+        const tenant = await this.getTenantById(tenantId);
+        if (!tenant?.notion_access_token) return false;
+        if (!tenant.last_token_check_at) return true;
+
+        const lastCheck = new Date(tenant.last_token_check_at).getTime();
+        const oneHourAgo = Date.now() - (60 * 60 * 1000);
+        return lastCheck < oneHourAgo;
+    }
+
+    /**
+     * Invalidates the Notion token (sets to NULL)
+     */
+    async invalidateNotionToken(tenantId: string): Promise<void> {
+        await this.db
+            .prepare("UPDATE tenants SET notion_access_token = NULL, root_page_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
+            .bind(tenantId)
+            .run();
+    }
+
+    /**
+     * Updates the last token check timestamp
+     */
+    async updateTokenCheckTimestamp(tenantId: string): Promise<void> {
+        await this.db
+            .prepare("UPDATE tenants SET last_token_check_at = CURRENT_TIMESTAMP WHERE id = ?")
+            .bind(tenantId)
+            .run();
+    }
 }

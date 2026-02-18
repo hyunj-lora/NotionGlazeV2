@@ -1,7 +1,8 @@
 import './lib/polyfills';
 import { defineMiddleware } from 'astro:middleware';
 import { recoverSessionFromCookie } from './lib/auth';
-import { AnalyticsService, TenantService, SessionService } from '@notionglaze/core';
+import { AnalyticsService, TenantService, SessionService, NotionService, CryptoService } from '@notionglaze/core';
+
 
 export const onRequest = defineMiddleware(async (context, next) => {
     const { request, locals, url } = context;
@@ -127,6 +128,36 @@ export const onRequest = defineMiddleware(async (context, next) => {
                         try {
                             locals.siteConfig = JSON.parse(tenant.config_json);
                         } catch (e) { }
+                    }
+
+                    // ASYNC TOKEN VALIDATION (non-blocking, but guaranteed to complete)
+                    // waitUntil() ensures Cloudflare Workers doesn't terminate the promise early
+                    if (tenant.notion_access_token) {
+                        const validationPromise = (async () => {
+                            try {
+                                const needsValidation = await tenantService.needsTokenValidation(tenant.id);
+                                if (needsValidation) {
+                                    const encryptionSecret = runtime?.env?.ENCRYPTION_SECRET;
+                                    if (!encryptionSecret) return;
+
+                                    const cryptoService = new CryptoService(encryptionSecret);
+                                    const decryptedToken = await cryptoService.decrypt(tenant.notion_access_token!);
+                                    const notionService = new NotionService(decryptedToken);
+
+                                    const isValid = await notionService.validateToken();
+                                    if (isValid) {
+                                        await tenantService.updateTokenCheckTimestamp(tenant.id);
+                                    } else {
+                                        console.warn(`Notion token for tenant ${tenant.id} is invalid. Clearing...`);
+                                        await tenantService.invalidateNotionToken(tenant.id);
+                                    }
+                                }
+                            } catch (validationError) {
+                                console.error('Token validation error:', validationError);
+                            }
+                        })();
+                        // Register with Cloudflare runtime to prevent early termination
+                        runtime?.context?.waitUntil(validationPromise);
                     }
                 }
             } catch (e) {

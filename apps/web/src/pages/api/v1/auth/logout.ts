@@ -13,9 +13,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
             await db.prepare('DELETE FROM sessions WHERE id = ?').bind(sessionId).run();
         }
 
-        // 2. Clear Cookie
+        // 2. Clear Cookies (session_id + notion_glaze_id to prevent Silent Login)
         const responseHeaders = new Headers();
         responseHeaders.append('Set-Cookie', 'session_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; HttpOnly; SameSite=Lax');
+        responseHeaders.append('Set-Cookie', 'notion_glaze_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT; HttpOnly; SameSite=Lax');
 
         return new Response(JSON.stringify({ success: true }), {
             status: 200,

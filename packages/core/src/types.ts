@@ -52,6 +52,7 @@ export interface Tenant {
     sync_status: "idle" | "syncing" | "error" | "success";
     sync_progress: number;
     last_sync_at: number | null;
+    last_token_check_at?: string | null; // ISO timestamp of last token validation
 }
 
 export interface SyncContext {

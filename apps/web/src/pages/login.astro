@@ -1,10 +1,6 @@
 ---
 import Layout from "@notionglaze/ui/Layout.astro";
-
-const sessionId = Astro.cookies.get("session_id")?.value;
-if (sessionId) {
-    return Astro.redirect("/dashboard");
-}
+// Session check is handled by middleware.ts
 ---
 
 <Layout title="Login to NotionGlaze">

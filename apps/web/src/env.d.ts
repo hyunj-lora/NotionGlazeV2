@@ -5,6 +5,7 @@ import type { Tenant, SiteConfig } from "@notionglaze/core";
 interface CloudflareRuntime {
     env: {
         DB: D1Database;
+        ENCRYPTION_SECRET: string;
         PADDLE_CLIENT_TOKEN: string;
         PADDLE_ENVIRONMENT: string;
         PADDLE_PRO_MONTHLY_PRICE_ID: string;

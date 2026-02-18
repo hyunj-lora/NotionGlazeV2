@@ -167,4 +167,24 @@ export class NotionService {
     async getDatabase(databaseId: string) {
         return await this.client.databases.retrieve({ database_id: databaseId });
     }
+
+    /**
+     * Validates if the access token is still valid by making a lightweight API call.
+     * Returns true if valid, false if invalid/expired.
+     */
+    async validateToken(): Promise<boolean> {
+        try {
+            // Use /v1/users/me endpoint - lightweight and requires valid token
+            await this.client.users.me({});
+            return true;
+        } catch (error: any) {
+            // Check if error is authentication-related
+            if (error?.code === 'unauthorized' || error?.status === 401) {
+                return false;
+            }
+            // For other errors (network, etc.), assume token is still valid
+            console.warn('Token validation encountered non-auth error:', error?.message);
+            return true;
+        }
+    }
 }
