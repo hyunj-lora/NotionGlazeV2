@@ -26,55 +26,48 @@ describe('TenantService — Token Validation', () => {
 
     describe('needsTokenValidation()', () => {
         it('returns false if tenant has no notion_access_token', async () => {
-            db.first.mockResolvedValueOnce({
+            const tenant: any = {
                 id: 'tenant-1',
                 notion_access_token: null,
                 last_token_check_at: null,
-            });
+            };
 
-            const result = await service.needsTokenValidation('tenant-1');
+            const result = service.needsTokenValidation(tenant);
             expect(result).toBe(false);
         });
 
         it('returns true if last_token_check_at is null (never checked)', async () => {
-            db.first.mockResolvedValueOnce({
+            const tenant: any = {
                 id: 'tenant-1',
                 notion_access_token: 'encrypted-token',
                 last_token_check_at: null,
-            });
+            };
 
-            const result = await service.needsTokenValidation('tenant-1');
+            const result = service.needsTokenValidation(tenant);
             expect(result).toBe(true);
         });
 
         it('returns true if last check was more than 1 hour ago', async () => {
             const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
-            db.first.mockResolvedValueOnce({
+            const tenant: any = {
                 id: 'tenant-1',
                 notion_access_token: 'encrypted-token',
                 last_token_check_at: twoHoursAgo,
-            });
+            };
 
-            const result = await service.needsTokenValidation('tenant-1');
+            const result = service.needsTokenValidation(tenant);
             expect(result).toBe(true);
         });
 
         it('returns false if last check was within 1 hour', async () => {
             const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
-            db.first.mockResolvedValueOnce({
+            const tenant: any = {
                 id: 'tenant-1',
                 notion_access_token: 'encrypted-token',
                 last_token_check_at: thirtyMinutesAgo,
-            });
+            };
 
-            const result = await service.needsTokenValidation('tenant-1');
-            expect(result).toBe(false);
-        });
-
-        it('returns false if tenant is not found', async () => {
-            db.first.mockResolvedValueOnce(null);
-
-            const result = await service.needsTokenValidation('nonexistent');
+            const result = service.needsTokenValidation(tenant);
             expect(result).toBe(false);
         });
     });

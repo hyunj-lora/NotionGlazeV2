@@ -142,4 +142,47 @@ export const prerender = false;
 			padding: 0 1rem;
 		}
 	}
+
+	/* Logout Toast Styles */
+	#logout-toast {
+		position: fixed;
+		bottom: 2rem;
+		left: 50%;
+		transform: translateX(-50%) translateY(100px);
+		background: hsl(var(--card));
+		border: 1px solid hsl(var(--border));
+		padding: 0.75rem 1.5rem;
+		border-radius: 9999px;
+		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+		z-index: 100;
+		transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-weight: 500;
+	}
+	#logout-toast.show {
+		transform: translateX(-50%) translateY(0);
+	}
 </style>
+
+<div id="logout-toast">
+	<span style="font-size: 1.25rem;">👋</span>
+	<span>Successfully logged out. See you soon!</span>
+</div>
+
+<script>
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.get("logout") === "success") {
+		const toast = document.getElementById("logout-toast");
+		if (toast) {
+			setTimeout(() => toast.classList.add("show"), 500);
+			setTimeout(() => {
+				toast.classList.remove("show");
+				// Clean URL without refresh
+				const newUrl = window.location.pathname;
+				window.history.replaceState({}, document.title, newUrl);
+			}, 4000);
+		}
+	}
+</script>

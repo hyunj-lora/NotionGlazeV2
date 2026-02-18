@@ -145,9 +145,8 @@ export class TenantService {
     /**
      * Checks if token validation is needed (last check was > 1 hour ago)
      */
-    async needsTokenValidation(tenantId: string): Promise<boolean> {
-        const tenant = await this.getTenantById(tenantId);
-        if (!tenant?.notion_access_token) return false;
+    needsTokenValidation(tenant: Tenant): boolean {
+        if (!tenant.notion_access_token) return false;
         if (!tenant.last_token_check_at) return true;
 
         const lastCheck = new Date(tenant.last_token_check_at).getTime();
@@ -173,5 +172,33 @@ export class TenantService {
             .prepare("UPDATE tenants SET last_token_check_at = CURRENT_TIMESTAMP WHERE id = ?")
             .bind(tenantId)
             .run();
+    }
+
+    /**
+     * Performs full validation logic (Decrypt -> Notion API -> Update/Invalidate)
+     */
+    async validateAndHandleTokenStatus(
+        tenant: Tenant,
+        encryptionSecret: string,
+        cryptoService: any, // CryptoService
+        notionServiceFactory: (token: string) => any // NotionService factory
+    ): Promise<void> {
+        try {
+            if (!this.needsTokenValidation(tenant)) return;
+
+            const decryptedToken = await cryptoService.decrypt(tenant.notion_access_token!);
+            const notionService = notionServiceFactory(decryptedToken);
+
+            const isValid = await notionService.validateToken();
+            if (isValid) {
+                await this.updateTokenCheckTimestamp(tenant.id);
+            } else {
+                console.warn(`Notion token for tenant ${tenant.id} is invalid. Clearing...`);
+                await this.invalidateNotionToken(tenant.id);
+            }
+        } catch (error) {
+            console.error(`Token status check failed for tenant ${tenant.id}:`, error);
+            // We don't throw here to avoid breaking the calling flow (e.g. middleware)
+        }
     }
 }

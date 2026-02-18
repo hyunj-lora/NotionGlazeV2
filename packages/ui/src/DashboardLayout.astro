@@ -754,14 +754,14 @@ const blogUrl = getLiveSiteUrl(tenant);
                         method: "POST",
                     });
                     if (res.ok) {
-                        window.location.href = "/login";
+                        window.location.href = "/?logout=success";
                     } else {
                         // Fallback: manual cookie clear and redirect if endpoint fails
                         document.cookie =
                             "session_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
                         document.cookie =
                             "notion_glaze_id=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-                        window.location.href = "/login";
+                        window.location.href = "/?logout=success";
                     }
                 } catch (e) {
                     window.location.href = "/";
