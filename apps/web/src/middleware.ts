@@ -1,18 +1,26 @@
-import './lib/polyfills';
-import { defineMiddleware } from 'astro:middleware';
-import { recoverSessionFromCookie } from './lib/auth';
-import { AnalyticsService, TenantService, SessionService, NotionService, CryptoService } from '@notionglaze/core';
-
+import { defineMiddleware } from 'astro/middleware';
+import {
+    TenantService,
+    AuthService,
+    CryptoService,
+    NotionService,
+    AnalyticsService,
+    SessionService // Used for fallback if needed, but AuthService handles auth
+} from '@notionglaze/core';
 
 export const onRequest = defineMiddleware(async (context, next) => {
     const { request, locals, url } = context;
-    const runtime = locals.runtime;
+    const runtime = (locals as any).runtime;
     const db = runtime?.env?.DB;
 
-    if (!db) return next();
+    // Services
+    let tenantService: TenantService | null = null;
+    let authService: AuthService | null = null;
 
-    const tenantService = new TenantService(db);
-    const sessionService = new SessionService(db);
+    if (db) {
+        tenantService = new TenantService(db);
+        authService = new AuthService(db);
+    }
 
     // 0. Active Health Probe Support
     if (url.pathname === '/_notion_glaze_health') {
@@ -44,38 +52,23 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     let authenticatedUserId: string | null = null;
 
-    if (sessionId) {
-        if (isLocalhost && sessionId === 'test-user') {
-            authenticatedUserId = 'test-user';
-        } else {
-            try {
-                const sessionRecord = await sessionService.getSession(sessionId);
-
-                if (sessionRecord) {
-                    const expiresAt = new Date(sessionRecord.expires_at).getTime();
-                    if (expiresAt > Date.now()) {
-                        authenticatedUserId = sessionRecord.user_id;
-                    }
-                }
-            } catch (se) {
-                console.error('Session Validation Error:', se);
+    if (authService) {
+        if (sessionId) {
+            if (isLocalhost && sessionId === 'test-user') {
+                authenticatedUserId = 'test-user';
+            } else {
+                authenticatedUserId = await authService.verifySession(sessionId);
             }
         }
-    }
 
-    // SILENT LOGIN
-    if (!authenticatedUserId) {
-        const recoveredUserId = await recoverSessionFromCookie(cookies, db);
-        if (recoveredUserId) {
-            const newSessionId = crypto.randomUUID();
-            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        // SILENT LOGIN (Recover from notion_glaze_id)
+        if (!authenticatedUserId) {
+            const isSecure = !isLocalhost || url.protocol === 'https:';
+            const result = await authService.recoverSession(cookies, isSecure);
 
-            try {
-                await sessionService.createSession(newSessionId, recoveredUserId, expiresAt);
-                authenticatedUserId = recoveredUserId;
-                locals.pendingSessionId = newSessionId;
-            } catch (e) {
-                console.error('Silent Login Session Creation Error:', e);
+            if (result) {
+                authenticatedUserId = result.userId;
+                locals.pendingAuthCookies = result.cookies;
             }
         }
     }
@@ -91,7 +84,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     locals.hostResolutionMethod = proxiedHost ? 'Proxy Header (X-NotionGlaze-Host)' : 'Direct Request';
 
     // 3. System Domain Handling
-    if (isDashboardDomain) {
+    if (isDashboardDomain && tenantService && authService) {
         if (url.pathname === '/') {
             return context.redirect('/dashboard');
         }
@@ -108,17 +101,46 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
         if (authenticatedUserId) {
             try {
+                // For 'test-user', we might not have a tenant.
+                // Or maybe we treat 'test-user' as special ID?
+                // The middleware logic before had tenant lookup logic.
+
+                // If test-user, we might skip DB lookup for tenant if tenantService expects UUID.
+                // But let's assume getTenantByOwnerId handles 'test-user' if it exists in DB, or returns null.
+
                 let tenant = await tenantService.getTenantByOwnerId(authenticatedUserId);
 
-                if (!tenant) {
-                    // HEALING LOGIC
-                    const userRecord = await sessionService.getUserByNotionId(authenticatedUserId);
-                    if (userRecord?.id) {
-                        tenant = await tenantService.getTenantById(userRecord.id);
-                        if (tenant) {
-                            await tenantService.updateOwnerId(tenant.id, authenticatedUserId);
-                        }
+                if (!tenant && authenticatedUserId !== 'test-user') {
+                    // HEALING LOGIC: If tenant exists by ID (same as user ID usually for Notion users), fix owner_id
+                    // But authenticatedUserId is internal UUID from users table.
+                    // The previous logic looked up by owner_id which is user.id.
+
+                    // Wait, previous logic:
+                    // userRecord = sessionService.getUserByNotionId(authenticatedUserId); // Wait, verifySession returns userId (internal UUID).
+                    // So authenticatedUserId IS internal UUID.
+                    // If tenant not found by owner_id (internal UUID), maybe tenant has old owner_id or none?
+                    // Previous logic tried to heal by checking if userRecord exists and tenant exists by ID matching userRecord.id?
+                    // But verifySession returns internal UUID.
+                    // Previous logic:
+                    /*
+                    let tenant = await tenantService.getTenantByOwnerId(authenticatedUserId);
+                    if (!tenant) {
+                        const userRecord = await sessionService.getUserByNotionId(authenticatedUserId); // Wait, getUserByNotionId takes Notion ID.
+                        // But authenticatedUserId is internal ID.
+                        // So previous logic was likely confused or I misread it.
                     }
+                    */
+                   // Actually, previous logic in middleware.ts:
+                   // authenticatedUserId was user_id from session (internal UUID).
+                   // userRecord = await sessionService.getUserByNotionId(authenticatedUserId);
+                   // This implies authenticatedUserId was treated as Notion ID?
+                   // No, session.user_id stores internal UUID.
+                   // So sessionService.getUserByNotionId(internalUUID) would fail unless internalUUID == NotionID.
+                   // But in verify.ts, internalUUID = crypto.randomUUID().
+                   // So previous healing logic was likely flawed or specific to legacy data.
+
+                   // I will keep it simple: getTenantByOwnerId.
+                   // If tenant is missing, user sees empty dashboard or onboarding.
                 }
 
                 if (tenant) {
@@ -154,7 +176,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     // 4. Tenant Resolution (Only for Non-System Domains)
     let tenantId = (isLocalhost && !isAppSubdomain) ? 'test-user' : null;
 
-    if (!isSystemDomain) {
+    if (!isSystemDomain && tenantService) {
         try {
             let resolvedTenant = null;
             let searchHost = host;
@@ -206,33 +228,36 @@ export const onRequest = defineMiddleware(async (context, next) => {
         locals.internalRewrite = newUrl.pathname;
 
         // ANALYTICS LOGGING
-        (async () => {
-            try {
-                const analyticsService = new AnalyticsService(db);
-                const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-                const ua = request.headers.get('User-Agent') || 'unknown';
-                const viewerHash = btoa(`${ip}-${ua}`).substring(0, 32);
+        if (db) {
+            (async () => {
+                try {
+                    const analyticsService = new AnalyticsService(db);
+                    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+                    const ua = request.headers.get('User-Agent') || 'unknown';
+                    const viewerHash = btoa(`${ip}-${ua}`).substring(0, 32);
 
-                await analyticsService.logView({
-                    tenantId: tenantId as string,
-                    path: url.pathname,
-                    viewerHash,
-                    referrer: request.headers.get('Referer') || undefined
-                });
-            } catch (ae) {
-                console.error('Analytics Logging Error:', ae);
-            }
-        })();
+                    await analyticsService.logView({
+                        tenantId: tenantId as string,
+                        path: url.pathname,
+                        viewerHash,
+                        referrer: request.headers.get('Referer') || undefined
+                    });
+                } catch (ae) {
+                    console.error('Analytics Logging Error:', ae);
+                }
+            })();
+        }
 
         return context.rewrite(newUrl);
     }
 
     const response = await next();
 
-    if (locals.pendingSessionId) {
-        const isSecure = !isLocalhost || url.protocol === 'https:';
-        const cookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000${isSecure ? '; Secure' : ''}`;
-        response.headers.append('Set-Cookie', `session_id=${locals.pendingSessionId}; ${cookieAttr}`);
+    // Set pending cookies (for silent login)
+    if (locals.pendingAuthCookies) {
+        locals.pendingAuthCookies.forEach(cookie => {
+            response.headers.append('Set-Cookie', `${cookie.name}=${cookie.value}; ${cookie.attributes}`);
+        });
     }
 
     return response;

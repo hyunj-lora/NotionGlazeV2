@@ -10,6 +10,9 @@ interface CloudflareRuntime {
         PADDLE_ENVIRONMENT: string;
         PADDLE_PRO_MONTHLY_PRICE_ID: string;
         PADDLE_PRO_ANNUALLY_PRICE_ID: string;
+        NOTION_CLIENT_ID: string;
+        NOTION_CLIENT_SECRET: string;
+        NOTION_REDIRECT_URI: string;
     };
     context: {
         waitUntil(promise: Promise<any>): void;
@@ -26,7 +29,7 @@ declare global {
             isSystemDomain: boolean;
             isDashboardDomain: boolean;
             hostResolutionMethod: string;
-            pendingSessionId?: string;
+            pendingAuthCookies?: { name: string; value: string; attributes: string }[];
             blogTenantId?: string | null;
             tenantPlan?: string;
             internalRewrite?: string;

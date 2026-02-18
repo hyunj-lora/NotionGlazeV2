@@ -65,6 +65,41 @@ export class TenantService {
         return newConfig;
     }
 
+    async createTenant(tenant: any): Promise<void> {
+        await this.db
+            .prepare(`
+                INSERT INTO tenants (id, notion_access_token, root_page_id, config_json, plan, trial_ends_at, subdomain, owner_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `)
+            .bind(tenant.id, tenant.notion_access_token, tenant.root_page_id, tenant.config_json, tenant.plan, tenant.trial_ends_at, tenant.subdomain, tenant.owner_id)
+            .run();
+    }
+
+    async upsertTenant(tenant: any): Promise<void> {
+         await this.db.prepare(`
+                INSERT INTO tenants (id, notion_access_token, root_page_id, config_json, plan, trial_ends_at, subdomain, owner_id)
+                VALUES (?, ?, ?, ?, 'trial', ?, ?, ?)
+                ON CONFLICT(id) DO UPDATE SET
+                    notion_access_token = excluded.notion_access_token,
+                    root_page_id = COALESCE(tenants.root_page_id, excluded.root_page_id),
+                    config_json = excluded.config_json,
+                    subdomain = COALESCE(tenants.subdomain, excluded.subdomain),
+                    owner_id = excluded.owner_id,
+                    updated_at = CURRENT_TIMESTAMP
+            `).bind(tenant.id, tenant.notion_access_token, tenant.root_page_id, tenant.config_json, tenant.trial_ends_at, tenant.subdomain, tenant.owner_id).run();
+    }
+
+    async updateTenantConfigAndToken(id: string, config: any, token: string, ownerId: string): Promise<void> {
+        await this.db
+            .prepare(`
+                UPDATE tenants
+                SET config_json = ?, notion_access_token = ?, owner_id = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            `)
+            .bind(JSON.stringify(config), token, ownerId, id)
+            .run();
+    }
+
     async getTenantStats(tenantId: string) {
         try {
             const counts = await this.db
