@@ -1,0 +1,77 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import { Input } from "@notionglaze/ui";
+
+export const prerender = true;
+---
+
+<Layout title="UI Debug - Input Component">
+    <div class="container mx-auto py-10 max-w-2xl space-y-8">
+        <header>
+            <h1 class="text-2xl font-bold mb-2">Input Component Verification</h1>
+            <p class="text-muted-foreground">
+                Testing the accessible Input component from @notionglaze/ui.
+            </p>
+        </header>
+
+        <section class="space-y-6">
+            <h2 class="text-lg font-semibold border-b pb-2">Examples</h2>
+
+            <!-- Standard Input -->
+            <div class="p-4 border rounded-lg bg-card">
+                <h3 class="text-sm font-medium mb-4">Standard Input</h3>
+                <Input
+                    id="input-standard"
+                    label="Username"
+                    placeholder="Enter your username"
+                />
+            </div>
+
+            <!-- Required Input -->
+            <div class="p-4 border rounded-lg bg-card">
+                <h3 class="text-sm font-medium mb-4">Required Input</h3>
+                <Input
+                    id="input-required"
+                    label="Email Address"
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                />
+            </div>
+
+            <!-- Input with Helper Text -->
+            <div class="p-4 border rounded-lg bg-card">
+                <h3 class="text-sm font-medium mb-4">Input with Helper Text</h3>
+                <Input
+                    id="input-helper"
+                    label="Password"
+                    type="password"
+                    helperText="Must be at least 8 characters long."
+                />
+            </div>
+
+            <!-- Input with Error -->
+            <div class="p-4 border rounded-lg bg-card">
+                <h3 class="text-sm font-medium mb-4">Input with Error</h3>
+                <Input
+                    id="input-error"
+                    label="Confirm Password"
+                    type="password"
+                    value="wrongpassword"
+                    error="Passwords do not match."
+                />
+            </div>
+
+            <!-- Disabled Input -->
+            <div class="p-4 border rounded-lg bg-card">
+                <h3 class="text-sm font-medium mb-4">Disabled Input</h3>
+                <Input
+                    id="input-disabled"
+                    label="License Key"
+                    value="XXXX-XXXX-XXXX-XXXX"
+                    disabled
+                />
+            </div>
+        </section>
+    </div>
+</Layout>
