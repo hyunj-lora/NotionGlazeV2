@@ -69,14 +69,14 @@ if (homeData.type === "page" && homeData.post) {
     };
 }
 
-const siteName = config.site_name || "NotionGlaze Blog";
+const siteName = config.site_name || "";
 const siteDescription =
     config.site_description ||
     "Thoughts, essays, and technical captures sync'd from Notion.";
 ---
 
 <Layout
-    title={`${siteName} | NotionGlaze`}
+    title={tenant?.plan === "pro" ? siteName : `${siteName} | NotionGlaze`}
     description={siteDescription}
     socialTitle={config.social_title}
     socialDescription={config.social_description}

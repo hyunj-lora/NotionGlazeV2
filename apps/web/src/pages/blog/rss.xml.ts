@@ -15,8 +15,8 @@ export const GET: APIRoute = async ({ locals, site }) => {
 
     const tenant = await db.prepare("SELECT config_json FROM tenants WHERE id = ?").bind(tenantId).first();
     const config = JSON.parse(tenant?.config_json || '{}');
-    const siteName = config.site_name || 'NotionGlaze Blog';
-    const siteDescription = config.site_description || 'A blog powered by NotionGlaze';
+    const siteName = config.site_name || '';
+    const siteDescription = config.site_description || '';
 
     return rss({
         title: siteName,

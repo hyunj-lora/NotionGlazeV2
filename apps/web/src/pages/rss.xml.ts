@@ -18,8 +18,8 @@ export const GET: APIRoute = async (context) => {
     ).bind(tenantId).first();
 
     const config = JSON.parse(tenant?.config_json || '{}');
-    const siteTitle = config.site_name || 'NotionGlaze Blog';
-    const siteDescription = config.site_description || 'Powered by NotionGlaze';
+    const siteTitle = config.site_name || '';
+    const siteDescription = config.site_description || '';
 
     return rss({
         title: siteTitle,

@@ -17,7 +17,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
         const tenant = await db.prepare('SELECT config_json FROM tenants WHERE id = ?').bind(post.tenant_id).first();
         const config = JSON.parse(tenant?.config_json || '{}');
         const brandColor = config.brand_color || '#6366f1';
-        const siteName = config.site_name || 'NotionGlaze Blog';
+        const siteName = config.site_name || '';
 
         // Load Font (Pretendard Bold for wide character support including Korean)
         const fontData = await fetch('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/static/Pretendard-Bold.otf').then(res => res.arrayBuffer());
@@ -80,7 +80,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
                         }
                     ],
                 }
-            },
+            } as any,
             {
                 width: 1200,
                 height: 630,

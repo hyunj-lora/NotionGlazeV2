@@ -19,9 +19,9 @@ const { config = {} } = Astro.props;
     
     const isCleanStack = style === 'clean-stack';
     
-    // Branding Logic: Always show for Free/Trial. Optional for Pro.
+    // Branding Logic: Always show for Free. Hidden by default for Pro (white-label).
     const isPro = config.plan === 'pro';
-    const showBranding = !isPro || !config.hide_attribution;
+    const showBranding = !isPro;
 ---
 
 <footer class:list={["blog-footer container", style]}>
