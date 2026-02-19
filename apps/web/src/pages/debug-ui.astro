@@ -1,0 +1,56 @@
+---
+import Layout from "@notionglaze/ui/Layout.astro";
+import Input from "../components/ui/Input.astro";
+---
+
+<Layout title="UI Debug | NotionGlaze">
+    <div class="max-w-2xl mx-auto py-12 px-4 space-y-8">
+        <header>
+            <h1 class="text-3xl font-bold tracking-tight">UI Component Debug</h1>
+            <p class="text-muted-foreground mt-2">
+                A testbed for verifying UI component accessibility and states.
+            </p>
+        </header>
+
+        <section class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Input Component</h2>
+                <span class="text-xs font-mono bg-muted px-2 py-1 rounded">apps/web/src/components/ui/Input.astro</span>
+            </div>
+
+            <div class="grid gap-6 p-6 border rounded-xl bg-card text-card-foreground shadow-sm">
+                <!-- Basic Input -->
+                <Input
+                    id="debug-basic-input"
+                    label="Display Name"
+                    placeholder="e.g. Acme Corp"
+                />
+
+                <!-- Required Input -->
+                <Input
+                    id="debug-required-input"
+                    label="Email Address"
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                />
+
+                <!-- Error State -->
+                <Input
+                    id="debug-error-input"
+                    label="Domain"
+                    error="This domain is already taken."
+                    defaultValue="taken-domain.com"
+                />
+
+                <!-- Disabled State -->
+                <Input
+                    id="debug-disabled-input"
+                    label="License Key (Read-only)"
+                    disabled
+                    value="XXXX-XXXX-XXXX-XXXX"
+                />
+            </div>
+        </section>
+    </div>
+</Layout>
