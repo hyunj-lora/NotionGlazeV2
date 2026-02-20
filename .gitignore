@@ -28,3 +28,15 @@ local.db
 
 # wrangler state
 .wrangler/
+
+# dev temporary
+*.sql
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!*.schema.json
+!lib/themes/*.json
+test_render.html
+recordMap_dump.json
+content.json
