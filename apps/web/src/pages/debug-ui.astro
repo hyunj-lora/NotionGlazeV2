@@ -1,0 +1,42 @@
+---
+import { Input } from "@notionglaze/ui";
+// Ensure global styles are loaded for Tailwind
+import "../styles/globals.css";
+---
+
+<div class="dashboard-shell min-h-screen p-10 bg-background text-foreground">
+    <div class="space-y-8 max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Input Verification</h1>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-4">1. Standard Input</h2>
+            <Input label="Username" id="username" placeholder="Enter username" />
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-4">2. Required Input</h2>
+            <Input label="Email" id="email" type="email" required placeholder="Enter email" />
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-4">3. Error State</h2>
+            <Input
+                label="Password"
+                id="password"
+                type="password"
+                error="Password is too short"
+                value="123"
+            />
+        </section>
+
+        <section>
+            <h2 class="text-lg font-semibold mb-4">4. Custom Styling</h2>
+            <Input
+                label="Promo Code"
+                id="promo"
+                class="font-mono text-blue-600 bg-blue-50"
+                placeholder="SAVE20"
+            />
+        </section>
+    </div>
+</div>
