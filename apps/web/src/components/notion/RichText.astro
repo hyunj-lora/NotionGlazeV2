@@ -1,0 +1,53 @@
+---
+interface Props {
+    richText: any[];
+}
+
+const { richText } = Astro.props;
+---
+
+{
+    richText.map((segment) => {
+        const { text, annotations, type } = segment;
+
+        if (type !== "text") return null;
+
+        let content = text.content;
+        const { bold, italic, strikethrough, underline, code, color } =
+            annotations;
+
+        // Build classes for color or other things if needed
+        const classes = [];
+        if (color && color !== "default") classes.push(`notion-${color}`);
+
+        let element = <>{content}</>;
+
+        if (code) element = <code>{element}</code>;
+        if (bold) element = <strong>{element}</strong>;
+        if (italic) element = <em>{element}</em>;
+        if (strikethrough) element = <del>{element}</del>;
+        if (underline)
+            element = (
+                <span style="text-decoration: underline;">{element}</span>
+            );
+
+        if (text.link) {
+            return (
+                <a
+                    href={text.link.url}
+                    class={classes.join(" ")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {element}
+                </a>
+            );
+        }
+
+        if (classes.length > 0) {
+            return <span class={classes.join(" ")}>{element}</span>;
+        }
+
+        return element;
+    })
+}

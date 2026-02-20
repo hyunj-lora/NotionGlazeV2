@@ -1,0 +1,57 @@
+---
+import RichText from "./RichText.astro";
+
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+const type = block.type; // heading_1, heading_2, heading_3
+---
+
+{
+    type === "heading_1" && (
+        <h1 id={block.id} class="notion-heading-1">
+            <RichText richText={block.content.rich_text} />
+        </h1>
+    )
+}
+{
+    type === "heading_2" && (
+        <h2 id={block.id} class="notion-heading-2">
+            <RichText richText={block.content.rich_text} />
+        </h2>
+    )
+}
+{
+    (type === "heading_3" || type === "sub_sub_header") && (
+        <h3 id={block.id} class="notion-heading-3">
+            <RichText richText={block.content.rich_text} />
+        </h3>
+    )
+}
+
+<style>
+    h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin: 2rem 0 1rem;
+    }
+    h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        margin: 1.5rem 0 0.75rem;
+    }
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1.25rem 0 0.5rem;
+    }
+
+    .notion-heading-1,
+    .notion-heading-2,
+    .notion-heading-3 {
+        line-height: 1.2;
+        color: hsl(var(--foreground));
+    }
+</style>

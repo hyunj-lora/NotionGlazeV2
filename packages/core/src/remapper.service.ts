@@ -1,5 +1,5 @@
 import { NotionService } from './notion.js';
-import { calculateBlockContentHash, generateRemapMap, BlockSnapshot } from './reconciler.js';
+import { calculateBlockContentHash, generateRemapMap, type BlockSnapshot } from './reconciler.js';
 
 export class RemapperService {
     constructor(private notion: NotionService) { }

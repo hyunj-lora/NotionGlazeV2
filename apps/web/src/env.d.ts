@@ -33,7 +33,8 @@ declare global {
             blogTenantId?: string | null;
             tenantPlan?: string;
             internalRewrite?: string;
-            runtime?: CloudflareRuntime;
+            runtime: CloudflareRuntime;
+            auth: () => Promise<any>;
         }
     }
 }

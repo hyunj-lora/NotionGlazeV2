@@ -18,22 +18,38 @@ if (!tenantId || !db) {
 if (Astro.request.method === "POST") {
     try {
         const formData = await Astro.request.formData();
-        const selectedId = formData.get("databaseId") as string;
+        const connectionMode = formData.get("connectionMode") as string;
 
-        if (selectedId) {
-            await db
-                .prepare(
-                    "UPDATE tenants SET root_page_id = ?, sync_status = 'pending' WHERE owner_id = ?",
-                )
-                .bind(selectedId, tenantId)
-                .run();
+        if (connectionMode === "public_link") {
+            const publicUrl = formData.get("publicLinkUrl") as string;
+            if (publicUrl) {
+                await db
+                    .prepare(
+                        "UPDATE tenants SET connection_type = 'public_link', public_link_url = ?, sync_status = 'pending' WHERE owner_id = ?",
+                    )
+                    .bind(publicUrl, tenantId)
+                    .run();
+                return Astro.redirect("/dashboard");
+            }
+        } else if (connectionMode === "oauth_db") {
+            const selectedId = formData.get("databaseId") as string;
+            if (selectedId) {
+                await db
+                    .prepare(
+                        "UPDATE tenants SET connection_type = 'oauth_db', root_page_id = ?, sync_status = 'pending' WHERE owner_id = ?",
+                    )
+                    .bind(selectedId, tenantId)
+                    .run();
 
-            return Astro.redirect("/dashboard/notion-source");
+                return Astro.redirect("/dashboard");
+            }
         }
     } catch (e) {
         error = "Failed to save selection.";
     }
 }
+
+let hasOauthConnection = false;
 
 // Fetch Databases from Notion
 try {
@@ -44,120 +60,194 @@ try {
         .bind(tenantId)
         .first();
 
-    if (!tenant?.notion_access_token) {
-        return Astro.redirect("/dashboard/notion-source");
-    }
+    if (tenant?.notion_access_token) {
+        hasOauthConnection = true;
+        // Decrypt the token
+        const cryptoService = new CryptoService(encryptionSecret);
+        const decryptedToken = await cryptoService.decrypt(
+            tenant.notion_access_token,
+        );
 
-    // Decrypt the token
-    const cryptoService = new CryptoService(encryptionSecret);
-    const decryptedToken = await cryptoService.decrypt(
-        tenant.notion_access_token,
-    );
-
-    const response = await fetch("https://api.notion.com/v1/search", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${decryptedToken}`,
-            "Content-Type": "application/json",
-            "Notion-Version": "2022-06-28",
-        },
-        body: JSON.stringify({
-            filter: {
-                value: "database",
-                property: "object",
+        const response = await fetch("https://api.notion.com/v1/search", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${decryptedToken}`,
+                "Content-Type": "application/json",
+                "Notion-Version": "2022-06-28",
             },
-            sort: {
-                direction: "descending",
-                timestamp: "last_edited_time",
-            },
-        }),
-    });
+            body: JSON.stringify({
+                filter: {
+                    value: "database",
+                    property: "object",
+                },
+                sort: {
+                    direction: "descending",
+                    timestamp: "last_edited_time",
+                },
+            }),
+        });
 
-    if (response.ok) {
-        const data = await response.json();
-        databases = data.results || [];
-    } else {
-        error = "Failed to fetch databases from Notion. Please reconnect.";
+        if (response.ok) {
+            const data = (await response.json()) as any;
+            databases = data.results || [];
+        } else {
+            error =
+                "Failed to fetch Notion databases. Your connection token may have expired.";
+        }
     }
 } catch (e) {
-    error = "Connection error. Please try again.";
+    error = "Connection error while checking OAuth status.";
 }
 ---
 
-<DashboardLayout title="Select Database">
+<DashboardLayout title="Connect Content Source">
     <div class="selection-container">
-        <h1>Select Content Source</h1>
+        <h1>Connect Your Notion Content</h1>
         <p class="subtitle">
-            Choose the Notion database you want to use as your blog engine.
+            Choose how you want to connect NotionGlaze to your workspace.
         </p>
 
         {error && <div class="error-banner">{error}</div>}
 
-        <form method="POST" class="db-grid">
-            {
-                databases.map((db: any) => (
-                    <label class="db-card">
+        <div class="connection-methods">
+            {/* Method 1: Public Link (Simple) */}
+            <div class="method-card primary-method">
+                <div class="method-header">
+                    <span class="badge">Easiest</span>
+                    <h2>Public Link Connection</h2>
+                    <p>
+                        Simply paste the URL of a public Notion page containing
+                        your posts.
+                    </p>
+                </div>
+
+                <form method="POST" class="public-link-form">
+                    <input
+                        type="hidden"
+                        name="connectionMode"
+                        value="public_link"
+                    />
+                    <div class="input-group">
+                        <label for="publicLinkUrl">Notion Page URL</label>
                         <input
-                            type="radio"
-                            name="databaseId"
-                            value={db.id}
+                            type="url"
+                            id="publicLinkUrl"
+                            name="publicLinkUrl"
+                            placeholder="https://notion.so/your-workspace/My-Blog-Page-12345..."
                             required
                         />
-                        <div class="card-content">
-                            <div class="db-icon">
-                                {db.icon?.type === "emoji"
-                                    ? db.icon.emoji
-                                    : "📄"}
-                            </div>
-                            <div class="db-info">
-                                <h3>
-                                    {db.title?.[0]?.plain_text ||
-                                        "Untitled Database"}
-                                </h3>
-                                <div class="meta">
-                                    <span>
-                                        Edited{" "}
-                                        {new Date(
-                                            db.last_edited_time,
-                                        ).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="check-circle" />
-                        </div>
-                    </label>
-                ))
-            }
-
-            {
-                (databases.length === 0 || error) && (
-                    <div class="empty-state">
-                        <p>
-                            {error
-                                ? "There was a problem connecting to Notion."
-                                : "No databases found. Make sure you shared the correct pages with the integration."}
+                        <p class="help-text">
+                            Ensure the page is set to "Share to web" in Notion.
                         </p>
-                        <a
-                            href="/api/v1/gateway/notion/init"
-                            class="btn-refresh"
-                        >
-                            {error ? "Fix Connection" : "Reconnect Notion"}
-                        </a>
                     </div>
-                )
-            }
-
-            <div class="actions">
-                <a href="/dashboard/notion-source" class="btn-cancel">Cancel</a>
-                <button
-                    type="submit"
-                    class="btn-submit"
-                    disabled={databases.length === 0}
-                >
-                    Confirm Selection
-                </button>
+                    <button type="submit" class="btn-submit"
+                        >Connect Public Link</button
+                    >
+                </form>
             </div>
-        </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            {/* Method 2: OAuth Database (Advanced) */}
+            <div class="method-card advanced-method">
+                <div class="method-header">
+                    <h2>Advanced Database Connection</h2>
+                    <p>
+                        Connect a specific database for granular control and
+                        private page support.
+                    </p>
+                </div>
+
+                {
+                    !hasOauthConnection ? (
+                        <div class="oauth-promo">
+                            <p>
+                                Authenticate with Notion to select a database
+                                directly.
+                            </p>
+                            <a
+                                href="/api/v1/gateway/notion/init?mode=connect"
+                                class="btn-connect-notion"
+                            >
+                                Connect Notion Account
+                            </a>
+                        </div>
+                    ) : (
+                        <form method="POST" class="oauth-form">
+                            <input
+                                type="hidden"
+                                name="connectionMode"
+                                value="oauth_db"
+                            />
+
+                            <div class="db-grid">
+                                {databases.map((db: any) => (
+                                    <label class="db-card">
+                                        <input
+                                            type="radio"
+                                            name="databaseId"
+                                            value={db.id}
+                                            required
+                                        />
+                                        <div class="card-content">
+                                            <div class="db-icon">
+                                                {db.icon?.type === "emoji"
+                                                    ? db.icon.emoji
+                                                    : "📄"}
+                                            </div>
+                                            <div class="db-info">
+                                                <h3>
+                                                    {db.title?.[0]
+                                                        ?.plain_text ||
+                                                        "Untitled Database"}
+                                                </h3>
+                                                <div class="meta">
+                                                    <span>
+                                                        Edited{" "}
+                                                        {new Date(
+                                                            db.last_edited_time,
+                                                        ).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="check-circle" />
+                                        </div>
+                                    </label>
+                                ))}
+                            </div>
+
+                            {databases.length === 0 && !error && (
+                                <div class="empty-state">
+                                    <p>
+                                        No databases found in your connected
+                                        workspace.
+                                    </p>
+                                    <a
+                                        href="/api/v1/gateway/notion/init?mode=connect"
+                                        class="btn-refresh"
+                                    >
+                                        Reconnect or Select Another Workspace
+                                    </a>
+                                </div>
+                            )}
+
+                            {databases.length > 0 && (
+                                <div class="actions">
+                                    <button
+                                        type="submit"
+                                        class="btn-submit alternative"
+                                    >
+                                        Confirm Selected Database
+                                    </button>
+                                </div>
+                            )}
+                        </form>
+                    )
+                }
+            </div>
+        </div>
     </div>
 </DashboardLayout>
 
@@ -302,6 +392,116 @@ try {
         border-radius: 0.5rem;
         margin-bottom: 2rem;
         text-align: center;
+    }
+
+    .method-card {
+        background: var(--background);
+        border: 1px solid var(--border);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        position: relative;
+    }
+
+    .primary-method {
+        border-color: var(--primary);
+        background: rgba(var(--primary-rgb), 0.02);
+    }
+
+    .method-header {
+        margin-bottom: 2rem;
+    }
+
+    .badge {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+    }
+
+    .method-header h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+    }
+
+    .method-header p {
+        color: var(--muted-foreground);
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+        font-weight: 600;
+    }
+
+    .input-group input {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: var(--background);
+        font-size: 1rem;
+    }
+
+    .help-text {
+        font-size: 0.8rem;
+        color: var(--muted-foreground);
+    }
+
+    .oauth-promo {
+        text-align: center;
+        padding: 2rem;
+        background: var(--muted);
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .btn-connect-notion {
+        background: var(--foreground);
+        color: var(--background);
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+
+    .btn-connect-notion:hover {
+        transform: translateY(-2px);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 3rem 0;
+        color: var(--muted-foreground);
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .divider span {
+        padding: 0 1rem;
+        font-weight: 600;
+        font-size: 0.875rem;
     }
 
     .empty-state {

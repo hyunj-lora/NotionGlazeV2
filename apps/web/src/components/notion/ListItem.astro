@@ -1,0 +1,24 @@
+---
+import RichText from "./RichText.astro";
+
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+const { rich_text } = block.content;
+const type = block.type;
+
+const Tag = type === "numbered_list" ? "li" : "li"; // Both are LI, but parent determines style
+---
+
+<li class={`notion-list-item notion-${type.replace("_", "-")}`}>
+    <RichText richText={rich_text} />
+</li>
+
+<style>
+    .notion-list-item {
+        padding: 0.25rem 0;
+        line-height: 1.5;
+    }
+</style>

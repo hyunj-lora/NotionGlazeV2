@@ -1,5 +1,6 @@
 import { Env, SyncContext } from "../index.js";
-import { NotionService, NotionParser, CryptoService, TenantService, PostService } from "@notionglaze/core";
+import { NotionService, NotionParser, CryptoService, TenantService, PostService, PublicNotionService } from "@notionglaze/core";
+import { PublicNotionParser } from "@notionglaze/core/src/services/public-notion-parser.js";
 import { processBlocksForAssets, processPageAssets } from "./assets.js";
 import { provideAISidekick } from "./ai.js";
 
@@ -137,6 +138,11 @@ export async function syncTenant(tenant: any, env: Env) {
     await tenantService.startSync(tenant.id);
 
     try {
+        if (tenant.connection_type === 'public_link') {
+            await processPublicLinkSync(tenant, env, tenantService);
+            return;
+        }
+
         const decryptedToken = await cryptoService.decrypt(tenant.notion_access_token);
         const notion = new NotionService(decryptedToken);
 
@@ -231,6 +237,116 @@ export async function syncTenant(tenant: any, env: Env) {
         await env.DB.prepare('UPDATE tenants SET sync_status = ?, last_sync_error = ?, sync_heartbeat = ? WHERE id = ?')
             .bind('error', val(errorMsg), val(Date.now()), val(tenant.id))
             .run();
+    }
+}
+
+async function processPublicLinkSync(tenant: any, env: Env, tenantService: TenantService) {
+    console.log(`Processing Public Link Sync for Tenant: ${tenant.id}`);
+    const publicService = new PublicNotionService();
+    const publicParser = new PublicNotionParser();
+    const postService = new PostService(env.DB);
+
+    const url = tenant.public_link_url || tenant.root_page_id;
+    if (!url) {
+        throw new Error("No public link URL configured.");
+    }
+
+    const blockId = publicService.extractBlockIdFromUrl(url);
+    if (!blockId) {
+        throw new Error("Could not extract Notion ID from public link.");
+    }
+
+    try {
+        const recordMapRaw = await publicService.getPageRecordMap(blockId);
+        const recordMap = recordMapRaw as any;
+        const posts = publicService.extractPostsFromRecordMap(recordMap, blockId);
+
+        console.log(`Found ${posts.length} raw components from public link.`);
+
+        let childPages: string[] = [];
+
+        if (posts.length > 0) {
+            const collectionData = posts[0].data;
+            // This assumes the recordMap contains a collection_view block that lists the pages
+            const blockKeys = Object.keys(recordMap.recordMap.block);
+            childPages = blockKeys.filter(k =>
+                recordMap.recordMap.block[k].value?.type === 'page' &&
+                recordMap.recordMap.block[k].value?.parent_id === collectionData.id
+            );
+        } else {
+            // It's a single page (like a landing page), not a database.
+            const rootStr = blockId.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
+            const rootBlock = recordMap.recordMap.block[rootStr]?.value || recordMap.recordMap.block[blockId]?.value;
+
+            if (rootBlock && rootBlock.type === 'page') {
+                childPages = [rootBlock.id];
+            }
+        }
+
+        console.log(`Extracted ${childPages.length} pages to sync.`);
+
+        if (childPages.length > 0) {
+            for (const pageId of childPages) {
+                const pageBlock = recordMap.recordMap.block[pageId].value;
+
+                // 1. Basic Metadata Mapping (using the schema if available, else generic properties)
+                const title = publicParser.extractText(pageBlock.properties?.title) || 'Untitled';
+                const slug = pageId.replace(/-/g, ''); // Default slug is the ID
+                const createdTime = pageBlock.created_time || Date.now();
+                const lastEditedTime = pageBlock.last_edited_time || Date.now();
+
+                // 2. Parse Content Tree
+                const blockIdsToParse = pageBlock.content || [];
+                const parsedBlocks = publicParser.parseBlocks(blockIdsToParse, recordMap);
+
+                // 3. Process Assets (Hijack images to Cloudflare R2)
+                const syncContext = { requestCount: 0 };
+                // Pass undefined for notion since we can't fetch official API databases on public links
+                await processBlocksForAssets(parsedBlocks, tenant.id, pageId, env, syncContext, undefined as any);
+
+                // 4. Prepare DB Statements
+                const statements: any[] = [];
+
+                statements.push(postService.getUpsertPostStatement({
+                    id: pageId,
+                    tenant_id: tenant.id,
+                    source_id: 'public-link',
+                    slug,
+                    title,
+                    summary: null,
+                    tags: [],
+                    content_json: parsedBlocks,
+                    cover_image_url: pageBlock.format?.page_cover || null,
+                    published_at: createdTime,
+                    last_edited_time: lastEditedTime,
+                    status: 'Published',
+                    notion_url: `https://notion.so/${pageId.replace(/-/g, '')}`,
+                    icon: null,
+                    created_time: createdTime,
+                    archived: pageBlock.alive === false ? 1 : 0,
+                    inTrash: 0,
+                    seo_title: title,
+                    seo_description: null,
+                    canonical_url: null,
+                    noindex: false,
+                    ai_seo_status: 'skipped',
+                    ai_seo_advice: null
+                }));
+
+                collectBlockStatements(parsedBlocks, pageId, tenant.id, null, env, statements, postService);
+
+                // Execute Batch
+                await env.DB.batch(statements);
+            }
+
+            await tenantService.updateSyncMetadata(tenant.id, childPages.length);
+        }
+
+        await tenantService.updateSyncStatus(tenant.id, 'success');
+        console.log(`Public Link Sync complete for ${tenant.id}.`);
+    } catch (err) {
+        console.error(`Public Link Sync failed:`, err);
+        throw err;
     }
 }
 

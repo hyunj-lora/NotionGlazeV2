@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PostService } from './post';
+import { PostService } from '@notionglaze/core';
 
 describe('PostService', () => {
     let mockDb: any;

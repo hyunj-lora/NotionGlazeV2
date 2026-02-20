@@ -96,134 +96,45 @@ export const GET: APIRoute = async ({ request, locals }) => {
         const encryptedToken = await cryptoService.encrypt(rawAccessToken);
 
         console.log('Database Operations Starting...');
-        const userService = new UserService(db);
         const tenantService = new TenantService(db);
-        const authService = new AuthService(db);
 
-        // 1. Find or Create Internal User (Both modes need a user)
-        let user = await userService.getUserByNotionId(notionUserId);
-        let internalUserId = user?.id;
+        // We no longer create "Users" here. User accounts are created via Auth.js (Google Login).
+        // This endpoint is now strictly for CONNECTING a Notion workspace to an ALREADY LOGGED IN user.
+        const currentUserId = (locals as any).userId;
 
-        if (!internalUserId) {
-            internalUserId = crypto.randomUUID();
-            await userService.createUser({
-                id: internalUserId,
-                notion_user_id: notionUserId,
-                email: notionUserEmail,
-                name: notionUserName,
-                avatar_url: notionUserAvatar
-            });
-        } else {
-            // Update profile info
-            await userService.updateUser(internalUserId, {
-                email: notionUserEmail,
-                name: notionUserName,
-                avatar_url: notionUserAvatar
-            });
+        if (!currentUserId) {
+            return new Response('Unauthorized: You must be logged in via Google to connect a Notion Workspace.', { status: 401 });
         }
 
-        if (mode === 'login') {
-            // mode: login -> Just create session and redirect to dashboard
+        const workspaceName = data.workspace_name || 'site';
+        const defaultSubdomain = `${workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substring(2, 6)}`;
+        const trialEndsAt = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
 
-            // Fix: Sync Notion Workspace Name even on simple login
-            try {
-                // Check if tenant exists for this Notion User ID (which is used as Tenant ID usually, but here ID matches Notion User ID)
-                const existingTenant = await tenantService.getTenantById(notionUserId);
+        // Treat the connected workspace as a Tenant owned by the current Google User
+        await tenantService.upsertTenant({
+            id: notionUserId, // We still use Notion's Workspace Owner ID as the Tenant ID for uniqueness within Notion
+            notion_access_token: encryptedToken,
+            root_page_id: rootPageId,
+            config_json: configJson,
+            plan: 'trial',
+            trial_ends_at: trialEndsAt,
+            subdomain: defaultSubdomain,
+            owner_id: currentUserId,
+            connection_type: 'oauth_db' // Record the type of connection
+        });
 
-                if (existingTenant) {
-                    let currentConfig: any = {};
-                    try {
-                        currentConfig = existingTenant.config_json ? JSON.parse(existingTenant.config_json) : {};
-                    } catch (e) { }
+        const isSecure = !redirectUri.includes('localhost');
+        const rememberMeCookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${isSecure ? '; Secure' : ''}`;
 
-                    // Mixin new workspace details
-                    const newConfig = {
-                        ...currentConfig,
-                        workspace_name: data.workspace_name,
-                        workspace_icon: data.workspace_icon,
-                        bot_id: data.bot_id
-                    };
+        const responseHeaders = new Headers();
 
-                    await tenantService.updateTenantConfigAndToken(
-                        existingTenant.id,
-                        newConfig,
-                        encryptedToken,
-                        internalUserId!
-                    );
-                } else {
-                    // Auto-provision if missing (Fixes 404 on API calls)
-                    console.log('Auto-provisioning tenant for login mode user...');
-                    const workspaceName = data.workspace_name || 'site';
-                    const defaultSubdomain = `${workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substring(2, 6)}`;
-                    const trialEndsAt = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
+        // Redirect back to the dashboard settings or notion-source selection
+        responseHeaders.append('Location', '/dashboard/settings');
 
-                    await tenantService.createTenant({
-                        id: notionUserId,
-                        notion_access_token: encryptedToken,
-                        root_page_id: rootPageId,
-                        config_json: configJson,
-                        plan: 'trial',
-                        trial_ends_at: trialEndsAt,
-                        subdomain: defaultSubdomain,
-                        owner_id: internalUserId
-                    });
-                }
-            } catch (syncErr) {
-                console.error('Failed to sync tenant info during login:', syncErr);
-            }
-
-            // Create Session
-            const isSecure = !redirectUri.includes('localhost');
-            const authResult = await authService.createSession(internalUserId!, isSecure);
-
-            const responseHeaders = new Headers();
-            authResult.cookies.forEach(cookie => {
-                responseHeaders.append('Set-Cookie', `${cookie.name}=${cookie.value}; ${cookie.attributes}`);
-            });
-            responseHeaders.append('Location', '/dashboard');
-
-            return new Response(null, {
-                status: 302,
-                headers: responseHeaders,
-            });
-        } else {
-            // mode: connect -> Update or Create Tenant and link to user
-            // Ensure the user is the one currently logged in (extra security check could be added here)
-            const currentUserId = (locals as any).userId;
-            if (currentUserId && currentUserId !== internalUserId) {
-                // User is trying to connect a workspace that belongs to a different Notion user than their current session
-                // We'll allow it but link it to the current session user
-                internalUserId = currentUserId;
-            }
-
-            const workspaceName = data.workspace_name || 'site';
-            const defaultSubdomain = `${workspaceName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Math.random().toString(36).substring(2, 6)}`;
-            const trialEndsAt = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
-
-            await tenantService.upsertTenant({
-                id: notionUserId,
-                notion_access_token: encryptedToken,
-                root_page_id: rootPageId,
-                config_json: configJson,
-                plan: 'trial',
-                trial_ends_at: trialEndsAt,
-                subdomain: defaultSubdomain,
-                owner_id: internalUserId
-            });
-
-            const isSecure = !redirectUri.includes('localhost');
-            const rememberMeCookieAttr = `Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000${isSecure ? '; Secure' : ''}`;
-
-            const responseHeaders = new Headers();
-            // We only need to ensure notion_glaze_id is set if not already, or refreshed.
-            responseHeaders.append('Set-Cookie', `notion_glaze_id=${internalUserId}; ${rememberMeCookieAttr}`);
-            responseHeaders.append('Location', '/dashboard/notion-source');
-
-            return new Response(null, {
-                status: 302,
-                headers: responseHeaders,
-            });
-        }
+        return new Response(null, {
+            status: 302,
+            headers: responseHeaders,
+        });
     } catch (err: any) {
         console.error('OAuth Callback Error:', err);
         return new Response(JSON.stringify({

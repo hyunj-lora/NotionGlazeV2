@@ -1,36 +1,71 @@
 export interface NotionPost {
     id: string;
-    tenantId: string;
+    tenant_id: string;
     slug: string;
     title: string;
     summary: string | null;
     tags: string[];
-    contentJson: string;
-    coverImageUrl: string | null;
-    publishedAt: number | null;
-    lastEditedTime: number;
+    content_json: string;
+    cover_image_url: string | null;
+    published_at: number | null;
+    last_edited_time: number;
     status: string;
-    notionUrl: string | null;
+    notion_url: string | null;
     icon: string | null;
-    createdTime: number;
+    created_time: number;
     archived: boolean;
-    inTrash: boolean;
-    canonicalUrl: string | null;
+    in_trash: boolean;
+    canonical_url: string | null;
     noindex: boolean;
-    aiSeoStatus: 'pending' | 'completed' | 'skipped' | 'failed';
-    aiSeoAdvice: string | null;
+    ai_seo_status: 'pending' | 'completed' | 'skipped' | 'failed';
+    ai_seo_advice: string | null;
 }
 
 export interface NotionBlock {
     id: string;
-    postId: string;
-    tenantId: string;
-    parentId: string | null;
+    post_id: string;
+    tenant_id: string;
+    parent_id: string | null;
     type: string;
     contentJson: string;
-    createdTime: number;
-    lastEditedTime: number;
-    orderIndex: number;
+    created_time: number;
+    last_edited_time: number;
+    order_index: number;
+}
+
+/**
+ * Hierarchical AST Block for Rendering
+ */
+export interface NotionGlazeBlock {
+    id: string;
+    type: string;
+    created_time: number;
+    last_edited_time: number;
+    has_children: boolean;
+    archived: boolean;
+    in_trash: boolean;
+    content: any; // Block specific content (normalized)
+    children?: NotionGlazeBlock[];
+}
+
+export interface NotionGlazeAnnotations {
+    bold: boolean;
+    italic: boolean;
+    strikethrough: boolean;
+    underline: boolean;
+    code: boolean;
+    color: string;
+}
+
+export interface NotionGlazeRichText {
+    type: 'text';
+    text: {
+        content: string;
+        link: { url: string } | null;
+    };
+    annotations: NotionGlazeAnnotations;
+    plain_text: string;
+    href: string | null;
 }
 
 export type BillingPlan = "trial" | "pro" | "free" | "enterprise";
@@ -53,6 +88,8 @@ export interface Tenant {
     sync_progress: number;
     last_sync_at: number | null;
     last_token_check_at?: string | null; // ISO timestamp of last token validation
+    connection_type?: "oauth_db" | "public_link";
+    public_link_url?: string | null;
 }
 
 export interface SyncContext {

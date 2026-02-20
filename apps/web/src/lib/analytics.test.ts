@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { AnalyticsService } from './analytics';
+import { AnalyticsService } from '@notionglaze/core';
 
 describe('AnalyticsService', () => {
     const mockDb = {

@@ -1,0 +1,22 @@
+---
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+---
+
+<div class="notion-unsupported">
+    <small>[Unsupported block type: {block.type}]</small>
+</div>
+
+<style>
+    .notion-unsupported {
+        padding: 0.5rem;
+        border: 1px dashed hsl(var(--border));
+        border-radius: 4px;
+        background: hsl(var(--muted) / 0.5);
+        margin: 0.5rem 0;
+        color: hsl(var(--muted-foreground));
+    }
+</style>

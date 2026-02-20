@@ -1,12 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { DomainManager } from './domain';
-import { CloudflareService } from './cloudflare';
+import { DomainService as DomainManager } from '@notionglaze/core';
+import { CloudflareService } from '@notionglaze/core';
 
-vi.mock('./cloudflare', () => {
-    const Mock = vi.fn();
-    Mock.prototype.getStatus = vi.fn();
-    return { CloudflareService: Mock };
-});
+const mockGetStatus = vi.fn();
+const mockDeleteCustomHostname = vi.fn();
+const mockUpsertCustomHostname = vi.fn();
+
+class MockCloudflareService {
+    getStatus = mockGetStatus;
+    deleteCustomHostname = mockDeleteCustomHostname;
+    upsertCustomHostname = mockUpsertCustomHostname;
+    getZoneId = vi.fn();
+    getCustomHostname = vi.fn();
+    createCustomHostname = vi.fn();
+    isDomainActive = vi.fn();
+}
 
 vi.mock('../utils', () => ({
     fetchDnsJSON: vi.fn(),
@@ -22,8 +30,8 @@ describe('DomainManager', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         domainManager = new DomainManager(mockEnv);
-        // Access the instance created by DomainManager constructor
-        mockCfInstance = (CloudflareService as any).mock.results[0].value;
+        // Direct override of the internal CloudflareService instance
+        (domainManager as any).cf = new MockCloudflareService();
     });
 
     it('should return no_domain if hostname is empty', async () => {
@@ -34,7 +42,7 @@ describe('DomainManager', () => {
     it('should generate unified records for a new domain', async () => {
         const hostname = 'blog.example.com';
 
-        mockCfInstance.getStatus.mockResolvedValue({
+        mockGetStatus.mockResolvedValue({
             hostname_status: 'pending',
             ssl_status: 'pending',
             ssl_validation: [{ hostname: '_acme-challenge.blog.example.com', value: 'token-123' }],
@@ -64,7 +72,7 @@ describe('DomainManager', () => {
 
     it('should detect ACTIVE state when DNS and SSL are configured', async () => {
         const hostname = 'blog.example.com';
-        mockCfInstance.getStatus.mockResolvedValue({
+        mockGetStatus.mockResolvedValue({
             hostname_status: 'active',
             ssl_status: 'active',
         });
@@ -82,7 +90,7 @@ describe('DomainManager', () => {
     describe('Phase 2: Robust Parsing', () => {
         it('should correctly handle multi-part TLDs (e.g., .co.kr)', async () => {
             const hostname = 'blog.mysite.co.kr';
-            mockCfInstance.getStatus.mockResolvedValue({
+            mockGetStatus.mockResolvedValue({
                 hostname_status: 'pending',
                 ssl_status: 'pending',
             });
@@ -100,7 +108,7 @@ describe('DomainManager', () => {
 
         it('should correctly handle apex domains with multi-part TLDs', async () => {
             const hostname = 'mysite.co.kr';
-            mockCfInstance.getStatus.mockResolvedValue({
+            mockGetStatus.mockResolvedValue({
                 hostname_status: 'pending',
                 ssl_status: 'pending',
             });
@@ -117,7 +125,7 @@ describe('DomainManager', () => {
 
     describe('Phase 2: Error Mapping', () => {
         it('should map technical Cloudflare errors to friendly messages', async () => {
-            mockCfInstance.getStatus.mockResolvedValue({
+            mockGetStatus.mockResolvedValue({
                 error: 'Cloudflare API Error: custom_hostname.error.duplicate_hostname (1001)'
             });
 

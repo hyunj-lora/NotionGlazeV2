@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getLiveSiteUrl } from './site';
+import { getLiveSiteUrl } from '@notionglaze/core';
 
 describe('getLiveSiteUrl', () => {
     it('should return default URL if tenant is missing', () => {

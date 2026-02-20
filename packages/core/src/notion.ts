@@ -12,16 +12,7 @@ export class NotionService {
      * Fetches all pages from a database that have been edited since the last sync.
      */
     async getUpdatedPages(databaseId: string, sinceDate?: Date) {
-        const filter: any = {
-            and: [
-                {
-                    property: 'Status',
-                    status: {
-                        equals: 'Published'
-                    }
-                }
-            ]
-        };
+        const filter: any = { and: [] };
 
         if (sinceDate) {
             filter.and.push({
@@ -32,16 +23,21 @@ export class NotionService {
             });
         }
 
-        return await this.client.databases.query({
+        const queryPayload: any = {
             database_id: databaseId,
-            filter: filter,
             sorts: [
                 {
                     timestamp: "last_edited_time",
                     direction: "descending",
                 },
             ],
-        });
+        };
+
+        if (filter.and.length > 0) {
+            queryPayload.filter = filter;
+        }
+
+        return await this.client.databases.query(queryPayload);
     }
 
     /**

@@ -69,6 +69,14 @@ export default {
                 return new Response('Sync triggered for all tenants.');
             }
         }
+
+        if (url.pathname.endsWith('/debug-db')) {
+            const { results: users } = await env.DB.prepare('SELECT count(*) as c FROM users').all();
+            const { results: tenants } = await env.DB.prepare('SELECT * FROM tenants').all();
+            return new Response(JSON.stringify({ users, tenants }, null, 2), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
         return new Response('Sync Worker is active.');
     }
 };

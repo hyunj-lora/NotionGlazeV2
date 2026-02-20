@@ -1,0 +1,84 @@
+---
+import type { NotionPost } from "@notionglaze/core";
+import Layout from "@notionglaze/ui/Layout.astro";
+import NotionRenderer from "../../components/notion/NotionRenderer.astro";
+
+const { slug } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+
+if (!db) {
+    return new Response("Database binding not found", { status: 500 });
+}
+
+// Search for post by slug
+const post = (await db
+    .prepare("SELECT * FROM posts WHERE slug = ?")
+    .bind(slug)
+    .first()) as NotionPost | null;
+
+if (!post) {
+    return new Response(`Post with slug "${slug}" not found in local D1.`, {
+        status: 404,
+    });
+}
+
+let blocks = [];
+try {
+    blocks = JSON.parse(post.content_json || "[]");
+} catch (e) {
+    console.error("JSON parse failed for post content", e);
+}
+---
+
+<Layout title={post.title} description={post.summary || undefined}>
+    <div class="test-render-container">
+        <header class="test-header">
+            <h1>{post.title}</h1>
+            <p class="test-meta">ID: {post.id} | Slug: {post.slug}</p>
+        </header>
+
+        <hr />
+
+        <div class="notion-content-area">
+            <NotionRenderer blocks={blocks} />
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .test-render-container {
+        max-width: 900px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border));
+        border-radius: 12px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .test-header {
+        margin-bottom: 2rem;
+    }
+
+    .test-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: hsl(var(--foreground));
+    }
+
+    .test-meta {
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid hsl(var(--border));
+        margin: 2rem 0;
+    }
+
+    .notion-content-area {
+        padding-top: 1rem;
+    }
+</style>

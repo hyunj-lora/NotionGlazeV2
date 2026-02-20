@@ -1,12 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { DomainManager } from './domain';
-import { CloudflareService } from './cloudflare';
+import { DomainService as DomainManager } from '@notionglaze/core';
+import { CloudflareService } from '@notionglaze/core';
 
-vi.mock('./cloudflare', () => {
-    const Mock = vi.fn();
-    Mock.prototype.getStatus = vi.fn();
-    return { CloudflareService: Mock };
-});
+const mockGetStatus = vi.fn();
+const mockDeleteCustomHostname = vi.fn();
+const mockUpsertCustomHostname = vi.fn();
+
+class MockCloudflareService {
+    getStatus = mockGetStatus;
+    deleteCustomHostname = mockDeleteCustomHostname;
+    upsertCustomHostname = mockUpsertCustomHostname;
+    getZoneId = vi.fn();
+    getCustomHostname = vi.fn();
+    createCustomHostname = vi.fn();
+    isDomainActive = vi.fn();
+}
 
 vi.mock('../utils', () => ({
     fetchDnsJSON: vi.fn(),
@@ -22,7 +30,8 @@ describe('DomainManager - Advanced O2O Scenarios', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         domainManager = new DomainManager(mockEnv);
-        mockCfInstance = (CloudflareService as any).mock.results[0].value;
+        (domainManager as any).cf = new MockCloudflareService();
+        mockCfInstance = (domainManager as any).cf;
     });
 
     it('should detect Error 1016 (Origin DNS Error) when Active but probe fails', async () => {

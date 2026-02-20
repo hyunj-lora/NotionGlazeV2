@@ -1,4 +1,4 @@
-import { ThemeName } from './index';
+import type { ThemeName } from './index';
 
 export interface ThemeConfig {
     name: ThemeName;

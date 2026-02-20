@@ -7,28 +7,51 @@ export async function processBlocksForAssets(blocks: any[], tenantId: string, pa
         if (context.requestCount > 45) break;
 
         const type = block.type;
-        const data = block[type];
+        let data = block[type];
+        let isPublicParser = false;
+
+        // If official API data object is missing but we have internal content, map it
+        if (!data && block.content && block.content.url) {
+            data = block.content;
+            isPublicParser = true;
+        }
 
         // Helper to hijack and update
         const hijack = async (url: string | undefined) => {
-            if (url && (url.includes('amazonaws.com') || data.type === 'file')) {
-                return await hijackAsset(url, tenantId, pageId, block.id, env, context);
+            if (!url) return null;
+
+            let targetUrl = url;
+
+            // Format AWS urls through the public image proxy to bypass token checks
+            if (url.startsWith('/')) {
+                targetUrl = `https://www.notion.so${url}`;
+            } else if (url.includes('amazonaws.com') && isPublicParser) {
+                targetUrl = `https://www.notion.so/image/${encodeURIComponent(url)}?table=block&id=${block.id}&cache=v2`;
+            }
+
+            if (targetUrl.includes('amazonaws.com') || targetUrl.includes('notion.so/image/') || data.type === 'file') {
+                return await hijackAsset(targetUrl, tenantId, pageId, block.id, env, context);
             }
             return null;
         };
 
         if (['image', 'video', 'file', 'pdf', 'audio'].includes(type) && data) {
-            const rawUrl = data.file?.url || data.external?.url;
+            const rawUrl = isPublicParser ? data.url : (data.file?.url || data.external?.url);
             const newUrl = await hijack(rawUrl);
 
             if (newUrl) {
-                // Normalize to 'file' type pointing to our asset
-                // This ensures the renderer sees it as a permanent URL
-                block[type] = {
-                    ...data, // keep caption etc
-                    type: 'file',
-                    file: { url: newUrl }
-                };
+                if (isPublicParser) {
+                    block.content.url = newUrl;
+                    block.content.type = 'file'; // Mark as internal hijacked asset
+                } else {
+                    // Normalize to 'file' type pointing to our asset
+                    // This ensures the renderer sees it as a permanent URL
+                    block[type] = {
+                        ...data, // keep caption etc
+                        type: 'file',
+                        file: { url: newUrl }
+                    };
+                }
             }
         } else if (type === 'child_database' && data.title === 'Untitled') {
             // Fetch real title if missing

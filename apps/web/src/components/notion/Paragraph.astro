@@ -1,0 +1,21 @@
+---
+import RichText from "./RichText.astro";
+
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+---
+
+<p class="notion-paragraph">
+    <RichText richText={block.content.rich_text} />
+</p>
+
+<style>
+    .notion-paragraph {
+        margin: 0.5rem 0;
+        line-height: 1.6;
+        min-height: 1.5rem; /* For empty blocks */
+    }
+</style>

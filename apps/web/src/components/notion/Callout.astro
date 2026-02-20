@@ -1,0 +1,62 @@
+---
+import RichText from "./RichText.astro";
+
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+const { rich_text, icon } = block.content;
+
+// Simplified color handling
+const backgroundColor = "hsl(var(--muted))";
+---
+
+<div class="notion-callout" style={`background-color: ${backgroundColor};`}>
+    {
+        icon && (
+            <div class="notion-callout-icon">
+                {icon.startsWith("http") ? (
+                    <img src={icon} alt="icon" class="icon-img" />
+                ) : (
+                    <span>{icon}</span>
+                )}
+            </div>
+        )
+    }
+    <div class="notion-callout-content">
+        <RichText richText={rich_text} />
+    </div>
+</div>
+
+<style>
+    .notion-callout {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        align-items: flex-start;
+    }
+
+    .notion-callout-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+
+    .icon-img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+    }
+
+    .notion-callout-content {
+        flex-grow: 1;
+        line-height: 1.5;
+    }
+</style>

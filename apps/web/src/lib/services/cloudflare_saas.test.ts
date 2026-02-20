@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CloudflareService } from './cloudflare';
+import { CloudflareService } from '@notionglaze/core';
 
 describe('CloudflareService - SaaS Worker Configuration', () => {
     let cfService: CloudflareService;

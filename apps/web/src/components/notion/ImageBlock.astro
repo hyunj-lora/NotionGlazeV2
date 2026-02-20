@@ -1,0 +1,54 @@
+---
+import RichText from "./RichText.astro";
+
+interface Props {
+    block: any;
+}
+
+const { block } = Astro.props;
+const { url, caption } = block.content;
+
+// If the URL is relative (from our hijacker), we keep it as is
+// because the browser will resolve it against the current origin.
+// In production, we might need a full URL if hosting assets on a different domain.
+---
+
+<figure class="notion-image">
+    <img
+        src={url}
+        alt={caption?.[0]?.plain_text || "Notion Image"}
+        loading="lazy"
+    />
+    {
+        caption && caption.length > 0 && (
+            <figcaption>
+                <RichText richText={caption} />
+            </figcaption>
+        )
+    }
+</figure>
+
+<style>
+    .notion-image {
+        margin: 1.5rem 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    figcaption {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: hsl(var(--muted-foreground));
+        text-align: center;
+    }
+</style>

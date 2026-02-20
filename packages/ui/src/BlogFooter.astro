@@ -19,9 +19,10 @@ const { config = {} } = Astro.props;
     
     const isCleanStack = style === 'clean-stack';
     
-    // Branding Logic: Always show for Free. Hidden by default for Pro (white-label).
+    // Branding Logic: Always show for Free. Hidden for Pro only if they opt-out or we default to hidden.
+    // The user requested to keep it as a toggle for affiliate marketing purposes.
     const isPro = config.plan === 'pro';
-    const showBranding = !isPro;
+    const showBranding = !isPro || !config.hide_attribution;
 ---
 
 <footer class:list={["blog-footer container", style]}>

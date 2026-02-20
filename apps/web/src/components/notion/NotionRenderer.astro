@@ -1,0 +1,71 @@
+---
+import Paragraph from "./Paragraph.astro";
+import Heading from "./Heading.astro";
+import ImageBlock from "./ImageBlock.astro";
+import ListItem from "./ListItem.astro";
+import Divider from "./Divider.astro";
+import Callout from "./Callout.astro";
+import Placeholder from "./Placeholder.astro";
+
+interface Props {
+    blocks: any[];
+}
+
+const { blocks } = Astro.props;
+
+/**
+ * Component Mapper for Notion Blocks
+ */
+const components: Record<string, any> = {
+    paragraph: Paragraph,
+    heading_1: Heading,
+    heading_2: Heading,
+    heading_3: Heading,
+    image: ImageBlock,
+    divider: Divider,
+    callout: Callout,
+    bulleted_list_item: ListItem,
+    numbered_list_item: ListItem,
+    // Add more here as implemented
+};
+---
+
+<div class="notion-renderer">
+    {
+        blocks.map((block) => {
+            const Component = components[block.type] || Placeholder;
+
+            return (
+                <div class="notion-block-wrapper">
+                    <Component block={block} />
+
+                    {block.has_children && block.children && (
+                        <div class="notion-children">
+                            <Astro.self blocks={block.children} />
+                        </div>
+                    )}
+                </div>
+            );
+        })
+    }
+</div>
+
+<style>
+    .notion-renderer {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+        color: hsl(var(--foreground));
+    }
+
+    .notion-children {
+        margin-left: 1.5rem;
+        border-left: 2px solid hsl(var(--border));
+        padding-left: 1rem;
+    }
+
+    .notion-block-wrapper {
+        margin-bottom: 0.25rem;
+    }
+</style>

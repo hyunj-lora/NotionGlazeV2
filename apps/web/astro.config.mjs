@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
+import auth from 'auth-astro';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,7 +12,7 @@ export default defineConfig({
     adapter: cloudflare({
         imageService: 'compile'
     }),
-    integrations: [tailwind(), react()],
+    integrations: [tailwind(), react(), auth({ configFile: '../../auth.config.ts' })],
     security: {
         checkOrigin: false
     },
