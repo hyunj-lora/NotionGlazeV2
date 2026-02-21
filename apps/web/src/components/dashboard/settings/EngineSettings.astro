@@ -103,12 +103,12 @@ const { tenant, sources, config } = Astro.props;
 
     <section class="settings-section" id="sec-connection">
         <div class="section-info">
-            <h3>Integration Engine</h3>
-            <p>Secret keys and connectivity status to the Notion cloud.</p>
+            <h3>Content Connection</h3>
+            <p>Status of your link to the Notion workspace.</p>
         </div>
         <div class="settings-card">
             {
-                tenant?.notion_access_token ? (
+                tenant?.public_link_url ? (
                     <div class="flex items-center justify-between p-2">
                         <div class="flex items-center gap-4">
                             <div class="relative flex h-3 w-3">
@@ -117,28 +117,27 @@ const { tenant, sources, config } = Astro.props;
                             </div>
                             <div class="grid gap-1">
                                 <h4 class="text-sm font-black uppercase tracking-tight text-foreground">
-                                    Connected to{" "}
-                                    {config.workspace_name || "Workspace"}
+                                    Connected via Public Link
                                 </h4>
-                                <p class="text-[11px] text-muted-foreground font-medium">
-                                    Synching active via Official Integration.
+                                <p class="text-[11px] text-muted-foreground font-medium truncate max-w-[200px]">
+                                    {tenant.public_link_url}
                                 </p>
                             </div>
                         </div>
                         <a
-                            href="/api/v1/gateway/notion/init?mode=connect"
+                            href="/dashboard/select-database"
                             class="h-9 px-6 rounded-lg border border-border bg-background flex items-center justify-center text-[10px] font-black uppercase tracking-widest hover:bg-accent transition-all"
                         >
-                            Switch
+                            Change Link
                         </a>
                     </div>
                 ) : (
                     <div class="p-4 text-center">
                         <a
-                            href="/api/v1/gateway/notion/init?mode=connect"
+                            href="/dashboard/select-database"
                             class="inline-flex h-12 px-10 rounded-2xl bg-primary text-primary-foreground items-center justify-center text-xs font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-primary/20"
                         >
-                            Connect Notion
+                            Connect Public Link
                         </a>
                     </div>
                 )
@@ -162,11 +161,12 @@ const { tenant, sources, config } = Astro.props;
                         stroke-width="2.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        ><path d="m12 14 4-4"></path><path
-                            d="M3.34 19a10 10 0 1 1 17.32 0"></path><path
-                            d="m12 14-4-4"></path><path d="m12 14 5 5"
-                        ></path><path d="m12 14-5 5"></path></svg
                     >
+                        <path d="M3 6h18"></path>
+                        <path
+                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                        ></path>
+                    </svg>
                 </div>
                 <div>
                     <h4
@@ -189,22 +189,22 @@ const { tenant, sources, config } = Astro.props;
                     <p
                         class="text-sm font-black text-foreground uppercase tracking-tight"
                     >
-                        Disconnect Notion
+                        Delete Connection
                     </p>
                     <p
                         class="text-[11px] text-muted-foreground font-medium leading-relaxed"
                     >
-                        Revoke all access tokens. This stops content
-                        synchronization immediately. Your site data remains but
-                        won't update.
+                        Remove the Notion connection. Your site will stop
+                        updating but existing content remains until manual
+                        deletion.
                     </p>
                 </div>
                 <button
                     type="button"
                     class="h-11 px-8 rounded-xl bg-destructive text-destructive-foreground text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-destructive/20"
-                    id="disconnect-btn"
+                    id="delete-connection-btn"
                 >
-                    Revoke Access
+                    Delete Connection
                 </button>
             </div>
         </div>
@@ -219,11 +219,10 @@ const { tenant, sources, config } = Astro.props;
 
         const list = document.getElementById("sources-list");
         const addBtn = document.getElementById("add-source-btn");
-        const disconnectBtn = document.getElementById("disconnect-btn");
+        const deleteConnBtn = document.getElementById("delete-connection-btn");
 
         addBtn?.addEventListener("click", () => {
-            // New sources use the O2O auth flow to add a database
-            window.location.href = "/api/v1/gateway/notion/init?mode=connect";
+            window.location.href = "/dashboard/select-database";
         });
 
         list?.addEventListener("click", (e) => {
@@ -242,15 +241,16 @@ const { tenant, sources, config } = Astro.props;
 
         list?.addEventListener("input", notifyChange);
 
-        disconnectBtn?.addEventListener("click", async () => {
+        deleteConnBtn?.addEventListener("click", async () => {
             if (confirm("Are you sure? This stops all synchronization.")) {
                 try {
-                    const res = await fetch("/api/v1/auth/revoke", {
+                    // We'll need a new simple endpoint or just update tenant to clear link
+                    const res = await fetch("/api/v1/tenant/clear-connection", {
                         method: "POST",
                     });
-                    if (res.ok) window.location.href = "/login";
+                    if (res.ok) window.location.reload();
                 } catch (e) {
-                    alert("Disconnection failed.");
+                    alert("Action failed.");
                 }
             }
         });

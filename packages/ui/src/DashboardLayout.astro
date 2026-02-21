@@ -22,6 +22,12 @@ const rawIcon = config.workspace_icon; // Could be emoji or URL
 const isEmoji = rawIcon && !rawIcon.startsWith("http");
 
 const blogUrl = getLiveSiteUrl(tenant);
+
+// Calculate Notion Editor URL
+const notionEditorUrl = tenant?.root_page_id
+    ? `https://notion.so/${tenant.root_page_id.replace(/-/g, "")}`
+    : tenant?.public_link_url || "#";
+const hasNotionLink = !!tenant?.root_page_id || !!tenant?.public_link_url;
 ---
 
 <Layout
@@ -358,9 +364,9 @@ const blogUrl = getLiveSiteUrl(tenant);
 
                 <div class="sidebar-action">
                     <a
-                        href={`https://notion.so/${tenant?.root_page_id?.replace(/-/g, "")}`}
+                        href={notionEditorUrl}
                         target="_blank"
-                        class={`btn-notion-editor ${!tenant?.root_page_id ? "hidden" : ""}`}
+                        class={`btn-notion-editor ${!hasNotionLink ? "hidden" : ""}`}
                     >
                         <span class="icon">
                             <svg
@@ -472,12 +478,14 @@ const blogUrl = getLiveSiteUrl(tenant);
                 </div>
                 <div class="actions">
                     {
-                        !tenant || !tenant.notion_access_token ? (
+                        !tenant ||
+                        (!tenant.notion_access_token &&
+                            !tenant.public_link_url) ? (
                             <a
-                                href="/dashboard/settings#engine"
+                                href="/dashboard/select-database"
                                 class="btn-primary-glow small"
                             >
-                                Connect Notion
+                                Setup Site
                             </a>
                         ) : (
                             <button

@@ -55,7 +55,7 @@ if (db && tenant) {
 const onboardingSteps = [
     {
         id: "connect",
-        label: "Connect Content Source (Notion)",
+        label: "Enter Your Notion Page Link",
         done:
             !!tenant?.notion_access_token ||
             tenant?.connection_type === "public_link",
@@ -63,7 +63,7 @@ const onboardingSteps = [
     },
     {
         id: "select",
-        label: "Secure Root Page",
+        label: "Confirm Site Structure",
         done:
             !!tenant?.root_page_id || tenant?.connection_type === "public_link",
         link: "/dashboard/select-database",

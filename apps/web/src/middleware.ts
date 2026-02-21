@@ -1,9 +1,6 @@
 import { defineMiddleware, sequence } from 'astro:middleware';
 import {
     TenantService,
-    AuthService,
-    CryptoService,
-    NotionService,
     AnalyticsService,
 } from '@notionglaze/core';
 
@@ -69,7 +66,7 @@ const authMiddleware = defineMiddleware(async (context, next) => {
     }
 
     // DEVELOPMENT FALLBACK
-    if (!authenticatedUserId && (context.locals as any)._isLocalhost) {
+    if (!authenticatedUserId && (context.locals as any)._isLocalhost && context.url.pathname !== '/login') {
         authenticatedUserId = 'test-user';
     }
 
@@ -96,7 +93,7 @@ const dashboardMiddleware = defineMiddleware(async (context, next) => {
 
     if (userId) {
         try {
-            const tenant = await tenantService.getTenantByOwnerId(userId);
+            const tenant = await tenantService.getOrCreateTenantByOwnerId(userId);
             if (tenant) {
                 locals.tenantId = tenant.id;
                 locals.tenant = tenant;
@@ -104,20 +101,14 @@ const dashboardMiddleware = defineMiddleware(async (context, next) => {
                     try { locals.siteConfig = JSON.parse(tenant.config_json); } catch (e) { }
                 }
 
-                // Token validation check
-                if (tenant.connection_type !== 'public_link' && tenant.notion_access_token) {
-                    const encryptionSecret = locals.runtime.env.ENCRYPTION_SECRET;
-                    if (encryptionSecret) {
-                        const cryptoService = new CryptoService(encryptionSecret);
-                        const validationPromise = tenantService.validateAndHandleTokenStatus(
-                            tenant,
-                            encryptionSecret,
-                            cryptoService,
-                            (token) => new NotionService(token)
-                        );
-                        locals.runtime.context?.waitUntil?.(validationPromise);
-                    }
+                // Redirect to onboarding if no connection
+                const hasConnection = !!tenant.public_link_url || !!tenant.notion_access_token;
+                const isSetupPage = url.pathname === '/dashboard/select-database';
+                if (!hasConnection && !isSetupPage && url.pathname.startsWith('/dashboard')) {
+                    return redirect('/dashboard/select-database');
                 }
+
+                // legacy logic removed (using public_link for rendering)
             }
         } catch (e) {
             console.error('Middleware Dashboard Tenant Resolution Error:', e);

@@ -10,6 +10,38 @@ export class TenantService {
             .first();
     }
 
+    /**
+     * Ensures a tenant exists for the given owner.
+     * If not found, creates a new tenant shell.
+     */
+    async getOrCreateTenantByOwnerId(ownerId: string): Promise<Tenant> {
+        const existing = await this.getTenantByOwnerId(ownerId);
+        if (existing) return existing;
+
+        const id = crypto.randomUUID();
+        // Generate a temporary subdomain based on ownerId (email)
+        const safePrefix = ownerId.split('@')[0].toLowerCase().replace(/[^a-z0-t]/g, '').substring(0, 10);
+        const subdomain = `${safePrefix || 'user'}-${Math.random().toString(36).substring(2, 7)}`;
+
+        const newTenantShell = {
+            id,
+            owner_id: ownerId,
+            subdomain,
+            plan: 'trial',
+            config_json: JSON.stringify({
+                site_name: `${ownerId}'s Blog`,
+                site_theme: 'modern'
+            }),
+            trial_ends_at: Date.now() + (14 * 24 * 60 * 60 * 1000) // 14 days trial
+        };
+
+        await this.createTenant(newTenantShell);
+
+        const created = await this.getTenantById(id);
+        if (!created) throw new Error("Failed to create tenant shell");
+        return created;
+    }
+
     async getTenantById(id: string): Promise<Tenant | null> {
         return await this.db
             .prepare("SELECT * FROM tenants WHERE id = ?")
@@ -75,30 +107,6 @@ export class TenantService {
             .run();
     }
 
-    async upsertTenant(tenant: any): Promise<void> {
-         await this.db.prepare(`
-                INSERT INTO tenants (id, notion_access_token, root_page_id, config_json, plan, trial_ends_at, subdomain, owner_id)
-                VALUES (?, ?, ?, ?, 'trial', ?, ?, ?)
-                ON CONFLICT(id) DO UPDATE SET
-                    notion_access_token = excluded.notion_access_token,
-                    root_page_id = COALESCE(tenants.root_page_id, excluded.root_page_id),
-                    config_json = excluded.config_json,
-                    subdomain = COALESCE(tenants.subdomain, excluded.subdomain),
-                    owner_id = excluded.owner_id,
-                    updated_at = CURRENT_TIMESTAMP
-            `).bind(tenant.id, tenant.notion_access_token, tenant.root_page_id, tenant.config_json, tenant.trial_ends_at, tenant.subdomain, tenant.owner_id).run();
-    }
-
-    async updateTenantConfigAndToken(id: string, config: any, token: string, ownerId: string): Promise<void> {
-        await this.db
-            .prepare(`
-                UPDATE tenants
-                SET config_json = ?, notion_access_token = ?, owner_id = ?, updated_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-            `)
-            .bind(JSON.stringify(config), token, ownerId, id)
-            .run();
-    }
 
     async getTenantStats(tenantId: string) {
         try {
@@ -177,63 +185,4 @@ export class TenantService {
             .run();
     }
 
-    /**
-     * Checks if token validation is needed (last check was > 1 hour ago)
-     */
-    needsTokenValidation(tenant: Tenant): boolean {
-        if (!tenant.notion_access_token) return false;
-        if (!tenant.last_token_check_at) return true;
-
-        const lastCheck = new Date(tenant.last_token_check_at).getTime();
-        const oneHourAgo = Date.now() - (60 * 60 * 1000);
-        return lastCheck < oneHourAgo;
-    }
-
-    /**
-     * Invalidates the Notion token (sets to NULL)
-     */
-    async invalidateNotionToken(tenantId: string): Promise<void> {
-        await this.db
-            .prepare("UPDATE tenants SET notion_access_token = NULL, root_page_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
-            .bind(tenantId)
-            .run();
-    }
-
-    /**
-     * Updates the last token check timestamp
-     */
-    async updateTokenCheckTimestamp(tenantId: string): Promise<void> {
-        await this.db
-            .prepare("UPDATE tenants SET last_token_check_at = CURRENT_TIMESTAMP WHERE id = ?")
-            .bind(tenantId)
-            .run();
-    }
-
-    /**
-     * Performs full validation logic (Decrypt -> Notion API -> Update/Invalidate)
-     */
-    async validateAndHandleTokenStatus(
-        tenant: Tenant,
-        encryptionSecret: string,
-        cryptoService: any, // CryptoService
-        notionServiceFactory: (token: string) => any // NotionService factory
-    ): Promise<void> {
-        try {
-            if (!this.needsTokenValidation(tenant)) return;
-
-            const decryptedToken = await cryptoService.decrypt(tenant.notion_access_token!);
-            const notionService = notionServiceFactory(decryptedToken);
-
-            const isValid = await notionService.validateToken();
-            if (isValid) {
-                await this.updateTokenCheckTimestamp(tenant.id);
-            } else {
-                console.warn(`Notion token for tenant ${tenant.id} is invalid. Clearing...`);
-                await this.invalidateNotionToken(tenant.id);
-            }
-        } catch (error) {
-            console.error(`Token status check failed for tenant ${tenant.id}:`, error);
-            // We don't throw here to avoid breaking the calling flow (e.g. middleware)
-        }
-    }
 }
