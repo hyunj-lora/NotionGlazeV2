@@ -13,6 +13,9 @@ interface CloudflareRuntime {
         NOTION_CLIENT_ID: string;
         NOTION_CLIENT_SECRET: string;
         NOTION_REDIRECT_URI: string;
+        GOOGLE_CLIENT_ID: string;
+        GOOGLE_CLIENT_SECRET: string;
+        AUTH_SECRET: string;
     };
     context: {
         waitUntil(promise: Promise<any>): void;

@@ -12,7 +12,7 @@ export default defineConfig({
     adapter: cloudflare({
         imageService: 'compile'
     }),
-    integrations: [tailwind(), react(), auth({ configFile: '../../auth.config.ts' })],
+    integrations: [tailwind(), react(), auth({ configFile: './auth.config.ts' })],
     security: {
         checkOrigin: false
     },
