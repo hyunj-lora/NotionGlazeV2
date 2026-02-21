@@ -1,0 +1,86 @@
+
+> @notionglaze/web@0.0.1 dev
+> astro dev
+
+02:37:51 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+02:37:51 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+Using vars defined in .dev.vars
+02:37:52 [types] Generated 1ms
+02:37:52 [content] Syncing content
+02:37:52 [content] Synced content
+02:37:52 [vite] Re-optimizing dependencies because vite config has changed
+
+ astro  v5.17.1 ready in 2992 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  http://192.168.0.2:4321/
+
+02:37:52 watching for file changes...
+Middleware Dashboard Tenant Resolution Error: Error: D1_ERROR: no such table: tenants: SQLITE_ERROR
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TenantService.getTenantByOwnerId (file:///app/packages/core/dist/services/tenant.service.js:7:16)
+    at async eval (/app/apps/web/src/middleware.ts:68:22)
+    at async callMiddleware (file:///app/node_modules/astro/dist/core/middleware/callMiddleware.js:11:10)
+    at async RenderContext.render (file:///app/node_modules/astro/dist/core/render-context.js:249:22)
+    at async handleRoute (file:///app/node_modules/astro/dist/vite-plugin-astro-server/route.js:180:16)
+    at async run (file:///app/node_modules/astro/dist/vite-plugin-astro-server/request.js:56:14)
+    at async runWithErrorHandling (file:///app/node_modules/astro/dist/vite-plugin-astro-server/controller.js:64:5)
+    at async handleRequest (file:///app/node_modules/astro/dist/vite-plugin-astro-server/request.js:50:3) {
+  [cause]: Error: no such table: tenants: SQLITE_ERROR
+      at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:140:24)
+      at async cloudflare-internal:d1-api:318:39 {
+    [cause]: undefined
+  }
+}
+Settings Page DB Error: Error: D1_ERROR: no such table: tenants: SQLITE_ERROR
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TenantService.getTenantByOwnerId (file:///app/packages/core/dist/services/tenant.service.js:7:16)
+    at async eval (/app/apps/web/src/pages/dashboard/settings.astro:28:16)
+    at async callComponentAsTemplateResultOrResponse (file:///app/node_modules/astro/dist/runtime/server/render/astro/render.js:96:25)
+    at async renderToAsyncIterable (file:///app/node_modules/astro/dist/runtime/server/render/astro/render.js:138:26)
+    at async renderPage (file:///app/node_modules/astro/dist/runtime/server/render/page.js:36:24)
+    at async lastNext (file:///app/node_modules/astro/dist/core/render-context.js:215:25)
+    at async callMiddleware (file:///app/node_modules/astro/dist/core/middleware/callMiddleware.js:11:10)
+    at async RenderContext.render (file:///app/node_modules/astro/dist/core/render-context.js:249:22)
+    at async handleRoute (file:///app/node_modules/astro/dist/vite-plugin-astro-server/route.js:180:16) {
+  [cause]: Error: no such table: tenants: SQLITE_ERROR
+      at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:140:24)
+      at async cloudflare-internal:d1-api:318:39 {
+    [cause]: undefined
+  }
+}
+02:38:36 [200] /dashboard/settings 2590ms
+Middleware Dashboard Tenant Resolution Error: Error: D1_ERROR: no such table: tenants: SQLITE_ERROR
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TenantService.getTenantByOwnerId (file:///app/packages/core/dist/services/tenant.service.js:7:16)
+    at async eval (/app/apps/web/src/middleware.ts:68:22)
+    at async callMiddleware (file:///app/node_modules/astro/dist/core/middleware/callMiddleware.js:11:10)
+    at async RenderContext.render (file:///app/node_modules/astro/dist/core/render-context.js:249:22)
+    at async handleRoute (file:///app/node_modules/astro/dist/vite-plugin-astro-server/route.js:180:16)
+    at async run (file:///app/node_modules/astro/dist/vite-plugin-astro-server/request.js:56:14)
+    at async runWithErrorHandling (file:///app/node_modules/astro/dist/vite-plugin-astro-server/controller.js:64:5)
+    at async handleRequest (file:///app/node_modules/astro/dist/vite-plugin-astro-server/request.js:50:3) {
+  [cause]: Error: no such table: tenants: SQLITE_ERROR
+      at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:140:24)
+      at async cloudflare-internal:d1-api:318:39 {
+    [cause]: undefined
+  }
+}
+Settings Page DB Error: Error: D1_ERROR: no such table: tenants: SQLITE_ERROR
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async TenantService.getTenantByOwnerId (file:///app/packages/core/dist/services/tenant.service.js:7:16)
+    at async eval (/app/apps/web/src/pages/dashboard/settings.astro:28:16)
+    at async callComponentAsTemplateResultOrResponse (file:///app/node_modules/astro/dist/runtime/server/render/astro/render.js:96:25)
+    at async renderToAsyncIterable (file:///app/node_modules/astro/dist/runtime/server/render/astro/render.js:138:26)
+    at async renderPage (file:///app/node_modules/astro/dist/runtime/server/render/page.js:36:24)
+    at async lastNext (file:///app/node_modules/astro/dist/core/render-context.js:215:25)
+    at async callMiddleware (file:///app/node_modules/astro/dist/core/middleware/callMiddleware.js:11:10)
+    at async RenderContext.render (file:///app/node_modules/astro/dist/core/render-context.js:249:22)
+    at async handleRoute (file:///app/node_modules/astro/dist/vite-plugin-astro-server/route.js:180:16) {
+  [cause]: Error: no such table: tenants: SQLITE_ERROR
+      at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:140:24)
+      at async cloudflare-internal:d1-api:318:39 {
+    [cause]: undefined
+  }
+}
+02:38:53 [200] /dashboard/settings 82ms
