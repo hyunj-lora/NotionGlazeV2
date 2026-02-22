@@ -1,18 +1,40 @@
 ---
 import { cn } from "../../lib/utils";
+import type { HTMLAttributes } from "astro/types";
 
-type Props = {
-    class?: string;
-    [key: string]: any;
-};
+interface Props extends HTMLAttributes<"input"> {
+    label?: string;
+    error?: string;
+    helpText?: string;
+    containerClass?: string;
+}
 
-const { class: className, ...props } = Astro.props;
+const { id, label, error, helpText, containerClass, class: className, ...props } = Astro.props;
 ---
 
-<input
-    class={cn(
-        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+<div class={cn("flex flex-col gap-1.5", containerClass)}>
+    {label && (
+        <label for={id} class="text-xs font-medium text-muted-foreground">
+            {label} {props.required && <span class="text-red-500" aria-hidden="true">*</span>}
+        </label>
     )}
-    {...props}
-/>
+    <input
+        id={id}
+        class={cn(
+            "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+            className
+        )}
+        aria-invalid={error ? "true" : "false"}
+        aria-describedby={[
+            error ? `${id}-error` : undefined,
+            (helpText && !error) ? `${id}-help` : undefined
+        ].filter(Boolean).join(" ") || undefined}
+        {...props}
+    />
+    {helpText && !error && (
+        <p id={`${id}-help`} class="text-[10px] text-muted-foreground">{helpText}</p>
+    )}
+    {error && (
+        <p id={`${id}-error`} class="text-[10px] text-red-500">{error}</p>
+    )}
+</div>
