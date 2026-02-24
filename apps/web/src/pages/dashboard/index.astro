@@ -166,7 +166,8 @@ const onboardingSteps = [
         const triggerSync = async (btn) => {
             if (!btn) return;
             btn.disabled = true;
-            btn.classList.add("spinning");
+            btn.classList.add("btn-loading");
+            btn.setAttribute("aria-busy", "true");
 
             try {
                 const res = await fetch("/api/v1/sync", { method: "POST" });
@@ -176,12 +177,14 @@ const onboardingSteps = [
                     const data = await res.json().catch(() => ({}));
                     alert(`Sync failed: ${data.error || "Please try again."}`);
                     btn.disabled = false;
-                    btn.classList.remove("spinning");
+                    btn.classList.remove("btn-loading");
+                    btn.removeAttribute("aria-busy");
                 }
             } catch (e) {
                 alert("Connection error.");
                 btn.disabled = false;
-                btn.classList.remove("spinning");
+                btn.classList.remove("btn-loading");
+                btn.removeAttribute("aria-busy");
             }
         };
 
@@ -242,16 +245,4 @@ const onboardingSteps = [
         margin-top: 0.5rem;
     }
 
-    .spinning {
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
 </style>
