@@ -219,7 +219,8 @@ const { config, tenant } = Astro.props;
                 manualSyncBtn.parentNode.replaceChild(newMan, manualSyncBtn);
                 newMan.addEventListener("click", async () => {
                     newMan.disabled = true;
-                    newMan.textContent = "Syncing...";
+                    newMan.classList.add("btn-loading");
+                    newMan.setAttribute("aria-busy", "true");
 
                     try {
                         const res = await fetch("/api/v1/sync", {
@@ -238,7 +239,8 @@ const { config, tenant } = Astro.props;
                             window.showToast("Connection error", "error");
                     } finally {
                         newMan.disabled = false;
-                        newMan.textContent = "Sync Now";
+                        newMan.classList.remove("btn-loading");
+                        newMan.removeAttribute("aria-busy");
                     }
                 });
             }
