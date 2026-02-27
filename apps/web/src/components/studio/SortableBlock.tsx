@@ -30,7 +30,9 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
     };
 
     return (
-        <div
+        <motion.div
+            layout
+            layoutId={block.v_id}
             ref={setNodeRef}
             style={style}
             onClick={() => selectBlock(block.v_id)}
@@ -40,7 +42,9 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
                 } ${isDragging ? 'opacity-0' : ''}`}
         >
             {/* Drag Handle Area */}
-            <div
+            <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 {...attributes}
                 {...listeners}
                 className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing p-2"
@@ -50,7 +54,7 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
                         <div key={i} className="w-1 h-1 bg-muted-foreground/40 rounded-full" />
                     ))}
                 </div>
-            </div>
+            </motion.div>
 
             {/* Content Area (Refactored to BlockRenderer) */}
             <div className={`transition-all duration-300 ${block.isSyncing ? 'blur-[1px]' : ''}`}>
@@ -83,6 +87,6 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
                     className="absolute left-0 top-2 bottom-2 w-1 bg-primary rounded-full"
                 />
             )}
-        </div>
+        </motion.div>
     );
 };

@@ -73,13 +73,18 @@ export const StudioCanvas: React.FC = () => {
                 </SortableContext>
             </DndContext>
 
-            <div className="mt-20 border-t border-dashed border-border py-12 text-center">
+            <div className="mt-8 pb-32">
                 <button
                     onClick={() => addBlock('paragraph', { rich_text: [{ plain_text: "" }] })}
-                    className="text-xs font-bold text-muted-foreground/40 hover:text-primary transition-colors flex items-center gap-2 mx-auto"
+                    className="group w-full h-8 flex items-center gap-3 px-2 opacity-0 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none transition-all duration-200 -ml-2"
+                    aria-label="Append new block"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
-                    Add new block here
+                    <div className="w-4 h-4 rounded bg-primary text-primary-foreground flex items-center justify-center shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                    </div>
+                    <div className="h-px bg-primary/20 flex-1" />
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Click to append block</span>
+                    <div className="h-px bg-primary/20 flex-1" />
                 </button>
             </div>
         </div>
