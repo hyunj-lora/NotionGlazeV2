@@ -239,11 +239,25 @@ const stats = {
                     {
                         posts.length === 0 && (
                             <tr>
-                                <td colspan="5" class="px-6 py-20 text-center">
-                                    <p class="text-sm text-muted-foreground font-medium">
-                                        No posts found. Run Magic Sync to fetch
-                                        content.
-                                    </p>
+                                <td colspan="5" class="px-6 py-24 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div class="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-4 text-muted-foreground/50">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                                                <polyline points="14 2 14 8 20 8"/>
+                                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                                <line x1="10" y1="9" x2="8" y2="9"/>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-sm font-bold text-foreground mb-1">No posts synced</h3>
+                                        <p class="text-xs text-muted-foreground mb-4 max-w-[250px]">
+                                            Run Magic Sync from the dashboard to fetch content from Notion.
+                                        </p>
+                                        <a href="/dashboard" class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors">
+                                            Go to Dashboard
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         )
