@@ -1,5 +1,6 @@
 ---
 import { DashboardCard, StickyFooter } from "@notionglaze/ui";
+import Input from "../../ui/Input.astro";
 
 interface Props {
     config: any;
@@ -20,36 +21,22 @@ const { config, tenant } = Astro.props;
                 </p>
             </div>
             <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2"
-                        >Workspace Name</label
-                    >
-                    <input
-                        type="text"
-                        id="workspace-name"
-                        value={config.workspace_name || ""}
-                        placeholder="My Workspace"
-                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                    />
-                    <p class="text-xs text-muted-foreground mt-1">
-                        Displayed in the dashboard sidebar
-                    </p>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2"
-                        >Workspace Icon (Emoji or URL)</label
-                    >
-                    <input
-                        type="text"
-                        id="workspace-icon"
-                        value={config.workspace_icon || ""}
-                        placeholder="🚀 or https://example.com/icon.png"
-                        class="w-full px-4 py-2 rounded-lg border border-border bg-background"
-                    />
-                    <p class="text-xs text-muted-foreground mt-1">
-                        Use an emoji or image URL
-                    </p>
-                </div>
+                <Input
+                    label="Workspace Name"
+                    type="text"
+                    id="workspace-name"
+                    value={config.workspace_name || ""}
+                    placeholder="My Workspace"
+                    helperText="Displayed in the dashboard sidebar"
+                />
+                <Input
+                    label="Workspace Icon (Emoji or URL)"
+                    type="text"
+                    id="workspace-icon"
+                    value={config.workspace_icon || ""}
+                    placeholder="🚀 or https://example.com/icon.png"
+                    helperText="Use an emoji or image URL"
+                />
             </div>
         </div>
     </DashboardCard>
