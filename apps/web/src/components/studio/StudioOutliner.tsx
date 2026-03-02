@@ -14,7 +14,9 @@ export const StudioOutliner: React.FC = () => {
                     <button
                         key={block.v_id}
                         onClick={() => selectBlock(block.v_id)}
-                        className={`w-full text-left px-3 py-2 rounded-lg mb-1 transition-all flex items-center gap-2 group ${selectedVId === block.v_id
+                        aria-pressed={selectedVId === block.v_id}
+                        aria-label={`Select outliner item: ${block.type}`}
+                        className={`w-full text-left px-3 py-2 rounded-lg mb-1 transition-all flex items-center gap-2 group focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ${selectedVId === block.v_id
                                 ? 'bg-primary/10 text-primary ring-1 ring-primary/20'
                                 : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                             }`}
