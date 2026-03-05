@@ -16,7 +16,7 @@ const { tenant, lastSync, publishedPosts, totalPosts } = Astro.props;
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
             <div
-                class={`h-3 w-3 rounded-full ${tenant?.notion_access_token && tenant?.root_page_id ? "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-muted"}`}
+                class={`h-3 w-3 rounded-full ${tenant?.notion_access_token && tenant?.root_page_id ? "bg-green-500 shadow-[0_0_10px_theme(colors.green.500/50%)]" : "bg-muted"}`}
             >
             </div>
             <span class="font-bold"
@@ -29,8 +29,9 @@ const { tenant, lastSync, publishedPosts, totalPosts } = Astro.props;
         </div>
         <button
             id="sync-now-btn"
-            class="btn-icon-bg"
+            class="btn-icon-bg focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             title="Trigger Manual Sync"
+            aria-label="Trigger Manual Sync"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
