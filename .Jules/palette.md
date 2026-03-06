@@ -1,0 +1,1 @@
+In empty states, avoid blank spaces; include a centered ghost icon (SVG), a concise headline, and a clear call to action. For status indicators and colored elements, use Tailwind's `dark:` modifier to ensure accessible contrast in dark mode (e.g., `bg-green-100 dark:bg-green-900/30`) instead of hardcoded hex colors.
