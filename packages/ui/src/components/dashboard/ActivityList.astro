@@ -18,7 +18,12 @@ const { posts } = Astro.props;
                         /{post.slug}
                     </span>
                 </div>
-                <div class={`status-pill ${post.status.toLowerCase()}`}>
+                <div class:list={[
+                    "px-2.5 py-1 rounded-full text-[0.65rem] font-extrabold uppercase tracking-wider border",
+                    post.status.toLowerCase() === 'published'
+                        ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800"
+                        : "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800"
+                ]}>
                     {post.status}
                 </div>
             </div>
@@ -26,8 +31,17 @@ const { posts } = Astro.props;
     }
     {
         posts.length === 0 && (
-            <div class="py-12 text-center text-muted-foreground text-sm font-medium">
-                No posts synced yet. Start by connecting your Notion!
+            <div class="py-16 px-6 flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 mb-4 text-muted-foreground/30 flex items-center justify-center rounded-full bg-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ghost"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>
+                </div>
+                <h3 class="text-lg font-semibold text-foreground mb-1">No posts synced yet</h3>
+                <p class="text-sm text-muted-foreground mb-6 max-w-[250px]">
+                    Connect your Notion workspace to start publishing content.
+                </p>
+                <a href="/dashboard/select-database" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                    Connect Notion
+                </a>
             </div>
         )
     }
@@ -58,27 +72,5 @@ const { posts } = Astro.props;
 
     .activity-item:hover {
         background: hsl(var(--secondary) / 0.3);
-    }
-
-    .status-pill {
-        padding: 0.25rem 0.6rem;
-        border-radius: 2rem;
-        font-size: 0.65rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        border: 1px solid transparent;
-    }
-
-    .status-pill.published {
-        background: #dcfce7;
-        color: #166534;
-        border-color: #bbf7d0;
-    }
-
-    .status-pill.draft {
-        background: #fef3c7;
-        color: #92400e;
-        border-color: #fde68a;
     }
 </style>
