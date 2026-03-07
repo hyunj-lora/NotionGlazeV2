@@ -1,0 +1,1 @@
+# Palette UX Lessons\n\n- Empty states should never be plain blank text. They must include a centered ghost icon (SVG), a concise headline, and a clear call to action to maintain a premium, Notion-like feel.
