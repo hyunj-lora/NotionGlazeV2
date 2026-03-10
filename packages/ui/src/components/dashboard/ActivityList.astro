@@ -18,7 +18,12 @@ const { posts } = Astro.props;
                         /{post.slug}
                     </span>
                 </div>
-                <div class={`status-pill ${post.status.toLowerCase()}`}>
+                <div class:list={[
+                    "status-pill",
+                    post.status.toLowerCase() === 'published'
+                        ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800"
+                        : "bg-amber-100 text-amber-900 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800"
+                ]}>
                     {post.status}
                 </div>
             </div>
@@ -26,8 +31,12 @@ const { posts } = Astro.props;
     }
     {
         posts.length === 0 && (
-            <div class="py-12 text-center text-muted-foreground text-sm font-medium">
-                No posts synced yet. Start by connecting your Notion!
+            <div class="py-12 flex flex-col items-center justify-center text-center">
+                <svg class="h-12 w-12 text-muted-foreground/50 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <h3 class="text-sm font-semibold text-foreground">No posts found</h3>
+                <p class="text-xs text-muted-foreground mt-1 max-w-[200px]">Connect your Notion workspace to start syncing content.</p>
             </div>
         )
     }
@@ -70,15 +79,4 @@ const { posts } = Astro.props;
         border: 1px solid transparent;
     }
 
-    .status-pill.published {
-        background: #dcfce7;
-        color: #166534;
-        border-color: #bbf7d0;
-    }
-
-    .status-pill.draft {
-        background: #fef3c7;
-        color: #92400e;
-        border-color: #fde68a;
-    }
 </style>
