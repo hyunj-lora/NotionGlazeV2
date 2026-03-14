@@ -76,9 +76,9 @@ export const StudioCanvas: React.FC = () => {
             <div className="mt-20 border-t border-dashed border-border py-12 text-center">
                 <button
                     onClick={() => addBlock('paragraph', { rich_text: [{ plain_text: "" }] })}
-                    className="text-xs font-bold text-muted-foreground/40 hover:text-primary transition-colors flex items-center gap-2 mx-auto"
+                    className="text-xs font-bold text-muted-foreground/40 hover:text-primary transition-colors flex items-center gap-2 mx-auto focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-4 rounded-md"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
                     Add new block here
                 </button>
             </div>

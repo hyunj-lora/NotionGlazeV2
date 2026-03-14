@@ -53,7 +53,7 @@ export const StudioInspector: React.FC = () => {
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center p-8 opacity-40">
                         <div className="w-12 h-12 rounded-full border-2 border-dashed border-muted-foreground/30 mb-4 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
                         </div>
                         <p className="text-xs font-medium text-muted-foreground">Select a block to <br />inspect properties</p>
                     </div>
