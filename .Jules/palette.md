@@ -1,0 +1,1 @@
+In the Studio Builder, drag handles provided by libraries like dnd-kit must be explicitly wrapped with keyboard accessibility attributes (`tabIndex=0`, `role=button`, `aria-label`) and visible focus states so they can be operated smoothly by all users.
