@@ -18,7 +18,11 @@ const { posts } = Astro.props;
                         /{post.slug}
                     </span>
                 </div>
-                <div class={`status-pill ${post.status.toLowerCase()}`}>
+                <div class={`status-pill ${
+                    post.status.toLowerCase() === 'published'
+                        ? 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800'
+                        : 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800'
+                }`}>
                     {post.status}
                 </div>
             </div>
@@ -26,8 +30,16 @@ const { posts } = Astro.props;
     }
     {
         posts.length === 0 && (
-            <div class="py-12 text-center text-muted-foreground text-sm font-medium">
-                No posts synced yet. Start by connecting your Notion!
+            <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground/30 mb-4">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <h3 class="text-sm font-bold text-foreground mb-1">No posts synced yet</h3>
+                <p class="text-xs text-muted-foreground mb-4">Start by connecting your Notion workspace.</p>
+                <a href="/dashboard/select-database" class="inline-flex items-center justify-center rounded-md text-xs font-bold bg-primary text-primary-foreground h-8 px-4 hover:opacity-90 transition-opacity">Connect Notion</a>
             </div>
         )
     }
@@ -68,17 +80,5 @@ const { posts } = Astro.props;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         border: 1px solid transparent;
-    }
-
-    .status-pill.published {
-        background: #dcfce7;
-        color: #166534;
-        border-color: #bbf7d0;
-    }
-
-    .status-pill.draft {
-        background: #fef3c7;
-        color: #92400e;
-        border-color: #fde68a;
     }
 </style>
