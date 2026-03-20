@@ -34,7 +34,15 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
             ref={setNodeRef}
             style={style}
             onClick={() => selectBlock(block.v_id)}
-            className={`group relative mb-2 p-4 rounded-xl border transition-all cursor-pointer ${isSelected
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectBlock(block.v_id);
+                }
+            }}
+            className={`group relative mb-2 p-4 rounded-xl border transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-primary ${isSelected
                 ? 'border-primary bg-primary/5 shadow-lg shadow-primary/5'
                 : 'border-transparent hover:border-border/50 hover:bg-muted/30'
                 } ${isDragging ? 'opacity-0' : ''}`}
@@ -43,7 +51,13 @@ export const SortableBlock: React.FC<Props> = ({ block }) => {
             <div
                 {...attributes}
                 {...listeners}
-                className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing p-2"
+                aria-label="Drag Handle"
+                onKeyDown={(e) => {
+                    if (listeners?.onKeyDown) {
+                        listeners.onKeyDown(e);
+                    }
+                }}
+                className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 cursor-grab active:cursor-grabbing p-2 rounded focus-visible:outline-2 focus-visible:outline-primary"
             >
                 <div className="grid grid-cols-2 gap-0.5">
                     {[...Array(6)].map((_, i) => (
