@@ -1,0 +1,1 @@
+Added keyboard accessibility (tabIndex, role, onKeyDown) and focus-visible states to the SortableBlock components in the Studio Builder, allowing navigation and selection via Enter/Space and clearly showing active items.
